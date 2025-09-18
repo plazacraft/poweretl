@@ -1,0 +1,21 @@
+{
+  "folders": [
+	{
+      "name": "common",
+      "path": "common"
+    },
+    {
+      "name": "defs",
+      "path": "defs"
+    },
+    {
+      "name": "databricks",
+      "path": "databricks"
+    },
+    {
+      "name": "examples",
+      "path": "examples"
+    }
+
+  ]
+}
