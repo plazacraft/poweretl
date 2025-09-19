@@ -8,17 +8,8 @@ poetry build
 
 cd ..\databricks
 call .venv\Scripts\activate.bat
-poetry build
-
-cd ..\examples
-call .venv\Scripts\activate.bat
-@REM poetry run pip install -e "../defs" --force-reinstall --no-deps
-@REM poetry run pip install -e "../common" --force-reinstall --no-deps
-@REM poetry run pip install -e "../databricks" --force-reinstall --no-deps
-
 poetry run pip install "../defs/dist/poweretl_defs-0.1.0-py3-none-any.whl" --force-reinstall --no-deps
 poetry run pip install "../common/dist/poweretl_common-0.1.0-py3-none-any.whl" --force-reinstall --no-deps
-poetry run pip install "../databricks/dist/poweretl_databricks-0.1.0-py3-none-any.whl" --force-reinstall --no-deps
 poetry lock
 poetry install 
 

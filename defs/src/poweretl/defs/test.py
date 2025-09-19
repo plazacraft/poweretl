@@ -1,4 +1,8 @@
-import sys
-print(sys.executable)
 
-print("ala")
+
+from poweretl.defs.model.types import ConfigType3
+
+
+
+
+print ("a")
