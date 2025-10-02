@@ -1,4 +1,8 @@
 
+import re
+from pathlib import Path
+
+
 class _MultiFileReader():
     """Reads multiple files matching a regex pattern in ascending order.
     """
@@ -13,9 +17,30 @@ class _MultiFileReader():
         self._regex = regex
         self._encoding = encoding
 
-    def get_names(self) -> list[str]:
-        return None
-    
-    def get_files(self) -> dict[str, str]:
-        return None
+    def get_files(self) -> list[Path]:
+        output = []
+        for file_path in self._file_path:
+            root = Path(file_path)
+            regex = re.compile(self._regex)
+
+            all_files = [
+                file for file in root.rglob("*")
+                if file.is_file() and regex.search(file.name)
+            ]
+
+            # Sort by parent folder full path and name, then by file name
+            sorted_files = sorted(
+                all_files,
+                key=lambda f: (str(f.parent.resolve()), f.parent.name.lower(), f.name.lower())
+            )
+            output.extend(sorted_files)
+        return output
+
+    def get_files_with_content(self) -> dict[Path, str]:
+        output = {}
+        for file in self.get_files():
+            # Open file in read-only mode
+            with open(file, 'r', encoding=self._encoding) as f:
+                output[file] = f.read()
+        return output
 

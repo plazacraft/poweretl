@@ -26,3 +26,4 @@ poweretl-defs = { path = "../defs/dist/poweretl_defs-0.1.0-py3-none-any.whl" }
 
 [tool.poetry.dependencies]
 poweretl-defs = "*"
+pytest = "^7.4.0"

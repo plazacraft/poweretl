@@ -28,3 +28,4 @@ poweretl-databricks = { path = "../databricks/dist/poweretl_databricks-0.1.0-py3
 
 [tool.poetry.dependencies]
 poweretl-databricks = "*"
+pytest = "^7.2.0"
