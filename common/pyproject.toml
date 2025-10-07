@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "*", from = "src"}]
+packages = [{include = "poweretl", from = "src"}]
 
 
 [build-system]
@@ -22,8 +22,11 @@ build-backend = "poetry.core.masonry.api"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-poweretl-defs = { path = "../defs/dist/poweretl_defs-0.1.0-py3-none-any.whl" }
+poweretl-defs = { path = "../defs/" }
+pytest = "^7.4.0"
+pytest-cov = "^7.0.0"
 
 [tool.poetry.dependencies]
 poweretl-defs = "*"
-pytest = "^7.4.0"
+dacite = "^1.9.2"
+deepmerge = "^2.0"

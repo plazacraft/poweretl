@@ -1,0 +1,16 @@
+{
+	"tables":
+	{
+		"table_1": 
+		{ 
+			"name": "table_1",
+			"columns":
+			{
+			
+				"col_1": { "name": "col 1", "type": "type" },
+				"col_2": { "name": "col 2", "type": "type" }				
+			}
+		}
+	}
+	
+}

@@ -6,7 +6,7 @@ version = "0.4.6"
 description = "Cross-platform colored terminal text."
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
-groups = ["main"]
+groups = ["main", "dev"]
 markers = "sys_platform == \"win32\""
 files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
@@ -14,12 +14,27 @@ files = [
 ]
 
 [[package]]
+name = "deepmerge"
+version = "2.0"
+description = "A toolset for deeply merging Python dictionaries."
+optional = false
+python-versions = ">=3.8"
+groups = ["main", "dev"]
+files = [
+    {file = "deepmerge-2.0-py3-none-any.whl", hash = "sha256:6de9ce507115cff0bed95ff0ce9ecc31088ef50cbdf09bc90a09349a318b3d00"},
+    {file = "deepmerge-2.0.tar.gz", hash = "sha256:5c3d86081fbebd04dd5de03626a0607b809a98fb6ccba5770b62466fe940ff20"},
+]
+
+[package.extras]
+dev = ["black", "build", "mypy", "pytest", "pyupgrade", "twine", "validate-pyproject[all]"]
+
+[[package]]
 name = "iniconfig"
 version = "2.1.0"
 description = "brain-dead simple config-ini parsing"
 optional = false
 python-versions = ">=3.8"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "iniconfig-2.1.0-py3-none-any.whl", hash = "sha256:9deba5723312380e77435581c6bf4935c94cbfab9b1ed33ef8d238ea168eb760"},
     {file = "iniconfig-2.1.0.tar.gz", hash = "sha256:3abbd2e30b36733fee78f9c7f7308f2d0050e88f0087fd25c2645f63c773e1c7"},
@@ -31,7 +46,7 @@ version = "25.0"
 description = "Core utilities for Python packages"
 optional = false
 python-versions = ">=3.8"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "packaging-25.0-py3-none-any.whl", hash = "sha256:29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484"},
     {file = "packaging-25.0.tar.gz", hash = "sha256:d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f"},
@@ -43,7 +58,7 @@ version = "1.6.0"
 description = "plugin and hook calling mechanisms for python"
 optional = false
 python-versions = ">=3.9"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"},
     {file = "pluggy-1.6.0.tar.gz", hash = "sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3"},
@@ -60,16 +75,17 @@ description = ""
 optional = false
 python-versions = ">=3.13"
 groups = ["main", "dev"]
-files = [
-    {file = "poweretl_common-0.1.0-py3-none-any.whl", hash = "sha256:62d2cd748671c236d6745478c4ec0c7dc065b756461379487ebcf6099114053e"},
-]
+files = []
+develop = false
 
 [package.dependencies]
+deepmerge = "~2.0"
 poweretl-defs = "*"
+pytest = "^7.4.0"
 
 [package.source]
-type = "file"
-url = "../common/dist/poweretl_common-0.1.0-py3-none-any.whl"
+type = "directory"
+url = "../common"
 
 [[package]]
 name = "poweretl-databricks"
@@ -78,16 +94,15 @@ description = ""
 optional = false
 python-versions = ">=3.13"
 groups = ["main", "dev"]
-files = [
-    {file = "poweretl_databricks-0.1.0-py3-none-any.whl", hash = "sha256:0923d5545cfc980dab0051ebc22b4a541fffbc3e324fe91585f72049acc9af25"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 poweretl-common = "*"
 
 [package.source]
-type = "file"
-url = "../databricks/dist/poweretl_databricks-0.1.0-py3-none-any.whl"
+type = "directory"
+url = "../databricks"
 
 [[package]]
 name = "poweretl-defs"
@@ -96,13 +111,12 @@ description = ""
 optional = false
 python-versions = ">=3.13"
 groups = ["main", "dev"]
-files = [
-    {file = "poweretl_defs-0.1.0-py3-none-any.whl", hash = "sha256:f6512bf9b63fe0918f76934aa0eab51f006f6866a0395e29138705c70672c042"},
-]
+files = []
+develop = false
 
 [package.source]
-type = "file"
-url = "../defs/dist/poweretl_defs-0.1.0-py3-none-any.whl"
+type = "directory"
+url = "../defs"
 
 [[package]]
 name = "pytest"
@@ -110,7 +124,7 @@ version = "7.4.4"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.7"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "pytest-7.4.4-py3-none-any.whl", hash = "sha256:b090cdf5ed60bf4c45261be03239c2c1c22df034fbffe691abe93cd80cea01d8"},
     {file = "pytest-7.4.4.tar.gz", hash = "sha256:2cf0005922c6ace4a3e2ec8b4080eb0d9753fdc93107415332f50ce9e7994280"},
@@ -128,4 +142,4 @@ testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "no
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "811bdf979296ed14ae79c10e2381f19f9c555b2b640659de36ddb70289920999"
+content-hash = "6069db047209e4039ba14f617cad99eecb041034de273bc2f83b83da123ce116"

@@ -4,4 +4,4 @@ from .Model import *
 from .Base import *
 from .ForeignKey import *
 from .PrimaryKey import *
-from .ConfigProvider import *
+from .IConfigProvider import *

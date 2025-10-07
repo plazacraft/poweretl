@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "*", from = "src"}]
+packages = [{include = "poweretl", from = "src"}]
 
 
 

@@ -12,6 +12,3 @@ class Model:
     tables:dict[str, Table] = None
 
 
-
-
-

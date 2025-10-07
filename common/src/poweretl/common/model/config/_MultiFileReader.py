@@ -38,9 +38,11 @@ class _MultiFileReader():
 
     def get_files_with_content(self) -> dict[Path, str]:
         output = {}
-        for file in self.get_files():
-            # Open file in read-only mode
+        files = self.get_files()
+        for file in files:
             with open(file, 'r', encoding=self._encoding) as f:
                 output[file] = f.read()
-        return output
+        
+        # for dictionary order is not guaranteed
+        return files, output
 

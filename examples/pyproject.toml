@@ -22,10 +22,10 @@ build-backend = "poetry.core.masonry.api"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-poweretl-defs = { path = "../defs/dist/poweretl_defs-0.1.0-py3-none-any.whl" }
-poweretl-common = { path = "../common/dist/poweretl_common-0.1.0-py3-none-any.whl" }
-poweretl-databricks = { path = "../databricks/dist/poweretl_databricks-0.1.0-py3-none-any.whl" }
+poweretl-defs = { path = "../defs/" }
+poweretl-common = { path = "../common/" }
+poweretl-databricks = { path = "../databricks/" }
+pytest = "^7.2.0"
 
 [tool.poetry.dependencies]
 poweretl-databricks = "*"
-pytest = "^7.2.0"
