@@ -1,2 +1,2 @@
 from .model import *
-from .tests import *
+from .utils import *

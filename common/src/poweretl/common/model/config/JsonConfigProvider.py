@@ -1,5 +1,5 @@
 import poweretl.defs.model.config as cnf
-from poweretl.common.model.config._MultiFileReader import _MultiFileReader
+from poweretl.common.utils.file import *
 import deepmerge
 import json
 from dacite import from_dict
@@ -13,11 +13,11 @@ class JsonConfigProvider(cnf.IConfigProvider):
     """
     def __init__(self, regex: str, file_paths: list[str], encoding:str='utf-8'):
         super().__init__()
-        self._MultiFileReader = _MultiFileReader(regex=regex, file_paths=file_paths, encoding=encoding)
+        self.MultiFileReader = MultiFileReader(regex=regex, file_paths=file_paths, encoding=encoding)
 
     def get_model(self) -> cnf.Model:
         data = None
-        files, contents = self._MultiFileReader.get_files_with_content()
+        files, contents = self.MultiFileReader.get_files_with_content()
         for file in files:
             json_data = None
             content = contents[file]

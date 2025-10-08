@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 
-class _MultiFileReader():
+class MultiFileReader():
     """Reads multiple files matching a regex pattern in ascending order.
     """
     def __init__(self, regex: str, file_paths: list[str], encoding: str = 'utf-8'):
