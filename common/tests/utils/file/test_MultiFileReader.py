@@ -11,9 +11,9 @@ def test_get_files():
     data_dir = f'{module_dir}/_data'
     reader = MultiFileReader(
         file_paths=[
-            MultiFileReader.FileEntry(data_dir, r'global\.json$', False),
-            MultiFileReader.FileEntry(f"{data_dir}/01", r'\.config\.json$'),
-            MultiFileReader.FileEntry(f"{data_dir}/02", r'\.config\.json$')
+            FileEntry(data_dir, r'global\.json$', False),
+            FileEntry(f"{data_dir}/01", r'\.config\.json$'),
+            FileEntry(f"{data_dir}/02", r'\.config\.json$')
         ],
         encoding='utf-8'
     )
@@ -29,7 +29,7 @@ def test_get_files():
     assert files == expected_files
 
     files, content = reader.get_files_with_content()
-    assert files == expected_files
+    assert files == expected_files, "Files not loaded correctly"
 
 
     

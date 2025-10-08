@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from .Base import *
 from .Column import *
 
@@ -10,7 +10,7 @@ class Table(Base):
         columns (dict[str, Column], optional): Columns in the table.
         properties (object, optional): Additional properties of the table.
     """
-    columns:dict[str, Column] = None
-    column_set_refs: list[str] = None
-    properties: object = None
+    columns         :dict[str, Column]      = field(default_factory=dict)
+    column_set_refs :list[str]              = field(default_factory=list)
+    properties      :object                  = None
 

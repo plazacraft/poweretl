@@ -1,0 +1,28 @@
+{
+	"params": {
+		"catalog": "prd",
+		"schema": "test"
+	},
+	
+	"tables":{
+		"{catalog}.{schema}.table_1": 
+		{ 
+			"name": "table_1_new",
+			"columns":
+			{
+				"col_1": { "name": "col 1 new", "type": "type" },
+				"col_3": { "name": "col 2", "type": "type" }				
+			}
+		},
+		"{catalog}.{schema}.table_2": 
+		{ 
+			"name": "table_2",
+			"columns":
+			{
+			
+				"col_1": { "name": "col 1", "type": "type" }				
+			}
+		}
+
+	}	
+}

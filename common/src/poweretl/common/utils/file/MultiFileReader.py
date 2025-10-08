@@ -3,14 +3,15 @@ import re
 from pathlib import Path
 from dataclasses import dataclass
 
+@dataclass
+class FileEntry():
+    path: str
+    regex: str
+    recursive: bool = True
+
+
 class MultiFileReader():
 
-
-    @dataclass
-    class FileEntry():
-        path: str
-        regex: str
-        recursive: bool = True
 
     def __init__(self, file_paths: list[FileEntry], encoding: str = 'utf-8'):
         """Initializes the _MultiFileReader.
