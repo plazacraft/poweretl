@@ -11,5 +11,6 @@ class Table(Base):
         properties (object, optional): Additional properties of the table.
     """
     columns:dict[str, Column] = None
+    column_set_refs: list[str] = None
     properties: object = None
 

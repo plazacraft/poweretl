@@ -1,0 +1,29 @@
+{
+	"params": {
+		"catalog": "dev",
+		"schema": "test"
+	},
+	
+	"columns":{
+		"version": { "name": "version", "type": "type" },
+		"last_modification": { "name": "last modification", "type": "type" }				
+	},
+	"column_sets":{
+		"dwh": ["version", "last modification"]
+	},
+
+	"tables":{
+		"{catalog}.{schema}.table_1": 
+		{ 
+			"name": "table_1",
+			"columns":
+			{
+			
+				"col_1": { "name": "col 1", "type": "type" },
+				"col_2": { "name": "col 2", "type": "type" }				
+			},
+			"column_set_refs": ["dwh"]
+		}
+	}
+	
+}

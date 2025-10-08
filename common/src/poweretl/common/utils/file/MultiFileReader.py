@@ -1,30 +1,38 @@
 
 import re
 from pathlib import Path
-
+from dataclasses import dataclass
 
 class MultiFileReader():
-    """Reads multiple files matching a regex pattern in ascending order.
-    """
-    def __init__(self, regex: str, file_paths: list[str], encoding: str = 'utf-8'):
+
+
+    @dataclass
+    class FileEntry():
+        path: str
+        regex: str
+        recursive: bool = True
+
+    def __init__(self, file_paths: list[FileEntry], encoding: str = 'utf-8'):
         """Initializes the _MultiFileReader.
         Args:
-            regex (str): Regular expression to match file names.
-            file_paths (list[str]): Absolute paths to folder to scan for files.
+            file_paths (list[FileEntry]): List of FileEntry objects containing paths and regex patterns.
             encoding (str, optional): Encoding to use for reading files. Defaults to 'utf-8'.
         """
-        self._file_path = file_paths
-        self._regex = regex
+        self._file_paths = file_paths
         self._encoding = encoding
 
     def get_files(self) -> list[Path]:
         output = []
-        for file_path in self._file_path:
-            root = Path(file_path)
-            regex = re.compile(self._regex)
+        for file_entry in self._file_paths:
+            root = Path(file_entry.path)
+            regex = re.compile(file_entry.regex)
+            if (file_entry.recursive):
+                files = root.rglob("*")
+            else:
+                files = root.iterdir()
 
             all_files = [
-                file for file in root.rglob("*")
+                file for file in files
                 if file.is_file() and regex.search(file.name)
             ]
 

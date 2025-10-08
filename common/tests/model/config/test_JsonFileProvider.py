@@ -9,10 +9,8 @@ def test_get_model():
     module_dir = os.path.dirname(os.path.abspath(__file__))
 
     config = JsonConfigProvider(
-        regex=r'\.config\.json$',
         file_paths=[
-            f'{module_dir}/_data/01',
-            f'{module_dir}/_data/02'
+            MultiFileReader.FileEntry(f'{module_dir}/_data/', r'\.json$')
         ],
         encoding='utf-8'
     )

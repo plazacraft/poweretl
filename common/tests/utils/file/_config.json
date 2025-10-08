@@ -4,6 +4,7 @@
         {
             "name": "MultiFileReader.get_files",
             "expected": [
+                    "{os.path.dirname(__file__)}/_data/global.json",
                     "{os.path.dirname(__file__)}/_data/01/01.config.json",
                     "{os.path.dirname(__file__)}/_data/01/02.config.json",
                     "{os.path.dirname(__file__)}/_data/01/00.folder/folder/01.config.json",
