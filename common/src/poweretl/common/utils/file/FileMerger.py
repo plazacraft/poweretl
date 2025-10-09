@@ -1,11 +1,16 @@
 from abc import abstractmethod
 import json
+import yaml
 from deepmerge import Merger
 from dacite import from_dict
 from dataclasses import asdict
+from pathlib import Path
 
 
-class BaseFileMerger:
+class FileMerger:
+
+    SUPPORTED_EXTENSIONS = ['.json', '.yaml', '.yml']
+
     """ Merger.
     """
     def __init__(self):
@@ -22,16 +27,28 @@ class BaseFileMerger:
         ["override"]
     )
 
-    @abstractmethod
-    def _v_to_dict(self, content) -> dict:
-        pass
 
-    def merge(self, contents: list[str]) -> dict:
+    @abstractmethod
+    def _to_dict(self, file: Path, content) -> dict:
+        if (not file.is_file()):
+            return None
+        
+        ext = file.suffix
+        if ext == '.json':
+            return json.loads(content)
+        elif ext in ['.yaml', '.yml']:
+            return yaml.safe_load(content)
+        else:
+            raise ValueError(f"Unsupported file extension: {ext}")
+        return None
+
+    def merge(self, files: list[Path], contents: dict[Path, str]) -> dict:
         data = None
-        for content in contents:
+        for file in files:
             file_data = None
+            content = contents[file]
             if content:
-                file_data = self._v_to_dict(content)
+                file_data = self._to_dict(file, content)
 
             if file_data:
                 if data is None:

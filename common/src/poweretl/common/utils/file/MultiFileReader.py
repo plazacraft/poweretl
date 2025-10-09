@@ -47,7 +47,7 @@ class MultiFileReader():
                 output.extend(sorted_files)
         return output
 
-    def get_files_with_content(self) -> dict[Path, str]:
+    def get_files_with_content(self) -> tuple[list[Path], dict[Path, str]]:
         output = {}
         files = self.get_files()
         for file in files:

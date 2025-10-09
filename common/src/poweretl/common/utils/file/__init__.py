@@ -1,3 +1,2 @@
 from .MultiFileReader import *
-from .JsonFileMerger import *
-from .YamlFileMerger import *
+from .FileMerger import *

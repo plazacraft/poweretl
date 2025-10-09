@@ -1,6 +1,6 @@
 from pathlib import Path
 from poweretl.defs.model.config import Model
-from poweretl.common.utils.file import MultiFileReader, FileEntry, JsonFileMerger, YamlFileMerger
+from poweretl.common.utils.file import MultiFileReader, FileEntry, FileMerger
 from poweretl.common.utils.text import TokensReplacer
 from poweretl.defs.model.config import IConfigProvider
 import json
@@ -11,7 +11,6 @@ from dataclasses import asdict
 
 class FileConfigProvider(IConfigProvider):
 
-    SUPPORTED_EXTENSIONS = ['.json', '.yaml', '.yml']
     
     """File Configuration provider.
     """
@@ -28,28 +27,8 @@ class FileConfigProvider(IConfigProvider):
             self._tokens_replacer = TokensReplacer(start="<", end=">", escape="^")
         else:
             self._tokens_replacer = token_replacer
+        self._file_merger = FileMerger()
             
-
-    def _validate_extensions(self, paths: list[Path]) -> str:
-        extensions = {p.suffix for p in paths if p.is_file()}
-        if len(extensions) > 1:
-            raise ValueError(f"Inconsistent file extensions for provided files: {extensions}")
-        if not extensions:
-            raise ValueError("No valid file extensions found.")
-
-        extension = extensions.pop()
-
-        if extension not in self.SUPPORTED_EXTENSIONS:
-            raise ValueError(f"Unsupported file extension: {extension}")
-
-        return extension
-
-    def _get_merger(self, extension: str):
-        if extension == '.json':
-            return JsonFileMerger()
-        elif extension in ['.yaml', '.yml']:
-            return YamlFileMerger()
-        return None
 
     def get_model(self) -> Model:
         data = None
@@ -62,19 +41,14 @@ class FileConfigProvider(IConfigProvider):
             return {}
         
         if params:
-            param_extension = self._validate_extensions(params)
-            param_merger = self._get_merger(param_extension)
-            param_contents = [p_contents[param] for param in params]
-            params_data = param_merger.merge(param_contents)
+            params_data = self._file_merger.merge(params, p_contents)
 
         if (params_data):
-            config_contents = [self._tokens_replacer.replace(tokens=params_data, text=c_contents[config]) for config in configs]
+            config_contents = {config: self._tokens_replacer.replace(tokens=params_data, text=c_contents[config]) for config in configs}
         else:
-            config_contents = [c_contents[config] for config in configs]
+            config_contents = c_contents
 
-        config_extension = self._validate_extensions(configs)
-        config_merger = self._get_merger(config_extension)
-        data = config_merger.merge(config_contents)
+        data = self._file_merger.merge(configs, config_contents)
         
         if (data):
             return from_dict(data_class=Model, data=data)
