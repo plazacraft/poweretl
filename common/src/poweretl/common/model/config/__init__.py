@@ -1,1 +1,1 @@
-from .JsonConfigProvider import *
+from .FileConfigProvider import *

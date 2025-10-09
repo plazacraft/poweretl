@@ -1,31 +1,7 @@
 {
-    "column_sets": {
-        "dwh": [
-            "version",
-            "last modification"
-        ]
-    },
-    "columns": {
-        "last_modification": {
-            "name": "last modification",
-            "properties": null,
-            "type": "type"
-        },
-        "version": {
-            "name": "version",
-            "properties": null,
-            "type": "type"
-        }
-    },
-    "params": {
-        "catalog": "prd",
-        "schema": "test"
-    },
+    "columns": {},
     "tables": {
-        "{catalog}.{schema}.table_1": {
-            "column_set_refs": [
-                "dwh"
-            ],
+        "prd.test.table_1": {
             "columns": {
                 "col_1": {
                     "name": "col 1 new",
@@ -41,13 +17,22 @@
                     "name": "col 2",
                     "properties": null,
                     "type": "type"
+                },
+                "last_modification": {
+                    "name": "last modification",
+                    "properties": null,
+                    "type": "type"
+                },
+                "version": {
+                    "name": "version",
+                    "properties": null,
+                    "type": "type"
                 }
             },
             "name": "table_1_new",
             "properties": null
         },
-        "{catalog}.{schema}.table_2": {
-            "column_set_refs": [],
+        "prd.test.table_2": {
             "columns": {
                 "col_1": {
                     "name": "col 1",

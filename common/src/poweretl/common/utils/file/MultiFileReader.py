@@ -24,25 +24,27 @@ class MultiFileReader():
 
     def get_files(self) -> list[Path]:
         output = []
-        for file_entry in self._file_paths:
-            root = Path(file_entry.path)
-            regex = re.compile(file_entry.regex)
-            if (file_entry.recursive):
-                files = root.rglob("*")
-            else:
-                files = root.iterdir()
+        if (self._file_paths):
+            for file_entry in self._file_paths:
+                root = Path(file_entry.path)
+                regex = re.compile(file_entry.regex)
+                if (file_entry.recursive):
+                    files = root.rglob("*")
+                else:
+                    files = root.iterdir()
 
-            all_files = [
-                file for file in files
-                if file.is_file() and regex.search(file.name)
-            ]
 
-            # Sort by parent folder full path and name, then by file name
-            sorted_files = sorted(
-                all_files,
-                key=lambda f: (str(f.parent.resolve()), f.parent.name.lower(), f.name.lower())
-            )
-            output.extend(sorted_files)
+                all_files = [
+                    file for file in files
+                    if file.is_file() and regex.search(file.name)
+                ]
+
+                # Sort by parent folder full path and name, then by file name
+                sorted_files = sorted(
+                    all_files,
+                    key=lambda f: (str(f.parent.resolve()), f.parent.name.lower(), f.name.lower())
+                )
+                output.extend(sorted_files)
         return output
 
     def get_files_with_content(self) -> dict[Path, str]:

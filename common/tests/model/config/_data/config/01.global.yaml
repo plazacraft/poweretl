@@ -1,0 +1,5 @@
+catalog: dev
+schema: test
+dwh_columns: |
+  "version": { "name": "version", "type": "type" },
+  "last_modification": { "name": "last modification", "type": "type" }

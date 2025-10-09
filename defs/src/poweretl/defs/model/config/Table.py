@@ -11,6 +11,5 @@ class Table(Base):
         properties (object, optional): Additional properties of the table.
     """
     columns         :dict[str, Column]      = field(default_factory=dict)
-    column_set_refs :list[str]              = field(default_factory=list)
     properties      :object                  = None
 
