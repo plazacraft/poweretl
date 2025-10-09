@@ -42,11 +42,10 @@ class FileMerger:
             raise ValueError(f"Unsupported file extension: {ext}")
         return None
 
-    def merge(self, files: list[Path], contents: dict[Path, str]) -> dict:
+    def merge(self, files: list[tuple[Path,str]]) -> dict:
         data = None
-        for file in files:
+        for file, content in files:
             file_data = None
-            content = contents[file]
             if content:
                 file_data = self._to_dict(file, content)
 

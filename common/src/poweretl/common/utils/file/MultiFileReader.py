@@ -47,13 +47,12 @@ class MultiFileReader():
                 output.extend(sorted_files)
         return output
 
-    def get_files_with_content(self) -> tuple[list[Path], dict[Path, str]]:
-        output = {}
+    def get_files_with_content(self) -> list[tuple[Path, str]]:
+        output = []
         files = self.get_files()
         for file in files:
             with open(file, 'r', encoding=self._encoding) as f:
-                output[file] = f.read()
+                output.append((file, f.read()))
         
-        # for dictionary order is not guaranteed
-        return files, output
+        return output
 

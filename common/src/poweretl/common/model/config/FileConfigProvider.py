@@ -33,22 +33,22 @@ class FileConfigProvider(IConfigProvider):
     def get_model(self) -> Model:
         data = None
 
-        params, p_contents = self._param_reader.get_files_with_content()
-        configs, c_contents = self._config_reader.get_files_with_content()
+        params = self._param_reader.get_files_with_content()
+        configs = self._config_reader.get_files_with_content()
         params_data = None
 
         if (not configs):
             return {}
         
         if params:
-            params_data = self._file_merger.merge(params, p_contents)
+            params_data = self._file_merger.merge(params)
 
         if (params_data):
-            config_contents = {config: self._tokens_replacer.replace(tokens=params_data, text=c_contents[config]) for config in configs}
+            config_contents = [(config, self._tokens_replacer.replace(tokens=params_data, text=content)) for config, content in configs]
         else:
-            config_contents = c_contents
+            config_contents = configs
 
-        data = self._file_merger.merge(configs, config_contents)
+        data = self._file_merger.merge(config_contents)
         
         if (data):
             return from_dict(data_class=Model, data=data)

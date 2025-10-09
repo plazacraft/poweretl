@@ -28,8 +28,9 @@ def test_get_files():
     files = reader.get_files()
     assert files == expected_files
 
-    files, content = reader.get_files_with_content()
-    assert files == expected_files, "Files not loaded correctly"
+    files, contents = zip(*reader.get_files_with_content())
+
+    assert list(files) == expected_files, "Files not loaded correctly"
 
 
     
