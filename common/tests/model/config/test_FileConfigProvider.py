@@ -10,7 +10,7 @@ def test_get_model():
 
     config_1 = FileConfigProvider(
         config_paths=[
-            FileEntry(f'{module_dir}/_data/config', r'\.json$')
+            FileEntry(f'{module_dir}/_data/config', r'\.jsonc?$')
         ],
         param_paths=[
             FileEntry(f'{module_dir}/_data/config', r'\.yaml$')

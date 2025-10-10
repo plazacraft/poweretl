@@ -10,23 +10,23 @@ from dataclasses import asdict
 
 
 class FileConfigProvider(IConfigProvider):
+    """_summary_
 
-    
-    """File Configuration provider.
+    Args:
+        IConfigProvider (_type_): _description_
     """
+    
+
     def __init__(self, 
                  config_paths: list[FileEntry], 
                  param_paths: list[FileEntry] = None,
                  encoding:str='utf-8',
-                 token_replacer: TokensReplacer = None
+                 tokens_replacer: TokensReplacer = TokensReplacer(start="/*<", end=">*/", escape="^")
                  ):
     
         self._config_reader = MultiFileReader(file_paths=config_paths, encoding=encoding)
         self._param_reader = MultiFileReader(file_paths=param_paths, encoding=encoding)
-        if (not token_replacer):
-            self._tokens_replacer = TokensReplacer(start="<", end=">", escape="^")
-        else:
-            self._tokens_replacer = token_replacer
+        self._tokens_replacer = tokens_replacer
         self._file_merger = FileMerger()
             
 

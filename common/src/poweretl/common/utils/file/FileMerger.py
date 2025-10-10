@@ -1,7 +1,8 @@
 from abc import abstractmethod
 import json
+import json5
 import yaml
-from deepmerge import Merger
+from deepmerge import Merger, always_merger
 from dacite import from_dict
 from dataclasses import asdict
 from pathlib import Path
@@ -9,23 +10,26 @@ from pathlib import Path
 
 class FileMerger:
 
-    SUPPORTED_EXTENSIONS = ['.json', '.yaml', '.yml']
+    SUPPORTED_EXTENSIONS = ['.json', '.yaml', '.yml', '.json5', '.jsonc']
 
-    """ Merger.
+    """ Merges files and returns dictionary object. Supported files are defined by SUPPORTED_EXTENSIONS
+    Attributes:
+        merger (Merger): Merger strategy, as default always_merger is used
     """
-    def __init__(self):
-        pass
+    def __init__(self, merger: Merger = always_merger):
+        self._merger = merger
+        # default strategy of always_merger
+        # self._merger = Merger(
+        #     [
+        #         (dict, "merge"), 
+        #         (list, "append"), 
+        #         (set, "union")
+        #     ],
+        #     ["override"],
+        #     ["override"]
+        # )        
 
-    # default strategy of always_merger
-    _merger = Merger(
-        [
-            (dict, "merge"), 
-            (list, "append"), 
-            (set, "union")
-        ],
-        ["override"],
-        ["override"]
-    )
+
 
 
     @abstractmethod
@@ -34,12 +38,16 @@ class FileMerger:
             return None
         
         ext = file.suffix
+        if (ext not in self.SUPPORTED_EXTENSIONS):
+            raise ValueError(f"Unsupported file extension: {ext}")
+
         if ext == '.json':
             return json.loads(content)
+        elif ext in ['.json5', '.jsonc']:
+            return json5.loads(content)
         elif ext in ['.yaml', '.yml']:
             return yaml.safe_load(content)
-        else:
-            raise ValueError(f"Unsupported file extension: {ext}")
+
         return None
 
     def merge(self, files: list[tuple[Path,str]]) -> dict:

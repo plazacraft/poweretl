@@ -11,14 +11,14 @@ class FileEntry():
 
 
 class MultiFileReader():
+    """Initializes the _MultiFileReader.
+    Attributes:
+        file_paths (list[FileEntry]): List of FileEntry objects containing paths and regex patterns.
+        encoding (str, optional): Encoding to use for reading files. Defaults to 'utf-8'.
+    """
 
 
     def __init__(self, file_paths: list[FileEntry], encoding: str = 'utf-8'):
-        """Initializes the _MultiFileReader.
-        Args:
-            file_paths (list[FileEntry]): List of FileEntry objects containing paths and regex patterns.
-            encoding (str, optional): Encoding to use for reading files. Defaults to 'utf-8'.
-        """
         self._file_paths = file_paths
         self._encoding = encoding
 
