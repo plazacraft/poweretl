@@ -1,5 +1,5 @@
 from .config import *
-from .meta import *
-from .Executor import *
-from .ResourceManager import *
+from .IMetaProvider import *
+from .IExecutor import *
+from .IResourceManager import *
 

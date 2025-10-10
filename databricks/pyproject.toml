@@ -24,6 +24,9 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 poweretl-defs = { path = "../defs/" }
 poweretl-common = { path = "../common/"}
+pytest = "^7.4.0"
+pytest-cov = "^7.0.0"
+
 
 [tool.poetry.dependencies]
 poweretl-common = "*"

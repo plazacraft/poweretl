@@ -8,7 +8,7 @@ from pathlib import Path
 def test_get_files():
     module_dir = os.path.dirname(os.path.abspath(__file__))
 
-    data_dir = f'{module_dir}/_data'
+    data_dir = f'{module_dir}/_data/MultiFileReader'
     reader = MultiFileReader(
         file_paths=[
             FileEntry(data_dir, r'global\.json$', False),
