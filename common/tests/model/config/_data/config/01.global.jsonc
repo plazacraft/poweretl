@@ -1,7 +1,7 @@
 {
 	
 	"tables":{
-		"/*<catalog>*/./*<schema>*/.table_1": 
+		"<catalog>.<schema>.table_1": 
 		{ 
 			"name": "table_1",
 			"columns":

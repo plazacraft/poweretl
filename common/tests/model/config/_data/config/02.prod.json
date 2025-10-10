@@ -1,6 +1,6 @@
 {
 	"tables":{
-		"/*<catalog>*/./*<schema>*/.table_1": 
+		"<catalog>.<schema>.table_1": 
 		{ 
 			"name": "table_1_new",
 			"columns":
@@ -9,7 +9,7 @@
 				"col_3": { "name": "col 2", "type": "type" }				
 			}
 		},
-		"/*<catalog>*/./*<schema>*/.table_2": 
+		"<catalog>.<schema>.table_2": 
 		{ 
 			"name": "table_2",
 			"columns":

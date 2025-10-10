@@ -1,8 +1,8 @@
 import pytest
-from poweretl.common.utils.text import TokensReplacer
+from poweretl.common.utils.text.TokensReplacer import TokensReplacer
 
 def test_basic_replacement():
-    replacer = TokensReplacer(start="{", end="}", escape="\\")
+    replacer = TokensReplacer()
     text = "Hello {user}, your balance is {amount}."
     replacements = {"user": "Roman", "amount": "100 PLN"}
 
@@ -10,7 +10,7 @@ def test_basic_replacement():
     assert result == "Hello Roman, your balance is 100 PLN."
 
 def test_escaped_token_preserved():
-    replacer = TokensReplacer(start="{", end="}", escape="\\")
+    replacer = TokensReplacer()
     text = "Escaped token: \\{user}"
     replacements = {"user": "Roman"}
 
@@ -18,7 +18,7 @@ def test_escaped_token_preserved():
     assert result == "Escaped token: {user}"
 
 def test_multiline_replacement():
-    replacer = TokensReplacer(start="{", end="}", escape="\\")
+    replacer = TokensReplacer()
     text = """Hello {user},
 Your balance is {amount}.
 Escaped: \\{user}"""
@@ -30,7 +30,7 @@ Your balance is 100 PLN.
 Escaped: {user}"""
 
 def test_missing_token_raises():
-    replacer = TokensReplacer(start="{", end="}", escape="\\")
+    replacer = TokensReplacer()
     text = "Hello {user}, your balance is {amount}."
 
     with pytest.raises(KeyError, match="Missing replacement for token: 'amount'"):

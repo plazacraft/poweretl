@@ -21,13 +21,14 @@ class FileConfigProvider(IConfigProvider):
                  config_paths: list[FileEntry], 
                  param_paths: list[FileEntry] = None,
                  encoding:str='utf-8',
-                 tokens_replacer: TokensReplacer = TokensReplacer(start="/*<", end=">*/", escape="^")
+                 tokens_replacer: TokensReplacer = TokensReplacer(re_start=r"(/\*<)|(<)", re_end=r"(>\*/)|(>)", re_escape=r"\^")
                  ):
     
         self._config_reader = MultiFileReader(file_paths=config_paths, encoding=encoding)
         self._param_reader = MultiFileReader(file_paths=param_paths, encoding=encoding)
         self._tokens_replacer = tokens_replacer
         self._file_merger = FileMerger()
+
             
 
     def get_model(self) -> Model:
