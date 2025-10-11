@@ -99,7 +99,7 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           recreate: true
-          path: test-summary.md
+          path: ${{ matrix.project }}/test-summary.md
 
       - name: Combine and add to summary
         run: |
