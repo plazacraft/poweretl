@@ -45,6 +45,13 @@ jobs:
         with:
           name: coverage-${{ matrix.project }}
           path: ${{ matrix.project }}/coverage.xml
+
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: htmlcov-${{ matrix.project }}
+          path: ${{ matrix.project }}/htmlcov/
+
           
       - name: Coverage Comment
         uses: MishaKav/pytest-coverage-comment@main
@@ -52,11 +59,10 @@ jobs:
           pytest-coverage-path: "${{ matrix.project }}/coverage.xml"
 
           
-      - name: Upload HTML coverage report
-        uses: actions/upload-artifact@v4
+      - name: Deploy coverage to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: htmlcov-${{ matrix.project }}
-          path: ${{ matrix.project }}/htmlcov/
-
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ matrix.project }}/htmlcov
 
         
