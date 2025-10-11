@@ -7,8 +7,8 @@ on:
     branches: [main, develop]
     
 permissions:
-  contents: write
-    
+  contents: read
+  pull-requests: write # Required for posting comments    
 
 jobs:
   test:
@@ -38,7 +38,9 @@ jobs:
         run: poetry install --with dev
        
       - name: Run tests with coverage
-        run: poetry run pytest --cov=poweretl.${{ matrix.project }} --cov-report=html --cov-report=xml --cov-report=term
+        #run: poetry run pytest  --doctest-modules --junitxml=junit/test-results.xml --cov=poweretl.${{ matrix.project }} --cov-report=html --cov-report=xml --cov-report=term
+        run: poetry run pytest --junitxml=junit/test-results.xml --cov=src --cov-report=html --cov-report=xml --cov-report=term
+        
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
@@ -52,17 +54,39 @@ jobs:
           name: htmlcov-${{ matrix.project }}
           path: ${{ matrix.project }}/htmlcov/
 
-          
-      - name: Coverage Comment
-        uses: MishaKav/pytest-coverage-comment@main
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
         with:
-          pytest-coverage-path: "${{ matrix.project }}/coverage.xml"
+          files: ${{ matrix.project }}/junit/test-results.xml
+          comment_mode: failures
+          check_name: "Test Results - ${{ matrix.project }}"
+
+      - name: Code Coverage Summary
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: ${{ matrix.project }}/coverage.xml
+          badge: true
+          format: markdown
+          output: both
+          
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        #if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: ${{ matrix.project }}/code-coverage-results.md
+          
+      - name: Write to Job Summary
+        run: cat ${{ matrix.project }}/code-coverage-results.md >> $GITHUB_STEP_SUMMARY
 
           
-      - name: Deploy coverage to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ matrix.project }}/htmlcov
+      # - name: Coverage Comment
+        # uses: MishaKav/pytest-coverage-comment@main
+        # with:
+          # pytest-coverage-path: "${{ matrix.project }}/coverage.xml"
+
+          
 
         
