@@ -47,9 +47,10 @@ jobs:
           path: ${{ matrix.project }}/coverage.xml
           
       - name: Coverage Comment
-          uses: MishaKav/pytest-coverage-comment@main
-          with:
-            pytest-coverage-path: ${{ matrix.project }}/coverage.xml
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: "${{ matrix.project }}/coverage.xml"
+
           
       - name: Deploy coverage to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
