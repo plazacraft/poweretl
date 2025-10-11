@@ -73,52 +73,43 @@ jobs:
           format: markdown
           output: both
           
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
-        with:
-          recreate: true
-          path: code-coverage-results.md
+      # - name: Add Coverage PR Comment
+        # uses: marocchino/sticky-pull-request-comment@v2
+        # if: github.event_name == 'pull_request'
+        # with:
+          # recreate: true
+          # path: code-coverage-results.md
         
 
-      - name: Generate test summary markdown
-        run: |
-          echo "## 🧪 Test Summary" > test-summary.md
-          total=$(grep -oP 'tests="\K[0-9]+' junit/test-results.xml)
-          failures=$(grep -oP 'failures="\K[0-9]+' junit/test-results.xml)
-          errors=$(grep -oP 'errors="\K[0-9]+' junit/test-results.xml)
-          skipped=$(grep -oP 'skipped="\K[0-9]+' junit/test-results.xml)
+      # - name: Generate test summary markdown
+        # run: |
+          # echo "## 🧪 Test Summary" > test-summary.md
+          # total=$(grep -oP 'tests="\K[0-9]+' junit/test-results.xml)
+          # failures=$(grep -oP 'failures="\K[0-9]+' junit/test-results.xml)
+          # errors=$(grep -oP 'errors="\K[0-9]+' junit/test-results.xml)
+          # skipped=$(grep -oP 'skipped="\K[0-9]+' junit/test-results.xml)
 
-          echo "- Total tests: $total" >> test-summary.md
-          echo "- Failures: $failures" >> test-summary.md
-          echo "- Errors: $errors" >> test-summary.md
-          echo "- Skipped: $skipped" >> test-summary.md
+          # echo "- Total tests: $total" >> test-summary.md
+          # echo "- Failures: $failures" >> test-summary.md
+          # echo "- Errors: $errors" >> test-summary.md
+          # echo "- Skipped: $skipped" >> test-summary.md
 
-      - name: Comment test summary on PR
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
-        with:
-          recreate: true
-          path: ${{ matrix.project }}/test-summary.md
+      # - name: Comment test summary on PR
+        # uses: marocchino/sticky-pull-request-comment@v2
+        # if: github.event_name == 'pull_request'
+        # with:
+          # recreate: true
+          # path: ${{ matrix.project }}/test-summary.md
           
-      # - name: List all files in working directory
-        # run: ls -al          
-        
-      # - name: List files in matrix project folder
-        # run: ls -al ../
       
 
-      - name: Combine and add to summary
-        if: github.event_name == 'pull_request'
-        run: |
-          cat test-summary.md >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          cat ../code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+      # - name: Combine and add to summary
+        # if: github.event_name == 'pull_request'
+        # run: |
+          # cat test-summary.md >> $GITHUB_STEP_SUMMARY
+          # echo "" >> $GITHUB_STEP_SUMMARY
+          # cat ../code-coverage-results.md >> $GITHUB_STEP_SUMMARY
          
-      # - name: Coverage Comment
-        # uses: MishaKav/pytest-coverage-comment@main
-        # with:
-          # pytest-coverage-path: "${{ matrix.project }}/coverage.xml"
 
           
 
