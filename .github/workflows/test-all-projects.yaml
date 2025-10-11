@@ -100,6 +100,13 @@ jobs:
         with:
           recreate: true
           path: ${{ matrix.project }}/test-summary.md
+          
+      - name: List all files in working directory
+        run: ls -al          
+        
+      - name: List files in matrix project folder
+        run: ls -al ${{ matrix.project }}
+      
 
       - name: Combine and add to summary
         if: github.event_name == 'pull_request'
