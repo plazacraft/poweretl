@@ -105,7 +105,7 @@ jobs:
         run: ls -al          
         
       - name: List files in matrix project folder
-        run: ls -al ${{ matrix.project }}
+        run: ls -al ../
       
 
       - name: Combine and add to summary
