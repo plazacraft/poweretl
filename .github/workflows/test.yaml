@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project: [project-a, project-b]
+        project: [defs, utils, common, databricks]
 
     defaults:
       run:
