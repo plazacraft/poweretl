@@ -80,10 +80,7 @@ jobs:
           recreate: true
           path: code-coverage-results.md
           
-      - name: Write to Job Summary
-        run: cat ${{ matrix.project }}/code-coverage-results.md >> $GITHUB_STEP_SUMMARY
-
-          
+         
       # - name: Coverage Comment
         # uses: MishaKav/pytest-coverage-comment@main
         # with:
