@@ -1,5 +1,5 @@
 from poweretl.common.model.config import *
-import poweretl.common.utils.tests as common_tests
+import poweretl.utils.tests as common_tests
 import pytest
 import os
 import re

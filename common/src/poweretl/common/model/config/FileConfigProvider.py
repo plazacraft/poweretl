@@ -1,7 +1,7 @@
 from pathlib import Path
 from poweretl.defs.model.config import Model
-from poweretl.common.utils.file import MultiFileReader, FileEntry, FileMerger
-from poweretl.common.utils.text import TokensReplacer
+from poweretl.utils.file import MultiFileReader, FileEntry, FileMerger
+from poweretl.utils.text import TokensReplacer
 from poweretl.defs.model.config import IConfigProvider
 import json
 from dacite import from_dict

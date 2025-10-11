@@ -1,5 +1,5 @@
-from poweretl.common.utils.file import *
-import poweretl.common.utils.tests as common_tests
+from poweretl.utils.file import *
+import poweretl.utils.tests as common_tests
 import pytest
 import os
 from pathlib import Path
@@ -31,6 +31,12 @@ def test_get_files():
     files, contents = zip(*reader.get_files_with_content())
 
     assert list(files) == expected_files, "Files not loaded correctly"
+
+
+
+
+
+
 
 
     

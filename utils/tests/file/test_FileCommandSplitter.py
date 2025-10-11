@@ -1,6 +1,6 @@
 from pathlib import Path
-from poweretl.common.utils.file.FileCommandSplitter import *
-import poweretl.common.utils.tests as common_tests
+from poweretl.utils.file.FileCommandSplitter import *
+import poweretl.utils.tests as common_tests
 import pytest
 import os
 

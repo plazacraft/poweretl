@@ -1,5 +1,5 @@
 [project]
-name = "poweretl-common"
+name = "poweretl-utils"
 version = "0.1.0"
 description = ""
 authors = [
@@ -22,14 +22,12 @@ build-backend = "poetry.core.masonry.api"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-poweretl-defs = { path = "../defs/" }
-poweretl-utils = { path = "../utils/" }
 pytest = "^7.4.0"
 pytest-cov = "^7.0.0"
 
 [tool.poetry.dependencies]
-poweretl-defs = "*"
 dacite = "^1.9.2"
 deepmerge = "^2.0"
 pyyaml = "^6.0.3"
 json5 = "^0.12.1"
+
