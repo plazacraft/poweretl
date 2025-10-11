@@ -78,10 +78,10 @@ jobs:
         #if: github.event_name == 'pull_request'
         with:
           recreate: true
-          path: ${{ matrix.project }}/code-coverage-results.md
+          path: code-coverage-results.md
           
       - name: Write to Job Summary
-        run: cat ${{ matrix.project }}/code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
 
           
       # - name: Coverage Comment
