@@ -13,7 +13,7 @@ def test_escaped_token_preserved():
     replacer = TokensReplacer()
     text = "Escaped token: \\{user}"
     replacements = {"user": "Roman"}
-
+    assert 1 == 0
     result = replacer.replace(text, replacements)
     assert result == "Escaped token: {user}"
 
