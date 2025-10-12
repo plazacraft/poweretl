@@ -1,8 +1,6 @@
 name: Publish To PyPI - PRD
 
 on:
-  # release:
-    # types: [published]
   push:
     tags:
       - '*-*.*.*-prd'
@@ -14,7 +12,8 @@ jobs:
   call-publisher:
     uses: plazacraft/poweretl-pipelines/.github/workflows/publish-packages.yaml@main
     with:
-      tag: ${{ github.event.release.tag_name }}
-      ref: ${{ github.event.release.target_commitish }}
+      tag: ${{ github.ref_name }}
+      ref: ${{ github.ref }}
       environment: prd
       python-version: '3.13'
+    secrets: inherit   
