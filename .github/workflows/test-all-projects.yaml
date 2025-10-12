@@ -8,7 +8,7 @@ on:
 
 jobs:
   run-tests:
-    uses: rplazaman/poweretl-pipelines/git-hub/tests.yaml@test
+    uses: rplazaman/poweretl-pipelines/.github/workflows/tests.yaml@test
     with:
       python-version: '3.13'
       projects: 'utils,common'
