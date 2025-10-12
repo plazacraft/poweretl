@@ -12,7 +12,7 @@ permissions:
   
 jobs:
   run-tests:
-    uses: plazacraft/poweretl-pipelines/.github/workflows/tests.yaml@test
+    uses: plazacraft/poweretl-pipelines/.github/workflows/run-tests.yaml@test
     with:
       python-version: '3.13'
       projects: '["utils","common"]'
