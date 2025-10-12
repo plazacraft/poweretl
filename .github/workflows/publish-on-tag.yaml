@@ -19,4 +19,4 @@ jobs:
       ref: ${{ github.ref }}
       environment: tst
       python-version: '3.13'
-      
+    secrets: inherit      

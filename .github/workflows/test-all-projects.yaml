@@ -16,3 +16,4 @@ jobs:
     with:
       python-version: '3.13'
       projects: '["utils","common"]'
+    secrets: inherit      
