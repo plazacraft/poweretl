@@ -1,4 +1,4 @@
-name: Trigger Publisher on Tag in Develop
+name: Publish To PyPI - TST
 
 on:
   push:
