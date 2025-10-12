@@ -1,0 +1,20 @@
+name: Trigger Publisher on Tag in Develop
+
+on:
+  push:
+    tags:
+      - '*-*.*.*-tst'
+
+permissions:
+  contents: write  # needed to upload release assets
+
+
+jobs:
+  call-publisher:
+    uses: plazacraft/poweretl-pipelines/.github/workflows/publish-packages.yaml@main
+    with:
+      tag: ${{ github.ref_name }}
+      ref: ${{ github.ref }}
+      environment: tst
+      python-version: '3.13'
+    secrets: inherit      

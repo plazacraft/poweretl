@@ -1,0 +1,4 @@
+-- VERSION: 1.2
+-- COMMAND
+SELECT 'v1.2' as v;
+-- COMMAND
