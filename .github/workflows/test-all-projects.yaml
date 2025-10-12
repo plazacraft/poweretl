@@ -1,4 +1,4 @@
-name: Run Tests For All Projects
+name: Run Tests For All Projects 
 on:
   push:
     branches: [main, develop]
