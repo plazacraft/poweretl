@@ -5,7 +5,7 @@ on:
     # types: [published]
   push:
     tags:
-      - '*-*.*.*-dev'
+      - '*-*.*.*-prd'
 
 permissions:
   contents: write  # needed to upload release assets
