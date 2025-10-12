@@ -1,5 +1,4 @@
-name: Use Shared Test Workflow
-
+name: Run Tests For All Projects
 on:
   push:
     branches: [main, develop]
