@@ -3,7 +3,7 @@ name: Trigger Publisher on Tag in Develop
 on:
   push:
     tags:
-      - '*-v*.*.*'
+      - '*-*.*.*'
     # branches:
       # - develop
 
