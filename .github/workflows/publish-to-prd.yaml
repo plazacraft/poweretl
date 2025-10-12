@@ -5,16 +5,14 @@ on:
     # types: [published]
   push:
     tags:
-      - '*-*.*.*'
-    branches:
-      - main    
+      - '*-*.*.*-dev'
 
 permissions:
   contents: write  # needed to upload release assets
 
 jobs:
   call-publisher:
-    uses: plazacraft/poweretl-pipelines/.github/workflows/publish-packages.yaml@test
+    uses: plazacraft/poweretl-pipelines/.github/workflows/publish-packages.yaml@main
     with:
       tag: ${{ github.event.release.tag_name }}
       ref: ${{ github.event.release.target_commitish }}

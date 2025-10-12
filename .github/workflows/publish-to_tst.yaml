@@ -3,9 +3,7 @@ name: Trigger Publisher on Tag in Develop
 on:
   push:
     tags:
-      - '*-*.*.*'
-    branches:
-      - develop
+      - '*-*.*.*-tst'
 
 permissions:
   contents: write  # needed to upload release assets
@@ -13,7 +11,7 @@ permissions:
 
 jobs:
   call-publisher:
-    uses: plazacraft/poweretl-pipelines/.github/workflows/publish-packages.yaml@test
+    uses: plazacraft/poweretl-pipelines/.github/workflows/publish-packages.yaml@main
     with:
       tag: ${{ github.ref_name }}
       ref: ${{ github.ref }}
