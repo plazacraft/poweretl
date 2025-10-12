@@ -1,0 +1,31 @@
+[project]
+name = "poweretl-examples"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+]
+
+[tool.poetry]
+packages = [{include = "poweretl", from = "src"}]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+poweretl-defs = { path = "../defs/" }
+poweretl-common = { path = "../common/" }
+poweretl-databricks = { path = "../databricks/" }
+pytest = "^7.2.0"
+
+[tool.poetry.dependencies]
+poweretl-databricks = "*"

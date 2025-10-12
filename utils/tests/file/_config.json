@@ -1,0 +1,28 @@
+{
+    "tests":
+    [
+        {
+            "name": "MultiFileReader.get_files",
+            "expected": [
+                    "{os.path.dirname(__file__)}/_data/MultiFileReader/global.json",
+                    "{os.path.dirname(__file__)}/_data/MultiFileReader/01/01.config.json",
+                    "{os.path.dirname(__file__)}/_data/MultiFileReader/01/02.config.json",
+                    "{os.path.dirname(__file__)}/_data/MultiFileReader/01/00.folder/folder/01.config.json",
+                    "{os.path.dirname(__file__)}/_data/MultiFileReader/01/00.folder_01/01.config.json",
+                    "{os.path.dirname(__file__)}/_data/MultiFileReader/01/00.folder_01/folder_01_01/01.config.json",
+                    "{os.path.dirname(__file__)}/_data/MultiFileReader/02/01.config.json"
+                ]
+        },
+        {
+            "name": "FileCommandSplitter.test_parse_sample_file",
+            "expected": [
+                "1.0",
+                "SELECT 1 as a",
+                "SELECT 2 as b",
+                "1.1",
+                "CREATE TABLE t",
+                "CREATE TABLE t2 (id INT)"
+            ]
+        }
+    ]
+}
