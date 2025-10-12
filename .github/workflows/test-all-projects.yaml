@@ -1,4 +1,4 @@
-name: Run Tests For All Projects 3
+name: Run Tests For All Projects
 on:
   push:
     branches: [main, develop]
@@ -12,7 +12,7 @@ permissions:
   
 jobs:
   run-tests:
-    uses: rplazaman/poweretl-pipelines/.github/workflows/tests.yaml@test
+    uses: plazacraft/poweretl-pipelines/.github/workflows/tests.yaml@test
     with:
       python-version: '3.13'
       projects: '["utils","common"]'
