@@ -4,8 +4,8 @@ on:
   push:
     tags:
       - '*-*.*.*'
-    # branches:
-      # - develop
+    branches:
+      - develop
 
 permissions:
   contents: write  # needed to upload release assets

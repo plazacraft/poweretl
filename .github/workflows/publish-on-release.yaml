@@ -1,8 +1,13 @@
 name: Trigger Publisher on GitHub Release
 
 on:
-  release:
-    types: [published]
+  # release:
+    # types: [published]
+  push:
+    tags:
+      - '*-*.*.*'
+    branches:
+      - main    
 
 permissions:
   contents: write  # needed to upload release assets
