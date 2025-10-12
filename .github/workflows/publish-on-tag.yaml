@@ -18,3 +18,5 @@ jobs:
       tag: ${{ github.ref_name }}
       ref: ${{ github.ref }}
       environment: tst
+      python-version: '3.13'
+      
