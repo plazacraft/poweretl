@@ -1,4 +1,4 @@
-name: Trigger Publisher on GitHub Release
+name: Publish To PyPI - PRD
 
 on:
   # release:
