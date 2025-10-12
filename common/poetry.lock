@@ -231,8 +231,8 @@ url = "../defs"
 
 [[package]]
 name = "poweretl-utils"
-version = "0.1.0"
-description = ""
+version = "0.0.1a1"
+description = "poweretl is library to support database, data-warehouse, data-lakehouse python projects. poweretl-utils is independent package for not only etl tasks."
 optional = false
 python-versions = ">=3.13"
 groups = ["dev"]
