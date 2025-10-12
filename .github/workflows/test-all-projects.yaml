@@ -1,116 +1,14 @@
-name: Run Tests for All Projects
+name: Use Shared Test Workflow
 
 on:
   push:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
-    
-permissions:
-  contents: read
-  pull-requests: write
-  checks: write
-  
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project: [utils, common]
-
-    defaults:
-      run:
-        working-directory: ${{ matrix.project }}
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.13'
-
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - name: Install dependencies
-        run: poetry install --with dev
-       
-      - name: Run tests with coverage
-        #run: poetry run pytest  --doctest-modules --junitxml=junit/test-results.xml --cov=poweretl.${{ matrix.project }} --cov-report=html --cov-report=xml --cov-report=term
-        run: poetry run pytest --junitxml=junit/test-results.xml --cov=src --cov-report=html --cov-report=xml --cov-report=term
-        
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-${{ matrix.project }}
-          path: ${{ matrix.project }}/coverage.xml
-
-      - name: Upload HTML coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: htmlcov-${{ matrix.project }}
-          path: ${{ matrix.project }}/htmlcov/
-
-
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          files: ${{ matrix.project }}/junit/test-results.xml
-          comment_mode: failures
-          check_name: "Test Results - ${{ matrix.project }}"
-
-      - name: Code Coverage Summary
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: ${{ matrix.project }}/coverage.xml
-          badge: true
-          format: markdown
-          output: both
-          
-      # - name: Add Coverage PR Comment
-        # uses: marocchino/sticky-pull-request-comment@v2
-        # if: github.event_name == 'pull_request'
-        # with:
-          # recreate: true
-          # path: code-coverage-results.md
-        
-
-      # - name: Generate test summary markdown
-        # run: |
-          # echo "## 🧪 Test Summary" > test-summary.md
-          # total=$(grep -oP 'tests="\K[0-9]+' junit/test-results.xml)
-          # failures=$(grep -oP 'failures="\K[0-9]+' junit/test-results.xml)
-          # errors=$(grep -oP 'errors="\K[0-9]+' junit/test-results.xml)
-          # skipped=$(grep -oP 'skipped="\K[0-9]+' junit/test-results.xml)
-
-          # echo "- Total tests: $total" >> test-summary.md
-          # echo "- Failures: $failures" >> test-summary.md
-          # echo "- Errors: $errors" >> test-summary.md
-          # echo "- Skipped: $skipped" >> test-summary.md
-
-      # - name: Comment test summary on PR
-        # uses: marocchino/sticky-pull-request-comment@v2
-        # if: github.event_name == 'pull_request'
-        # with:
-          # recreate: true
-          # path: ${{ matrix.project }}/test-summary.md
-          
-      
-
-      - name: Combine and add to summary
-        if: github.event_name == 'pull_request'
-        run: |
-          # cat test-summary.md >> $GITHUB_STEP_SUMMARY
-          # echo "" >> $GITHUB_STEP_SUMMARY
-          cat ../code-coverage-results.md >> $GITHUB_STEP_SUMMARY
-         
-
-          
-
-        
+  run-tests:
+    uses: rplazaman/poweretl-pipelines/git-hub/tests.yaml@test
+    with:
+      python-version: '3.13'
+      projects: 'utils,common'
