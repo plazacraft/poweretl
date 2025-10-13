@@ -16,5 +16,5 @@ jobs:
     uses: plazacraft/poweretl-pipelines/.github/workflows/code-checks.yaml@feature/pylint
     with:
       python-version: '3.13'
-      projects: '["utils","common"]'
+      projects: '["utils"]'
     secrets: inherit      
