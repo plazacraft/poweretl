@@ -13,6 +13,13 @@ dependencies = [
 [tool.poetry]
 packages = [{include = "poweretl", from = "src"}]
 
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.black]
+line-length = 88
+
 
 
 [build-system]
@@ -23,6 +30,9 @@ build-backend = "poetry.core.masonry.api"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-
+black = "^25.9.0"
+pylint = "^4.0.0"
+flake8 = "^7.3.0"
+isort = "^7.0.0"
 
 [tool.poetry.dependencies]

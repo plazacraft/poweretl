@@ -1,14 +1,13 @@
 from dataclasses import dataclass
-from .Table import *
 
+from .Table import *
 
 
 @dataclass
 class Model:
-    """ Represents configuration of model. 
+    """Represents configuration of model.
     Attributes:
         tables (dict[str, Table], optional): Tables in the model.
     """
-    tables      :dict[str, Table]           = field(default_factory=dict)
 
-
+    tables: dict[str, Table] = field(default_factory=dict)
