@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from .Model import *
+from .model import Model
 
 
 class IConfigProvider(ABC):

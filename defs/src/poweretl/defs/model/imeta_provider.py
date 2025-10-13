@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from poweretl.defs.model.config import *
+from poweretl.defs.model.config import Model
 
 
 class IMetaProvider(ABC):

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .Base import *
+from .base import Base
 
 
 @dataclass

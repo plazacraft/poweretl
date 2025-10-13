@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from .Base import *
-from .Column import *
+from .base import Base
+from .column import Column
 
 
 @dataclass

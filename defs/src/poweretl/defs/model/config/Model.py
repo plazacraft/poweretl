@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from .Table import *
+from .table import Table
 
 
 @dataclass
