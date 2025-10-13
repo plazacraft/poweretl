@@ -1,0 +1,20 @@
+name: Run Standard Project Checks
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  
+jobs:
+  run-checks:
+    uses: plazacraft/poweretl-pipelines/.github/workflows/code-checks.yaml@feature/pylint
+    with:
+      python-version: '3.13'
+      projects: '["utils","common"]'
+    secrets: inherit      

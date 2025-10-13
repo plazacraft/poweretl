@@ -1,4 +1,4 @@
-name: Run Tests For All Projects
+name: Run All Project Checks
 on:
   push:
     branches: [main, develop]
@@ -11,6 +11,13 @@ permissions:
   checks: write
   
 jobs:
+  run-checks:
+    uses: plazacraft/poweretl-pipelines/.github/workflows/code-checks.yaml@feature/pylint
+    with:
+      python-version: '3.13'
+      projects: '["utils", "defs", "common", "databricks"]'
+    secrets: inherit      
+        
   run-tests:
     uses: plazacraft/poweretl-pipelines/.github/workflows/run-tests.yaml@main
     with:

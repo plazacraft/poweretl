@@ -1,25 +1,27 @@
 {
   "folders": [
-	{
-      "name": "common",
-      "path": "common"
+    {
+        "name": "common",
+        "path": "common"
     },
     {
-      "name": "defs",
-      "path": "defs"
+        "name": "defs",
+        "path": "defs"
     },
     {
-      "name": "databricks",
-      "path": "databricks"
+        "name": "databricks",
+        "path": "databricks"
     },
     {
-      "name": "examples",
-      "path": "examples"
+        "name": "examples",
+        "path": "examples"
     },
     {
-      "name": "utils",
-      "path": "utils"
+        "name": "utils",
+        "path": "utils"
+    },
+    {
+        "path": "."
     }
-
-  ]
+]
 }

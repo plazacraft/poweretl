@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Defs",
+            "name": "Python Debugger: Utils",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "cwd": "${fileDirname}",
             "console": "integratedTerminal",
-            "python": "${workspaceFolder}/.venv/Scripts/python",
+            "python": "${workspaceFolder}/utils/.venv/Scripts/python",
 
         }
     ]

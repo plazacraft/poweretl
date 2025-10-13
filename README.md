@@ -1,1 +1,0 @@
-![Tests](https://github.com/rplazaman/poweretl/utils/actions/workflows/test.yml/badge.svg)

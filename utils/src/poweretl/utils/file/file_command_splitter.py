@@ -1,10 +1,7 @@
-
 import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List
-
-
 
 
 @dataclass
@@ -15,13 +12,14 @@ class CommandEntry:
 
 
 class FileCommandSplitter:
-    """Parses text files that contain VERSION and COMMAND sections. It splits files to parts version-command.
-    """
+    """Parses text files that contain VERSION and COMMAND sections.
+    It splits files to parts version-command."""
 
-    def __init__(self,
-                 re_version = r"^\s*--\s*VERSION:\s*(?P<version>.+)\s*$",
-                 re_command = r"^\s*--\s*COMMAND\s*$"
-                 ):
+    def __init__(
+        self,
+        re_version=r"^\s*--\s*VERSION:\s*(?P<version>.+)\s*$",
+        re_command=r"^\s*--\s*COMMAND\s*$",
+    ):
         self._version_re = re.compile(re_version)
         self._command_re = re.compile(re_command)
 
@@ -38,7 +36,6 @@ class FileCommandSplitter:
                 key.append(p.lower())
         return tuple(key)
 
-
     def _parse_text(self, file_path: str, text: str) -> List[CommandEntry]:
         lines = text.splitlines()
         current_version = ""
@@ -53,11 +50,17 @@ class FileCommandSplitter:
                 if in_command:
                     command_text = "\n".join(command_lines).strip()
                     if command_text:
-                        results.append(CommandEntry(file=file_path, version=current_version, command=command_text))
+                        results.append(
+                            CommandEntry(
+                                file=file_path,
+                                version=current_version,
+                                command=command_text,
+                            )
+                        )
                     command_lines = []
                     in_command = False
                 # set current version
-                current_version = mver.group('version').strip()
+                current_version = mver.group("version").strip()
                 continue
 
             if self._command_re.match(line):
@@ -67,7 +70,13 @@ class FileCommandSplitter:
                 if in_command:
                     command_text = "\n".join(command_lines).strip()
                     if command_text:
-                        results.append(CommandEntry(file=file_path, version=current_version, command=command_text))
+                        results.append(
+                            CommandEntry(
+                                file=file_path,
+                                version=current_version,
+                                command=command_text,
+                            )
+                        )
                     command_lines = []
                     in_command = True
                 else:
@@ -81,7 +90,13 @@ class FileCommandSplitter:
         if in_command:
             command_text = "\n".join(command_lines).strip()
             if command_text:
-                results.append(CommandEntry(file=file_path, version=current_version, command=command_text))
+                results.append(
+                    CommandEntry(
+                        file=file_path,
+                        version=current_version,
+                        command=command_text,
+                    )
+                )
 
         return results
 
@@ -104,5 +119,5 @@ class FileCommandSplitter:
             out.extend(self._read_file(p))
 
         # Sort by semantic version ascending, then by file path ascending
-        out.sort(key=lambda e: (self.version_key(e.version), e.file or ''))
+        out.sort(key=lambda e: (self.version_key(e.version), e.file or ""))
         return out
