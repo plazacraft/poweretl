@@ -2,16 +2,21 @@ import json
 from dataclasses import asdict
 
 from dacite import from_dict
-from poweretl.defs.model.config import IConfigProvider, Model
+from poweretl.defs.model import Model
+from poweretl.defs.providers import IModelProvider
 from poweretl.utils.file import FileEntry, FileMerger, MultiFileReader
 from poweretl.utils.text import TokensReplacer
 
 
-class FileConfigProvider(IConfigProvider):
-    """_summary_
+class FileModelProvider(IModelProvider):
+    """Provides model definition from files
 
-    Args:
-        IConfigProvider (_type_): _description_
+    Attributes:
+        config_paths (list[FileEntry]): Files with model definitions
+        param_paths (list[FileEntry], optional): Files with parameters
+        encoding (str, optional): Encoding of files. Defaults to "utf-8".
+        tokens_replacer (TokensReplacer, optional): Tokens replacer used
+            to replace tokens with provided parameters.
     """
 
     def __init__(
@@ -23,7 +28,6 @@ class FileConfigProvider(IConfigProvider):
             re_start=r"(/\*<)|(<)", re_end=r"(>\*/)|(>)", re_escape=r"\^"
         ),
     ):
-
         self._config_reader = MultiFileReader(
             file_paths=config_paths, encoding=encoding
         )

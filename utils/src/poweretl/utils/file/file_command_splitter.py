@@ -13,21 +13,34 @@ class CommandEntry:
 
 class FileCommandSplitter:
     """Parses text files that contain VERSION and COMMAND sections.
-    It splits files to parts version-command."""
+    It splits files to parts version-command.
+
+    Attributes:
+        ref_version (str): Regex to define how Version section is parsed
+        re_command (str): Regex to define how Command section is parsed
+    """
 
     def __init__(
         self,
-        re_version=r"^\s*--\s*VERSION:\s*(?P<version>.+)\s*$",
-        re_command=r"^\s*--\s*COMMAND\s*$",
+        re_version: str = r"^\s*--\s*VERSION:\s*(?P<version>.+)\s*$",
+        re_command: str = r"^\s*--\s*COMMAND\s*$",
     ):
         self._version_re = re.compile(re_version)
         self._command_re = re.compile(re_command)
 
     @classmethod
-    def version_key(cls, v: str):
-        if not v:
+    def version_key(cls, version: str) -> tuple[str]:
+        """Parse version string
+
+        Args:
+            v (str): Version to parse.
+
+        Returns:
+            tuple[str]: Tuple with version parts.
+        """
+        if not version:
             return (0,)
-        parts = re.split(r"[^0-9A-Za-z]+", v)
+        parts = re.split(r"[^0-9A-Za-z]+", version)
         key = []
         for p in parts:
             if p.isdigit():
@@ -105,6 +118,12 @@ class FileCommandSplitter:
 
         Results are returned in the order files are provided; callers can sort
         them as needed.
+
+        Args:
+            files (list[tuple[Path, str]]): List of files and their contents to process.
+
+        Returns:
+            List[CommandEntry]: Ordered list of Files, Commands and their Versions.
         """
         entries: List[CommandEntry] = []
         for file, content in files:

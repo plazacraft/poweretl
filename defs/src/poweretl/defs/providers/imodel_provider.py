@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 
-from .model import Model
+from poweretl.defs.model import Model
 
 
-class IConfigProvider(ABC):
+class IModelProvider(ABC):
     """Provides configuration of model."""
 
     def __init__(self):

@@ -11,7 +11,7 @@ class FileEntry:
 
 
 class MultiFileReader:
-    """Initializes the _MultiFileReader.
+    """Reads file paths and its contents based on provided regex patterns.
     Attributes:
         file_paths (list[FileEntry]): List of
             FileEntry objects containing paths and regex patterns.
@@ -24,6 +24,11 @@ class MultiFileReader:
         self._encoding = encoding
 
     def get_files(self) -> list[Path]:
+        """Get file paths.
+
+        Returns:
+            list[Path]: Ordered list of file paths.
+        """
         output = []
         if self._file_paths:
             for file_entry in self._file_paths:
@@ -51,6 +56,11 @@ class MultiFileReader:
         return output
 
     def get_files_with_content(self) -> list[tuple[Path, str]]:
+        """Get files and their contents.
+
+        Returns:
+            list[tuple[Path, str]]: Ordered list of pair Path-Content.
+        """
         output = []
         files = self.get_files()
         for file in files:

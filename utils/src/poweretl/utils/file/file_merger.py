@@ -50,6 +50,14 @@ class FileMerger:
         return None
 
     def merge(self, files: list[tuple[Path, str]]) -> dict:
+        """Mere files.
+
+        Args:
+            files (list[tuple[Path, str]]): List of files and their contents.
+
+        Returns:
+            dict: Dictionary of objects after merging.
+        """
         data = None
         for file, content in files:
             file_data = None

@@ -1,7 +1,6 @@
+from poweretl.defs.model import IMetaProvider
 
-
-
-class DatabricksMetaProvider:
+class DatabricksMetaProvider(IMetaProvider):
 
     def __init__(self):
         pass
