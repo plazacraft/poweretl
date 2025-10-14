@@ -12,15 +12,15 @@ permissions:
   
 jobs:
   run-checks:
-    uses: plazacraft/poweretl-pipelines/.github/workflows/code-checks.yaml@feature/pylint
+    uses: plazacraft/poweretl-pipelines/.github/workflows/code-checks.yaml@main
     with:
       python-version: '3.13'
-      projects: '["utils", "defs", "common", "databricks"]'
+      projects: '["utils", "defs", "common", "databricks", "examples"]'
     secrets: inherit      
         
   run-tests:
     uses: plazacraft/poweretl-pipelines/.github/workflows/run-tests.yaml@main
     with:
       python-version: '3.13'
-      projects: '["utils","common"]'
+      projects: '["utils","common", "examples"]'
     secrets: inherit      

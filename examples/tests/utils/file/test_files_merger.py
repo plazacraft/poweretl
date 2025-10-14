@@ -1,5 +1,5 @@
-import os
 import json
+import os
 
 from poweretl.utils.file import FileEntry, FileMerger, MultiFileReader
 from poweretl.utils.text import TokensReplacer
@@ -28,8 +28,6 @@ def test_merge_files():
 
     config = merger.merge(config_contents)
 
-    json_str=json.dumps(config, indent=4, sort_keys=True)
-    with open(f'{module_dir}/config.json', "w+", encoding="utf-8") as f:
+    json_str = json.dumps(config, indent=4, sort_keys=True)
+    with open(f"{module_dir}/config.json", "w+", encoding="utf-8") as f:
         f.write(json_str)
-
-

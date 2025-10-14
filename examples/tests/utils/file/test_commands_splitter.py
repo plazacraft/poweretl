@@ -1,9 +1,13 @@
-import os
 import csv
-from pathlib import Path
+import os
 from dataclasses import asdict
 
-from poweretl.utils.file import CommandEntry, FileCommandSplitter, FileEntry, FileMerger, MultiFileReader
+from poweretl.utils.file import (
+    FileCommandSplitter,
+    FileEntry,
+    FileMerger,
+    MultiFileReader,
+)
 from poweretl.utils.text import TokensReplacer
 
 
@@ -16,16 +20,17 @@ def test_get_commands():
     replacer = TokensReplacer()
     merger = FileMerger()
 
-
     # read command files in Lexicographical order
     commands_reader = MultiFileReader([FileEntry(f"{data_dir}", r"\.sql$")])
     commands_files = commands_reader.get_files_with_content()
 
     # read params from yaml files, global and prod (omit test)
     param_reader = MultiFileReader(
-        [FileEntry(f"{data_dir}", r"global\.yaml$"),
-        FileEntry(f"{data_dir}", r"prod\.yaml$")]
-        )
+        [
+            FileEntry(f"{data_dir}", r"global\.yaml$"),
+            FileEntry(f"{data_dir}", r"prod\.yaml$"),
+        ]
+    )
     param_files = param_reader.get_files_with_content()
     params = merger.merge(param_files)
 
@@ -44,9 +49,3 @@ def test_get_commands():
         writer.writeheader()
         for command in commands:
             writer.writerow(asdict(command))
-
-
-
-
-
-

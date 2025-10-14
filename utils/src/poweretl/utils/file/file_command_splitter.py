@@ -100,7 +100,6 @@ class FileCommandSplitter:
 
         return results
 
-
     def get_commands(self, files: list[tuple[Path, str]]) -> List[CommandEntry]:
         """Read multiple files and return combined list of (version, command).
 

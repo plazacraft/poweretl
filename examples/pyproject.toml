@@ -11,8 +11,16 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "poweretl", from = "src"}]
+# packages = [{include = "poweretl", from = "src"}]
 package-mode = false
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.black]
+line-length = 88
+
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

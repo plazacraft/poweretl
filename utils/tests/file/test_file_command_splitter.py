@@ -2,20 +2,21 @@ import os
 from pathlib import Path
 
 import poweretl.utils.tests as common_tests
-from poweretl.utils.file import CommandEntry, FileCommandSplitter, MultiFileReader, FileEntry
+from poweretl.utils.file import (
+    CommandEntry,
+    FileCommandSplitter,
+    FileEntry,
+    MultiFileReader,
+)
 
 
 def test_parse_sample_file():
     data_dir = Path(__file__).parent / "_data/FileCommandSplitter"
     module_dir = os.path.dirname(os.path.abspath(__file__))
 
-
     reader = MultiFileReader(
-        file_paths=[
-            FileEntry(data_dir, r"01\.sample_meta\.sql", False)
-        ],
+        file_paths=[FileEntry(data_dir, r"01\.sample_meta\.sql", False)],
     )
-
 
     provider = FileCommandSplitter()
     results = provider.get_commands(reader.get_files_with_content())
@@ -39,10 +40,9 @@ def test_read_files_multiple():
     reader = MultiFileReader(
         file_paths=[
             FileEntry(data_dir, r"01\.sample_meta\.sql", False),
-            FileEntry(data_dir, r"02\.sample_meta_2\.sql", False)
+            FileEntry(data_dir, r"02\.sample_meta_2\.sql", False),
         ],
     )
-
 
     provider = FileCommandSplitter()
     results = provider.get_commands(reader.get_files_with_content())
@@ -55,14 +55,12 @@ def test_read_files_multiple():
 def test_semver_sorting():
     data_dir = Path(__file__).parent / "_data/FileCommandSplitter"
 
-
     reader = MultiFileReader(
         file_paths=[
             FileEntry(data_dir, r"03\.sample_semver_1\.sql", False),
-            FileEntry(data_dir, r"04\.sample_semver_2\.sql", False)
+            FileEntry(data_dir, r"04\.sample_semver_2\.sql", False),
         ],
     )
-
 
     provider = FileCommandSplitter()
     # provide files in reverse order to ensure sort happens

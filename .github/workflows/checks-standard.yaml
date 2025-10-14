@@ -13,8 +13,8 @@ permissions:
   
 jobs:
   run-checks:
-    uses: plazacraft/poweretl-pipelines/.github/workflows/code-checks.yaml@feature/pylint
+    uses: plazacraft/poweretl-pipelines/.github/workflows/code-checks.yaml@main
     with:
       python-version: '3.13'
-      projects: '["utils", "defs", "common"]'
+      projects: '["utils", "defs", "common", "examples"]'
     secrets: inherit      
