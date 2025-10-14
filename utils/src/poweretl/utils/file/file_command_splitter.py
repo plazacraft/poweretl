@@ -100,24 +100,17 @@ class FileCommandSplitter:
 
         return results
 
-    def _read_file(self, path: Path) -> List[CommandEntry]:
-        """Read a single file and parse its content."""
-        with path.open("r", encoding="utf-8") as f:
-            text = f.read()
-        entries = self._parse_text(path.absolute().as_posix(), text)
 
-        return entries
-
-    def read_files(self, paths: List[Path]) -> List[CommandEntry]:
+    def get_commands(self, files: list[tuple[Path, str]]) -> List[CommandEntry]:
         """Read multiple files and return combined list of (version, command).
 
         Results are returned in the order files are provided; callers can sort
         them as needed.
         """
-        out: List[CommandEntry] = []
-        for p in paths:
-            out.extend(self._read_file(p))
+        entries: List[CommandEntry] = []
+        for file, content in files:
+            entries.extend(self._parse_text(file, content))
 
         # Sort by semantic version ascending, then by file path ascending
-        out.sort(key=lambda e: (self.version_key(e.version), e.file or ""))
-        return out
+        entries.sort(key=lambda e: (self.version_key(e.version), e.file or ""))
+        return entries

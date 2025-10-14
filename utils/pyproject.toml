@@ -3,7 +3,7 @@ name = "poweretl-utils"
 version = "0.0.1a1"
 description = "poweretl is library to support database, data-warehouse, data-lakehouse python projects. poweretl-utils is independent package for not only etl tasks."
 authors = [
-    {name = "Roman Plaza",email = "r.plazaman@gmail.com"}
+    {name = "plazacraft",email = "r.plazaman@gmail.com"}
 ]
 readme = "README.md"
 keywords = ["python", "etl", "database", "data-lakehouse", "data-warehouse"]

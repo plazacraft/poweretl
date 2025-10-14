@@ -17,7 +17,7 @@ def test_merge_files():
     config_reader_1 = MultiFileReader([FileEntry(f"{data_dir}/config", r"\.jsonc?$")])
     config_files_1 = config_reader_1.get_files_with_content()
 
-    param_reader_1 = MultiFileReader([FileEntry(f"{data_dir}/config", r"\.yaml?$")])
+    param_reader_1 = MultiFileReader([FileEntry(f"{data_dir}/config", r"\.yaml$")])
     param_files_1 = param_reader_1.get_files_with_content()
 
     params_1 = merger.merge(param_files_1)
@@ -28,7 +28,7 @@ def test_merge_files():
 
     config_1 = merger.merge(config_contents_1)
 
-    config_reader_2 = MultiFileReader([FileEntry(f"{data_dir}/result", r"\.json?$")])
+    config_reader_2 = MultiFileReader([FileEntry(f"{data_dir}/result", r"\.json$")])
     config_files_2 = config_reader_2.get_files_with_content()
     config_2 = merger.merge(config_files_2)
 

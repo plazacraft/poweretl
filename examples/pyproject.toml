@@ -3,7 +3,7 @@ name = "poweretl-examples"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "plazacraft",email = "r.plazaman@gmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"
@@ -23,9 +23,18 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 poweretl-defs = { path = "../defs/" }
+poweretl-utils = { path = "../utils/" }
 poweretl-common = { path = "../common/" }
 poweretl-databricks = { path = "../databricks/" }
-pytest = "^7.2.0"
+pytest = "^7.4.0"
+pytest-cov = "^7.0.0"
+black = "^25.9.0"
+pylint = "^4.0.0"
+flake8 = "^7.3.0"
+isort = "^7.0.0"
 
 [tool.poetry.dependencies]
+poweretl-utils = "*"
+poweretl-common = "*"
 poweretl-databricks = "*"
+

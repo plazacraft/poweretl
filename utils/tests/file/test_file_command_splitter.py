@@ -2,17 +2,23 @@ import os
 from pathlib import Path
 
 import poweretl.utils.tests as common_tests
-from poweretl.utils.file import CommandEntry, FileCommandSplitter
+from poweretl.utils.file import CommandEntry, FileCommandSplitter, MultiFileReader, FileEntry
 
 
 def test_parse_sample_file():
     data_dir = Path(__file__).parent / "_data/FileCommandSplitter"
     module_dir = os.path.dirname(os.path.abspath(__file__))
 
-    sample = data_dir / "01.sample_meta.sql"
+
+    reader = MultiFileReader(
+        file_paths=[
+            FileEntry(data_dir, r"01\.sample_meta\.sql", False)
+        ],
+    )
+
 
     provider = FileCommandSplitter()
-    results = provider.read_files([sample])
+    results = provider.get_commands(reader.get_files_with_content())
 
     tests_config = common_tests.ConfigReader(file_path=f"{module_dir}/_config.json")
     config_test_name = "FileCommandSplitter.test_parse_sample_file"
@@ -29,11 +35,17 @@ def test_parse_sample_file():
 
 def test_read_files_multiple():
     data_dir = Path(__file__).parent / "_data/FileCommandSplitter"
-    f1 = data_dir / "01.sample_meta.sql"
-    f2 = data_dir / "02.sample_meta_2.sql"
+
+    reader = MultiFileReader(
+        file_paths=[
+            FileEntry(data_dir, r"01\.sample_meta\.sql", False),
+            FileEntry(data_dir, r"02\.sample_meta_2\.sql", False)
+        ],
+    )
+
 
     provider = FileCommandSplitter()
-    results = provider.read_files([f1, f2])
+    results = provider.get_commands(reader.get_files_with_content())
 
     assert len(results) == 7
     assert results[4].version == "1.1"
@@ -43,12 +55,18 @@ def test_read_files_multiple():
 def test_semver_sorting():
     data_dir = Path(__file__).parent / "_data/FileCommandSplitter"
 
-    v1_10 = data_dir / "03.sample_semver_1.sql"
-    v1_2 = data_dir / "04.sample_semver_2.sql"
+
+    reader = MultiFileReader(
+        file_paths=[
+            FileEntry(data_dir, r"03\.sample_semver_1\.sql", False),
+            FileEntry(data_dir, r"04\.sample_semver_2\.sql", False)
+        ],
+    )
+
 
     provider = FileCommandSplitter()
     # provide files in reverse order to ensure sort happens
-    results = provider.read_files([v1_10, v1_2])
+    results = provider.get_commands(reader.get_files_with_content())
 
     # Semantic sort should put 1.2 before 1.10
     versions = [r.version for r in results if r.command.strip()]
