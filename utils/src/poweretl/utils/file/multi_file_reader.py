@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-from poweretl.utils.providers import IFileStorageProvider, OSFileStorageProvider
+from poweretl.utils.providers import IFileStorageReader, OSFileStorageProvider
 
 
 @dataclass
@@ -25,7 +25,7 @@ class MultiFileReader:
         self,
         file_paths: list[FileEntry],
         encoding: str = "utf-8",
-        file_storage_provider: IFileStorageProvider = OSFileStorageProvider(),
+        file_storage_provider: IFileStorageReader = OSFileStorageProvider(),
     ):
         self._file_paths = file_paths
         self._encoding = encoding

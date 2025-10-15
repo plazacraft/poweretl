@@ -1,9 +1,9 @@
 from pathlib import Path
 
-from .ifile_storage_provider import IFileStorageProvider
+from .ifile_storage_provider import IFileStorageReader, IFileStorageWriter
 
 
-class OSFileStorageProvider(IFileStorageProvider):
+class OSFileStorageProvider(IFileStorageReader, IFileStorageWriter):
 
     def __init__(self):
         pass
@@ -22,3 +22,6 @@ class OSFileStorageProvider(IFileStorageProvider):
     def get_file_str_content(self, full_path: str, encoding: str) -> str:
         with open(full_path, "r", encoding=encoding) as f:
             return f.read()
+
+    def upload_file_str(self, path: str, file: str, content: str):
+        pass

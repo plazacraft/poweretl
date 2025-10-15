@@ -4,7 +4,7 @@ from poweretl.defs.meta import Meta
 from poweretl.defs.model import Model
 
 
-class IMetaManager(ABC):
+class IMetaProvider(ABC):
     """Keeps Model metadata and it's provisioning state."""
 
     def __init__(self):
