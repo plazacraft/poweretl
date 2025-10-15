@@ -1,23 +1,21 @@
-import json
-from pathlib import Path
-
-import json5
-import yaml
 from deepmerge import Merger, always_merger
 
+from .file_serializer import FileSerializer
 
 class FileMerger:
-    SUPPORTED_EXTENSIONS = [".json", ".yaml", ".yml", ".json5", ".jsonc"]
 
     """Merges files and returns dictionary object.
-    Supported files are defined by SUPPORTED_EXTENSIONS
+    
 
     Attributes:
+        file_serializer (FileSerializer): Serializes files to dict, 
+            only files supported by target file_serializer can be used
         merger (Merger): Merger strategy,
             as default always_merger is used
     """
 
-    def __init__(self, merger: Merger = always_merger):
+    def __init__(self, file_serializer = FileSerializer(), merger: Merger = always_merger):
+        self._file_serializer = file_serializer
         self._merger = merger
         # default strategy of always_merger
         # self._merger = Merger(
@@ -31,19 +29,7 @@ class FileMerger:
         # )
 
     def _to_dict(self, file: str, content) -> dict:
-
-        ext = Path(file).suffix
-        if ext not in self.SUPPORTED_EXTENSIONS:
-            raise ValueError(f"Unsupported file extension: {ext}")
-
-        if ext == ".json":
-            return json.loads(content)
-        if ext in [".json5", ".jsonc"]:
-            return json5.loads(content)
-        if ext in [".yaml", ".yml"]:
-            return yaml.safe_load(content)
-
-        return None
+        return self._file_serializer.to_dict(file, content)
 
     def merge(self, files: list[tuple[str, str]]) -> dict:
         """Mere files.

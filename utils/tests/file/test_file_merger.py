@@ -59,5 +59,5 @@ def test_merge_files_unsupported():
     config_reader_1 = MultiFileReader([FileEntry(f"{data_dir}/config", r"\.txt$")])
     config_files_1 = config_reader_1.get_files_with_content()
 
-    with pytest.raises(ValueError, match="Unsupported file extension: .txt"):
+    with pytest.raises(ValueError, match="Unsupported file format: .txt"):
         merger.merge(config_files_1)
