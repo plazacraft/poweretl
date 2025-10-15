@@ -1,5 +1,4 @@
 import json
-from abc import abstractmethod
 from pathlib import Path
 
 import json5
@@ -31,12 +30,9 @@ class FileMerger:
         #     ["override"]
         # )
 
-    @abstractmethod
-    def _to_dict(self, file: Path, content) -> dict:
-        if not file.is_file():
-            return None
+    def _to_dict(self, file: str, content) -> dict:
 
-        ext = file.suffix
+        ext = Path(file).suffix
         if ext not in self.SUPPORTED_EXTENSIONS:
             raise ValueError(f"Unsupported file extension: {ext}")
 
@@ -49,11 +45,11 @@ class FileMerger:
 
         return None
 
-    def merge(self, files: list[tuple[Path, str]]) -> dict:
+    def merge(self, files: list[tuple[str, str]]) -> dict:
         """Mere files.
 
         Args:
-            files (list[tuple[Path, str]]): List of files and their contents.
+            files (list[tuple[str, str]]): List of files and their contents.
 
         Returns:
             dict: Dictionary of objects after merging.

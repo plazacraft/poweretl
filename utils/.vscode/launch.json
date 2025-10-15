@@ -11,7 +11,7 @@
             "program": "${file}",
             "cwd": "${fileDirname}",
             "console": "integratedTerminal",
-            "python": "${workspaceFolder}/utils/.venv/Scripts/python",
+            "python": "${workspaceFolder}/.venv/Scripts/python",
 
         }
     ]

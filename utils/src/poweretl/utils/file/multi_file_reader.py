@@ -2,6 +2,8 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+from poweretl.utils.providers import IFileStorageReader, OSFileStorageProvider
+
 
 @dataclass
 class FileEntry:
@@ -19,11 +21,17 @@ class MultiFileReader:
             Defaults to 'utf-8'.
     """
 
-    def __init__(self, file_paths: list[FileEntry], encoding: str = "utf-8"):
+    def __init__(
+        self,
+        file_paths: list[FileEntry],
+        encoding: str = "utf-8",
+        file_storage_provider: IFileStorageReader = OSFileStorageProvider(),
+    ):
         self._file_paths = file_paths
         self._encoding = encoding
+        self._file_storage_provider = file_storage_provider
 
-    def get_files(self) -> list[Path]:
+    def get_files(self) -> list[str]:
         """Get file paths.
 
         Returns:
@@ -32,15 +40,15 @@ class MultiFileReader:
         output = []
         if self._file_paths:
             for file_entry in self._file_paths:
-                root = Path(file_entry.path)
                 regex = re.compile(file_entry.regex)
-                if file_entry.recursive:
-                    files = root.rglob("*")
-                else:
-                    files = root.iterdir()
-
+                file_list = self._file_storage_provider.get_files_list(
+                    file_entry.path, file_entry.recursive
+                )
+                file_list_paths = [Path(file) for file in file_list]
                 all_files = [
-                    file for file in files if file.is_file() and regex.search(file.name)
+                    file
+                    for file in file_list_paths
+                    if file.is_file() and regex.search(file.name)
                 ]
 
                 # Sort by parent folder full path and name, then by file name
@@ -53,9 +61,10 @@ class MultiFileReader:
                     ),
                 )
                 output.extend(sorted_files)
+        output = [file_path.resolve() for file_path in output]
         return output
 
-    def get_files_with_content(self) -> list[tuple[Path, str]]:
+    def get_files_with_content(self) -> list[tuple[str, str]]:
         """Get files and their contents.
 
         Returns:
@@ -64,7 +73,12 @@ class MultiFileReader:
         output = []
         files = self.get_files()
         for file in files:
-            with open(file, "r", encoding=self._encoding) as f:
-                output.append((file, f.read()))
-
+            output.append(
+                (
+                    file,
+                    self._file_storage_provider.get_file_str_content(
+                        file, self._encoding
+                    ),
+                )
+            )
         return output
