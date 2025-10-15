@@ -1,6 +1,6 @@
 import pytest
 
-from poweretl.utils.text import TokensReplacer
+from poweretl.utils import TokensReplacer
 
 
 def test_basic_replacement():

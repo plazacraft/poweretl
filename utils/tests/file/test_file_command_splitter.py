@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 import poweretl.utils.tests as common_tests
-from poweretl.utils.file import (
+from poweretl.utils import (
     CommandEntry,
     FileCommandSplitter,
     FileEntry,

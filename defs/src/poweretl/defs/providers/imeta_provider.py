@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
-from poweretl.defs.meta import Meta
-from poweretl.defs.model import Model
+from poweretl.defs import Meta, Model
 
 
 class IMetaProvider(ABC):
@@ -22,6 +21,7 @@ class IMetaProvider(ABC):
             model (Model): Model changes to be updated.
         """
 
+    @abstractmethod
     def push_meta_changes(self, meta: Meta):
         """Push new meta information about target model
 

@@ -2,7 +2,7 @@ import csv
 import os
 from dataclasses import asdict
 
-from poweretl.utils.file import (
+from poweretl.utils import (
     FileCommandSplitter,
     FileEntry,
     FileMerger,

@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from poweretl.utils.file import FilePathOrganizer
+from poweretl.utils import FilePathOrganizer
 
 
 @pytest.fixture

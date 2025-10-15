@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 import poweretl.utils.tests as common_tests
-from poweretl.utils.file import FileEntry, MultiFileReader
+from poweretl.utils import FileEntry, MultiFileReader
 
 
 def test_get_files():

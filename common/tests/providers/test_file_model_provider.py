@@ -1,9 +1,9 @@
 import os
 
 import pytest
-from poweretl.utils.file import FileEntry
+from poweretl.utils import FileEntry
 
-from poweretl.common.providers import FileModelProvider
+from poweretl.common import FileModelProvider
 
 
 def test_get_model():

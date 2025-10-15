@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from poweretl.defs.model import Model
+from poweretl.defs import Model
 
 
 class IModelProvider(ABC):

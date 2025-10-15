@@ -1,8 +1,7 @@
 import json
 import os
 
-from poweretl.utils.file import FileEntry, FileMerger, MultiFileReader
-from poweretl.utils.text import TokensReplacer
+from poweretl.utils import FileEntry, FileMerger, MultiFileReader, TokensReplacer
 
 
 def test_merge_files():
