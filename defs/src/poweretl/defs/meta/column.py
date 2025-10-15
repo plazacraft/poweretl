@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from poweretl.defs.model import Column as mColumn
 
@@ -8,4 +8,4 @@ from .meta_info import MetaInfo
 @dataclass
 class Column(mColumn):
 
-    meta: MetaInfo = MetaInfo()
+    meta: MetaInfo = field(default_factory=MetaInfo())
