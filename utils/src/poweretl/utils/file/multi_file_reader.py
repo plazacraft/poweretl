@@ -76,9 +76,7 @@ class MultiFileReader:
             output.append(
                 (
                     file,
-                    self._file_storage_provider.get_file_str_content(
-                        file, self._encoding
-                    ),
+                    self._file_storage_provider.get_file_str_content(file),
                 )
             )
         return output

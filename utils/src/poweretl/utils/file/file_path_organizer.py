@@ -12,9 +12,9 @@ class FilePathOrganizer:
             https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
     """
 
-    def __init__(self, 
-                 path_pattern: str = "%Y-%m/%d", 
-                 file_pattern: str = "%Y-%m-%d_%H-%M-%S_%f"):
+    def __init__(
+        self, path_pattern: str = "%Y-%m/%d", file_pattern: str = "%Y-%m-%d_%H-%M-%S_%f"
+    ):
         self.path_pattern = path_pattern
         self.file_pattern = file_pattern
 

@@ -7,7 +7,6 @@ class IFileStorageReader(ABC):
     def get_first_file_or_folder(self, path: str, ascending: bool) -> str:
         pass
 
-
     @abstractmethod
     def get_folders_list(self, path: str, recursive: bool = False) -> list[str]:
         pass
@@ -24,5 +23,5 @@ class IFileStorageReader(ABC):
 class IFileStorageWriter(IFileStorageReader):
 
     @abstractmethod
-    def upload_file_str(self, full_path: str, file: str, content: str):
+    def upload_file_str(self, full_path: str, content: str):
         pass
