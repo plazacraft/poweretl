@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from poweretl.defs import Meta, Model
+from poweretl.defs.meta import Meta
+from poweretl.defs.model import Model
 
 
 class IMetaProvider(ABC):
