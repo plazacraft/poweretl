@@ -11,6 +11,7 @@ class Base:
     def __init__(self, a, b):
         self.a = a
         self.b = b
+        self.custom_list = ["test_1", "test_2"]
 
 
 @dataclass
@@ -19,6 +20,7 @@ class Child(Base):
     b: int
     c: int = 0
     d: str = "default"
+    custom_list: list[str] = None
 
 
 # --- Tests ---
@@ -34,15 +36,19 @@ def test_basic_upgrade():
     assert child.b == 2
     assert child.c == 0
     assert child.d == "default"
+    assert child.custom_list is None
+    assert upgrader.are_the_same(base, child)
 
 
 def test_override_fields():
     base = Base(10, 20)
     upgrader = DataclassUpgrader(Child)
     child = upgrader.from_parent(base, c=99, d="custom")
+    child.a = 30
 
     assert child.c == 99
     assert child.d == "custom"
+    assert not upgrader.are_the_same(base, child)
 
 
 def test_missing_field_in_parent():

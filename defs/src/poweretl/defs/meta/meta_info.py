@@ -24,6 +24,6 @@ class MetaInfo:
         operation (Operation): Operation to run
     """
 
-    object_id: int = None
+    object_id: str = None
     status: Status = None
     operation: Operation = None

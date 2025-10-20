@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class IFileStorageReader(ABC):
 
     @abstractmethod
-    def get_first_file_or_folder(self, path: str, ascending: bool) -> str:
+    def get_first_file_or_folder(self, path: str, ascending: bool) -> tuple[str, bool]:
         pass
 
     @abstractmethod
