@@ -1,69 +1,82 @@
-from dataclasses import dataclass
+# pylint: disable=W0212
+
+from dataclasses import dataclass, field
 
 import pytest
 
-from poweretl.utils import DataclassUpgrader
-
-# --- Sample classes for testing ---
-
-
-class Base:
-    def __init__(self, a, b):
-        self.a = a
-        self.b = b
-        self.custom_list = ["test_1", "test_2"]
+from poweretl.utils.helpers.dataclass_upgrader import (
+    DataclassUpgrader,
+)
 
 
-@dataclass
-class Child(Base):
-    a: int
-    b: int
-    c: int = 0
-    d: str = "default"
-    custom_list: list[str] = None
+def test_is_excluded_with_class_and_instance_and_non_dataclass():
 
+    @dataclass
+    class Parent:
+        a: int = field(default=1, metadata={"exclude_from_upgrader": True})
+        b: int = 2
 
-# --- Tests ---
-
-
-def test_basic_upgrade():
-    base = Base(1, 2)
-    upgrader = DataclassUpgrader(Child)
-    child = upgrader.from_parent(base)
-
-    assert isinstance(child, Child)
-    assert child.a == 1
-    assert child.b == 2
-    assert child.c == 0
-    assert child.d == "default"
-    assert child.custom_list is None
-    assert upgrader.are_the_same(base, child)
-
-
-def test_override_fields():
-    base = Base(10, 20)
-    upgrader = DataclassUpgrader(Child)
-    child = upgrader.from_parent(base, c=99, d="custom")
-    child.a = 30
-
-    assert child.c == 99
-    assert child.d == "custom"
-    assert not upgrader.are_the_same(base, child)
-
-
-def test_missing_field_in_parent():
-    class Incomplete:
-        def __init__(self):
-            self.a = 5  # b is missing
-
-    upgrader = DataclassUpgrader(Child)
-    with pytest.raises(TypeError):
-        upgrader.from_parent(Incomplete())
-
-
-def test_non_dataclass_child():
-    class NotADataclass:
+    @dataclass
+    class Child(Parent):
         pass
 
+    upgrader = DataclassUpgrader(Child)
+
+    # Class-level check
+    assert upgrader._is_excluded(Parent, "a") is True
+    assert upgrader._is_excluded(Parent, "b") is False
+
+    # Instance-level check
+    p = Parent()
+    assert upgrader._is_excluded(p, "a") is True
+    assert upgrader._is_excluded(p, "b") is False
+
+    # Non-dataclass input should return False
+    assert upgrader._is_excluded(object(), "a") is False
+
+
+def test_dataclass_upgrader_from_parent_and_are_the_same():
+    @dataclass
+    class Parent:
+        x: int
+        items: list = field(default_factory=lambda: [1, 2, 3])
+        secret: str = field(default="top", metadata={"exclude_from_upgrader": True})
+
+    @dataclass
+    class Child(Parent):
+        # secret is excluded when creating from parent, so give child a default
+        secret: str = field(default="child_default")
+        only_in_child: str = "child_only"
+
+    parent = Parent(x=10, items=[1, 2, 3], secret="parent_secret")
+
+    # DataclassUpgrader must accept a dataclass type
+    upgrader = DataclassUpgrader(Child)
+
+    # from_parent should deep-copy items and not copy 'secret'
+    child = upgrader.from_parent(parent)
+    assert isinstance(child, Child)
+    assert child.x == 10
+    assert child.items == [1, 2, 3]
+    assert child.only_in_child == "child_only"
+
+    # deep copy: different object identity
+    assert child.items is not parent.items
+    # excluded field remains child's default
+    assert child.secret == "child_default"
+
+    # overrides should apply
+    child2 = upgrader.from_parent(parent, secret="overridden")
+    assert child2.secret == "overridden"
+
+    # are_the_same: child created from parent (ignoring excluded field) should be same
+    assert upgrader.are_the_same(parent, child) is True
+
+    # if we change a non-excluded field, are_the_same should return False
+    child.items.append(99)
+    assert upgrader.are_the_same(parent, child) is False
+
+
+def test_dataclass_upgrader_init_raises_on_non_dataclass():
     with pytest.raises(TypeError):
-        DataclassUpgrader(NotADataclass)
+        DataclassUpgrader(int)
