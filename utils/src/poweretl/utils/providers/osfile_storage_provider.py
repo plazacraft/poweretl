@@ -45,6 +45,9 @@ class OSFileStorageProvider(IFileStorageWriter):
         return all_files
 
     def get_file_str_content(self, full_path: str) -> str:
+        if not Path(full_path).exists():
+            return None
+
         with open(full_path, "r", encoding=self._encoding) as f:
             return f.read()
 

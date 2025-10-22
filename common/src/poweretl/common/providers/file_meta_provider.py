@@ -5,6 +5,7 @@ from typing import TypeVar
 
 from dacite import from_dict  # pylint: disable=C0411
 from deepmerge import always_merger  # pylint: disable=C0411
+
 from poweretl.defs import Meta, Model
 from poweretl.utils import (
     FilePathOrganizer,

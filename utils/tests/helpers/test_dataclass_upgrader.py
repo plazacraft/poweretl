@@ -4,9 +4,7 @@ from dataclasses import dataclass, field
 
 import pytest
 
-from poweretl.utils.helpers.dataclass_upgrader import (
-    DataclassUpgrader,
-)
+from poweretl.utils.helpers.dataclass_upgrader import DataclassUpgrader
 
 
 def test_is_excluded_with_class_and_instance_and_non_dataclass():

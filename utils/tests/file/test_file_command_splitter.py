@@ -2,12 +2,7 @@ import os
 from pathlib import Path
 
 import poweretl.utils.tests as common_tests
-from poweretl.utils import (
-    CommandEntry,
-    FileCommandSplitter,
-    FileEntry,
-    MultiFileReader,
-)
+from poweretl.utils import CommandEntry, FileCommandSplitter, FileEntry, MultiFileReader
 
 
 def test_parse_sample_file():

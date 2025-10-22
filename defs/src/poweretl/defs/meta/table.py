@@ -10,4 +10,4 @@ from .meta_info import MetaInfo
 class Table(mTable):
 
     columns: dict[str, Column] = field(default_factory=dict)
-    meta: MetaInfo = field(default_factory=MetaInfo())
+    meta: MetaInfo = field(default_factory=MetaInfo)

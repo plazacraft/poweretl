@@ -4,9 +4,7 @@ from typing import Optional, Type, TypeVar
 
 from poweretl.defs import IMetaProvider, Meta, Model
 from poweretl.defs.meta import Column, Operation, Status, Table
-from poweretl.utils import (
-    DataclassUpgrader,
-)
+from poweretl.utils import DataclassUpgrader
 
 T = TypeVar("T")
 

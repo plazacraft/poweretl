@@ -8,4 +8,4 @@ from .meta_info import MetaInfo
 @dataclass
 class Column(mColumn):
 
-    meta: MetaInfo = field(default_factory=MetaInfo())
+    meta: MetaInfo = field(default_factory=MetaInfo)

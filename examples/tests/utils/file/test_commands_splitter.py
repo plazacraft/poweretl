@@ -2,12 +2,7 @@ import csv
 import os
 from dataclasses import asdict
 
-from poweretl.utils import (
-    FileCommandSplitter,
-    FileEntry,
-    FileMerger,
-    MultiFileReader,
-)
+from poweretl.utils import FileCommandSplitter, FileEntry, FileMerger, MultiFileReader
 from poweretl.utils.text import TokensReplacer
 
 
@@ -44,7 +39,12 @@ def test_get_commands():
     commands = command_splitter.get_commands(commands_contents)
 
     # extract commands to csv
-    with open(f"{module_dir}/_data/commands_splitter_results/commands.csv", "w", newline="", encoding="utf-8") as f:
+    with open(
+        f"{module_dir}/_data/commands_splitter_results/commands.csv",
+        "w",
+        newline="",
+        encoding="utf-8",
+    ) as f:
         writer = csv.DictWriter(f, fieldnames=commands[0].__dataclass_fields__.keys())
         writer.writeheader()
         for command in commands:
