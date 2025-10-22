@@ -16,7 +16,7 @@ def test_get_model():
     )
 
     model_2 = FileModelProvider(
-        config_paths=[FileEntry(f"{module_dir}/_data/result", r"\.json$")],
+        config_paths=[FileEntry(f"{module_dir}/_data/result", r"model\.json$")],
         encoding="utf-8",
     )
 
@@ -55,5 +55,5 @@ def test_get_model_unsupported():
         encoding="utf-8",
     )
 
-    with pytest.raises(ValueError, match="Unsupported file extension: .txt"):
+    with pytest.raises(ValueError, match="Unsupported file format: .txt"):
         model_1.get_model()

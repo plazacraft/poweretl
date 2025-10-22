@@ -15,5 +15,5 @@ class Table(Base):
     """
 
     prune_columns: bool = False
-    columns: dict[str, Column] = field(default_factory=dict)
+    columns: dict[str, Column] = field(default_factory=dict, metadata={"exclude_from_upgrader": True})
     properties: object = None

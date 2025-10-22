@@ -12,4 +12,4 @@ class Model:
     """
 
     prune_tables: bool = False
-    tables: dict[str, Table] = field(default_factory=dict)
+    tables: dict[str, Table] = field(default_factory=dict, metadata={"exclude_from_upgrader": True})

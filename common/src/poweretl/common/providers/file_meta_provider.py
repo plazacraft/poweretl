@@ -44,7 +44,7 @@ class FileMetaProvider(IMetaProvider):
     def _find_latest_file(self, path: str):
 
         if not self._store_versions:
-            return self._file_name
+            return str(Path(path).joinpath(self._file_name))
 
         first, is_dir = self._storage_provider.get_first_file_or_folder(path, False)
         if not first:
@@ -62,9 +62,9 @@ class FileMetaProvider(IMetaProvider):
             output_file = self._file_name
         else:
             output_dir, output_file = self._file_path_organizer.get_name(datetime.now())
-            output_file = Path(output_file).joinpath(self._file_name)
+            output_file = output_file + self._file_name
 
-        output_dir = Path(self._path).joinpath(output_dir)
+        output_dir = str(Path(self._path).joinpath(output_dir))
         content = self._file_serializer.to_file_content(output_file, asdict(meta))
         self._storage_provider.upload_file_str(output_dir, output_file, content)
 
@@ -107,7 +107,15 @@ class FileMetaProvider(IMetaProvider):
     # detect what is new, what to delete and what to remove
     # this function can be generic!
     def _get_updated_meta(self, model: Model, meta: Meta) -> Meta:
+        """_summary_
 
+        Args:
+            model (Model): _description_
+            meta (Meta): _description_
+
+        Returns:
+            Meta: _description_
+        """
         # don't update provided object, return new updated
         meta = copy.deepcopy(meta)
 
@@ -180,9 +188,11 @@ class FileMetaProvider(IMetaProvider):
                 meta = from_dict(data_class=Meta, data=meta_dict)
 
                 if table_id and meta:
-                    meta.tables = [
-                        table for table in meta.tables if table["id"] == table_id
-                    ]
+                    meta.tables = {
+                        key: table
+                        for key, table in meta.tables.items()
+                        if key == table_id
+                    }
                 return meta
 
         return None

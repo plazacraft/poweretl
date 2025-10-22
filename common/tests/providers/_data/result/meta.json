@@ -1,0 +1,13 @@
+{
+  "id": "expected-meta-id",
+  "tables": {
+    "t1": {
+      "id": "t1",
+      "name": "table_one",
+      "columns": {
+        "c1": {"id": "c1", "name": "col1", "meta": {"status": "ACTIVE"}},
+        "c2": {"id": "c2", "name": "col2", "meta": {"status": "ACTIVE"}}
+      }
+    }
+  }
+}

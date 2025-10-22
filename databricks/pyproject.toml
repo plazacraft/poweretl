@@ -26,7 +26,10 @@ poweretl-defs = { path = "../defs/" }
 poweretl-common = { path = "../common/"}
 pytest = "^7.4.0"
 pytest-cov = "^7.0.0"
-
+black = "^25.9.0"
+pylint = "^4.0.0"
+flake8 = "^7.3.0"
+isort = "^7.0.0"
 
 [tool.poetry.dependencies]
 poweretl-defs = "*"
