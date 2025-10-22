@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from poweretl.defs import Meta, Model, Operation, Status
 
-from poweretl.common.providers.file_meta_provider import FileMetaProvider
+from poweretl.common import FileMetaProvider
 
 
 class DummyStorageProvider:
