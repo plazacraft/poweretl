@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 
@@ -29,3 +29,12 @@ class MetaInfo:
     status: str = None
     # use str to avoid problems with serialization of Enums
     operation: str = None
+
+@dataclass
+class BaseItem:
+    """Base class for metadata objects.
+    Attributes:
+        meta (MetaInfo): Metadata information.
+    """
+
+    meta: MetaInfo = field(default_factory=MetaInfo)    

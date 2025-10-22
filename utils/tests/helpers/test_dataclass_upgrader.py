@@ -78,3 +78,39 @@ def test_dataclass_upgrader_from_parent_and_are_the_same():
 def test_dataclass_upgrader_init_raises_on_non_dataclass():
     with pytest.raises(TypeError):
         DataclassUpgrader(int)
+
+
+def test_nested_dataclass_and_container_copying():
+    @dataclass
+    class Inner:
+        a: int
+        secret: int = field(default=0, metadata={"exclude_from_upgrader": True})
+
+    @dataclass
+    class Parent:
+        x: int
+        inner: Inner
+        inners: list = field(default_factory=list)
+
+    @dataclass
+    class Child(Parent):
+        pass
+
+    parent = Parent(x=1, inner=Inner(a=5, secret=99), inners=[Inner(a=1, secret=9), Inner(a=2, secret=8)])
+
+    upgrader = DataclassUpgrader(Child)
+
+    child = upgrader.from_parent(parent)
+
+    # nested dataclass instance should be reconstructed (different identity)
+    assert child.inner is not parent.inner
+    assert isinstance(child.inner, Inner)
+    assert child.inner.a == 5
+    # excluded field on nested dataclass should not be copied and should use the default
+    assert child.inner.secret == 0
+
+    # container of dataclasses should be deep-copied and inner items reconstructed
+    assert child.inners is not parent.inners
+    assert child.inners[0] is not parent.inners[0]
+    assert child.inners[0].a == 1
+    assert child.inners[0].secret == 0

@@ -1,3 +1,5 @@
+from dataclasses import asdict
+#import json
 import os
 
 import pytest
@@ -21,17 +23,13 @@ def test_get_model():
     )
 
     model_1 = model_1.get_model()
-    # json_str = model_1.to_json(model_1, dump_params={"indent": 4, "sort_keys": True})
-    # with open(f'{module_dir}/_data/result/merged.json', "w+", encoding="utf-8") as f:
+    # json_str = json.dumps(asdict(model_1), indent=4, sort_keys=True)
+    # with open(f'{module_dir}/_data/result/model.json', "w+", encoding="utf-8") as f:
     #     f.write(json_str)
 
     model_2 = model_2.get_model()
     assert model_1 == model_2, "Models are not equal"
 
-    # json_str = model_1.to_json(model_1, dump_params={"indent": 4, "sort_keys": True})
-    # with open(f"{module_dir}/_data/result/merged.json", "r", encoding="utf-8") as f:
-    #     file_str = f.read()
-    # assert json_str == file_str, "JSON strings are not equal"
 
 
 def test_get_model_empty():

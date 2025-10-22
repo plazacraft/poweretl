@@ -71,9 +71,10 @@ def test_file_meta_provider_full():
     # )
 
     model_init = model_provider_init.get_model()
+    # meta_provider_init.push_model_changes(model_init)
     meta_provider_current.push_model_changes(model_init)
 
-    meta_init = meta_provider_init.get_meta()
+    meta_init = meta_provider_init.get_meta()   
     meta_current = meta_provider_current.get_meta()
 
     assert deep_compare(

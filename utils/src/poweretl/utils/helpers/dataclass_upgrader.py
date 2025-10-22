@@ -40,16 +40,72 @@ class DataclassUpgrader(Generic[T]):
         - Deep copies all attributes from parent_obj unless marked with @exclude.
         - Allows overrides for child-specific fields.
         """
+        def _copy_dataclass_instance(obj):
+            """Reconstruct a dataclass instance by copying its fields but
+            skipping any fields marked with metadata 'exclude_from_upgrader'.
+            This avoids using copy.deepcopy on the dataclass as a whole so
+            excluded fields can be omitted.
+            """
+            if obj is None:
+                return None
+
+            cls = obj if isinstance(obj, type) else getattr(obj, "__class__", None)
+            if cls is None or not is_dataclass(cls):
+                # fallback to deepcopy for non-dataclass objects
+                return copy.deepcopy(obj)
+
+            result_kwargs = {}
+            for f in fields(cls):
+                name = f.name
+                if not hasattr(obj, name):
+                    continue
+
+                # Skip fields that are marked excluded on the object's class
+                if self._is_excluded(obj, name):
+                    continue
+
+                val = getattr(obj, name)
+                result_kwargs[name] = _deep_copy_value(val)
+
+            return cls(**result_kwargs)
+
+        def _deep_copy_value(value):
+            """Recursively copy values, reconstructing dataclass instances via
+            _copy_dataclass_instance and falling back to deepcopy for other
+            objects. Handles containers (list/tuple/set/dict).
+            """
+            # dataclass instance -> reconstruct without excluded fields
+            if is_dataclass(value):
+                return _copy_dataclass_instance(value)
+
+            # Containers
+            if isinstance(value, dict):
+                return { _deep_copy_value(k): _deep_copy_value(v) for k, v in value.items() }
+
+            if isinstance(value, list):
+                return [ _deep_copy_value(v) for v in value ]
+
+            if isinstance(value, tuple):
+                return tuple(_deep_copy_value(v) for v in value)
+
+            if isinstance(value, set):
+                return { _deep_copy_value(v) for v in value }
+
+            # Fallback to deepcopy for other types (primitives, class instances, etc.)
+            return copy.deepcopy(value)
+
         init_args = {}
         for f in self._child_fields:
             if not hasattr(parent_obj, f.name):
                 continue
 
-            value = getattr(parent_obj, f.name)
-
             # Check if field should be excluded from copying
-            if not self._is_excluded(parent_obj, f.name):
-                init_args[f.name] = copy.deepcopy(value)
+            if self._is_excluded(parent_obj, f.name):
+                continue
+
+            value = getattr(parent_obj, f.name)
+            # Use our recursive copier which will reconstruct dataclasses
+            init_args[f.name] = _deep_copy_value(value)
 
         init_args.update(overrides)
         return self.child_cls(**init_args)

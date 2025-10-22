@@ -1,88 +1,94 @@
 {
-    "prune_tables": false,
     "tables": {
-        "prd.test.table_1": {
-            "name": "table_1_new",
-            "prune_columns": false,
-            "columns": {
-                "col_1": {
-                    "name": "col 1 new",
-                    "type": "type",
-                    "properties": null,
-                    "meta": {
-                        "object_id": "55ecf15a-6844-4083-8afa-c0854a25af2e",
-                        "status": "pending",
-                        "operation": "new"
+        "prune": false,
+        "items": {
+            "prd.test.table_1": {
+                "name": "table_1_new",
+                "columns": {
+                    "prune": false,
+                    "items": {
+                        "col_1": {
+                            "name": "col 1 new",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "f3f6f575-3f69-4fe4-8b45-b8f1657d644a",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        },
+                        "col_2": {
+                            "name": "col 2",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "1e3b8922-30cb-43e9-876a-dcb3371196da",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        },
+                        "col_3": {
+                            "name": "col 2",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "2a6fafe1-2526-4613-8b48-b67ddf821b94",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        },
+                        "last_modification": {
+                            "name": "last modification",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "1fc8ab9d-a07b-4c3a-b4ae-fc724d745ddf",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        },
+                        "version": {
+                            "name": "version",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "6c9e2988-8332-404c-bb61-8faf5b68dd2c",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        }
                     }
                 },
-                "col_2": {
-                    "name": "col 2",
-                    "type": "type",
-                    "properties": null,
-                    "meta": {
-                        "object_id": "ff17313b-30f7-42e4-af3d-682f91bc7568",
-                        "status": "pending",
-                        "operation": "new"
-                    }
-                },
-                "col_3": {
-                    "name": "col 2",
-                    "type": "type",
-                    "properties": null,
-                    "meta": {
-                        "object_id": "ea3517d1-e50f-4e9d-be70-fb99083d25a9",
-                        "status": "pending",
-                        "operation": "new"
-                    }
-                },
-                "last_modification": {
-                    "name": "last modification",
-                    "type": "type",
-                    "properties": null,
-                    "meta": {
-                        "object_id": "9795100e-dc27-4a36-9646-40cf418d4e24",
-                        "status": "pending",
-                        "operation": "new"
-                    }
-                },
-                "version": {
-                    "name": "version",
-                    "type": "type",
-                    "properties": null,
-                    "meta": {
-                        "object_id": "1ed27cba-14cd-4667-bff4-1959ee2f124c",
-                        "status": "pending",
-                        "operation": "new"
-                    }
+                "properties": null,
+                "meta": {
+                    "object_id": "c66a180d-90bf-4517-beac-179b953ab163",
+                    "status": "pending",
+                    "operation": "new"
                 }
             },
-            "properties": null,
-            "meta": {
-                "object_id": "2f7b7d14-fb83-43ef-8018-2db14ff9b12c",
-                "status": "pending",
-                "operation": "new"
-            }
-        },
-        "prd.test.table_2": {
-            "name": "table_2",
-            "prune_columns": false,
-            "columns": {
-                "col_1": {
-                    "name": "col 1",
-                    "type": "type",
-                    "properties": null,
-                    "meta": {
-                        "object_id": "5cfb023b-0fb0-401b-a9de-058e92c028b8",
-                        "status": "pending",
-                        "operation": "new"
+            "prd.test.table_2": {
+                "name": "table_2",
+                "columns": {
+                    "prune": false,
+                    "items": {
+                        "col_1": {
+                            "name": "col 1",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "e74a8dca-dbcc-4c6a-bdf6-23ca08ea6c5c",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        }
                     }
+                },
+                "properties": null,
+                "meta": {
+                    "object_id": "f28265dd-1980-4fef-a760-1af76d66a67c",
+                    "status": "pending",
+                    "operation": "new"
                 }
-            },
-            "properties": null,
-            "meta": {
-                "object_id": "beb76f5f-705d-4bba-85c4-42d2717f3b99",
-                "status": "pending",
-                "operation": "new"
             }
         }
     }

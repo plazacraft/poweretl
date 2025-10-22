@@ -94,9 +94,9 @@ class FileMetaProvider(BaseMetaProvider):
                 meta = from_dict(data_class=Meta, data=meta_dict)
 
                 if table_id and meta:
-                    meta.tables = {
+                    meta.tables.items = {
                         key: table
-                        for key, table in meta.tables.items()
+                        for key, table in meta.tables.items.items()
                         if key == table_id
                     }
                 return meta

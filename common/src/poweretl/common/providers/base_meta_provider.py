@@ -3,10 +3,10 @@ import uuid
 from typing import Optional, Type, TypeVar
 
 from poweretl.defs import IMetaProvider, Meta, Model
-from poweretl.defs.meta import Column, Operation, Status, Table
+from poweretl.defs.meta import Column, Operation, Status, Table, BaseItem
 from poweretl.utils import DataclassUpgrader
 
-T = TypeVar("T")
+TBaseMetaItem = TypeVar("TBaseMetaItem", bound=BaseItem)
 
 
 class BaseMetaProvider(IMetaProvider):
@@ -18,9 +18,9 @@ class BaseMetaProvider(IMetaProvider):
     def _v_create_or_update(
         self,
         source_obj,
-        dest_obj: Optional[T],
-        child_cls: Type[T],
-    ) -> T:
+        dest_obj: Optional[TBaseMetaItem],
+        child_cls: Type[TBaseMetaItem],
+    ) -> TBaseMetaItem:
         """
         Generic create-or-update for parent/child dataclasses.
 
@@ -63,12 +63,12 @@ class BaseMetaProvider(IMetaProvider):
         # don't update provided object, return new updated
         meta = copy.deepcopy(meta)
 
-        for table_id, table in model.tables.items():
+        for table_id, table in model.tables.items.items():
 
             # update table properties in meta or create new object
             dest_table = None
-            if table_id in meta.tables.keys():
-                dest_table = meta.tables[table_id]
+            if table_id in meta.tables.items.keys():
+                dest_table = meta.tables.items[table_id]
 
             meta_table: Table = self._v_create_or_update(
                 table,
@@ -76,11 +76,11 @@ class BaseMetaProvider(IMetaProvider):
                 Table,
             )
 
-            for column_id, column in table.columns.items():
+            for column_id, column in table.columns.items.items():
                 # update column properties in meta or create new object
                 dest_column = None
-                if column_id in meta_table.columns.keys():
-                    dest_column = meta_table.columns[column_id]
+                if column_id in meta_table.columns.items.keys():
+                    dest_column = meta_table.columns.items[column_id]
 
                 meta_column = self._v_create_or_update(
                     column,
@@ -88,23 +88,23 @@ class BaseMetaProvider(IMetaProvider):
                     Column,
                 )
 
-                meta_table.columns[column_id] = meta_column
+                meta_table.columns.items[column_id] = meta_column
 
-            meta.tables[table_id] = meta_table
+            meta.tables.items[table_id] = meta_table
 
             # mark not existed columns to remove
-            if table.prune_columns:
+            if table.columns.prune:
                 for (
                     meta_current_column_id,
                     meta_current_column,
-                ) in meta_table.columns.items():
-                    if meta_current_column_id not in table.columns.keys():
+                ) in meta_table.columns.items.items():
+                    if meta_current_column_id not in table.columns.items.keys():
                         meta_current_column.meta.status = Status.PENDING.value
                         meta_current_column.meta.operation = Operation.DELETED.value
 
         # mark not existed tables to remove
-        if model.prune_tables:
-            for meta_current_table_id, meta_current_table in meta.tables.items():
+        if model.tables.prune:
+            for meta_current_table_id, meta_current_table in meta.tables.items.items():
                 if meta_current_table_id not in model.tables.keys():
                     meta_current_table.meta.status = Status.PENDING.value
                     meta_current_table.meta.operation = Operation.DELETED.value

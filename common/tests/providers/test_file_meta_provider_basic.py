@@ -165,7 +165,7 @@ def test_get_meta_returns_meta_object(monkeypatch):
     )
 
     # create a stored meta
-    meta = {"prune_tables": True, "tables": {}}
+    meta = {"tables": {"prune": True}}
     storage._store["/tmp/getmeta/ver/meta"] = {"metadata.json": json.dumps(meta)}
 
     # make get_first_file_or_folder return the path to the file
@@ -177,7 +177,7 @@ def test_get_meta_returns_meta_object(monkeypatch):
     result = provider.get_meta()
     # from_dict should construct Meta; ensure id is present
     assert result is not None
-    assert getattr(result, "prune_tables")
+    assert getattr(result.tables, "prune")
 
 
 @pytest.mark.parametrize("table_id", [None, "t1"])
@@ -197,22 +197,24 @@ def test_get_meta_with_table_id_filters(monkeypatch, table_id):
 
     meta = {
         "tables": {
-            "t1": {
-                "name": "t1",
-                "meta": {
-                    "object_id": "1",
-                    "operation": Operation.NEW.value,
-                    "status": Status.SUCCESS.value,
+            "items": {
+                "t1": {
+                    "name": "t1",
+                    "meta": {
+                        "object_id": "1",
+                        "operation": Operation.NEW.value,
+                        "status": Status.SUCCESS.value,
+                    },
                 },
-            },
-            "t2": {
-                "name": "t2",
-                "meta": {
-                    "object_id": "2",
-                    "operation": Operation.NEW.value,
-                    "status": Status.SUCCESS.value,
+                "t2": {
+                    "name": "t2",
+                    "meta": {
+                        "object_id": "2",
+                        "operation": Operation.NEW.value,
+                        "status": Status.SUCCESS.value,
+                    },
                 },
-            },
+            }
         }
     }
     storage._store["/tmp/filter"] = {"metadata.json": json.dumps(meta)}
@@ -226,9 +228,9 @@ def test_get_meta_with_table_id_filters(monkeypatch, table_id):
     result = provider.get_meta(table_id=table_id)
     assert result is not None
     if table_id is None:
-        assert isinstance(result.tables, dict)
-        assert len(result.tables) == 2
+        assert isinstance(result.tables.items, dict)
+        assert len(result.tables.items) == 2
     else:
         # expecting only the matching table in result.tables
-        assert len(result.tables) == 1
-        assert result.tables[table_id].name == table_id
+        assert len(result.tables.items) == 1
+        assert result.tables.items[table_id].name == table_id

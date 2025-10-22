@@ -1,13 +1,21 @@
 from dataclasses import dataclass, field
 
-from poweretl.defs.model import Table as mTable
+from poweretl.defs.model import Table as mTable, Tables as mTables
 
-from .column import Column
-from .meta_info import MetaInfo
+from .column import Columns
+from .base import BaseItem
 
 
 @dataclass
-class Table(mTable):
+class Table(BaseItem, mTable):
+    columns: Columns = field(
+        default_factory=Columns
+    )
+    pass
 
-    columns: dict[str, Column] = field(default_factory=dict)
-    meta: MetaInfo = field(default_factory=MetaInfo)
+
+@dataclass
+class Tables(mTables):
+    items: dict[str, Table] = field(
+        default_factory=dict, metadata={"exclude_from_upgrader": True}
+    )
