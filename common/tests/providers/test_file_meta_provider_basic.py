@@ -31,8 +31,8 @@ class DummyStorageProvider:
             return Path(path).joinpath(first).as_posix(), True
         return Path(path).joinpath(first).as_posix(), False
 
-    def upload_file_str(self, output_dir, output_file, content):
-        output_dir = Path(output_dir).as_posix()
+    def upload_file_str(self, output_file, content):
+        output_dir = Path(output_file).parent.as_posix()
         filename = Path(output_file).name
         self._store.setdefault(output_dir, {})[filename] = content
 
