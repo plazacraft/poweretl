@@ -1,7 +1,8 @@
 import os
 
-from poweretl.common import FileMetaProvider, FileModelProvider
 from poweretl.utils import FileEntry, OSFileStorageProvider
+
+from poweretl.common import FileMetaProvider, FileModelProvider
 
 
 class CacheStorageProvider(OSFileStorageProvider):

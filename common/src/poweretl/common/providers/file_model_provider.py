@@ -2,7 +2,6 @@ import json
 from dataclasses import asdict
 
 from dacite import from_dict
-
 from poweretl.defs import IModelProvider, Model
 from poweretl.utils import FileEntry, FileMerger, MultiFileReader, TokensReplacer
 

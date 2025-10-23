@@ -6,9 +6,9 @@ from datetime import datetime
 from pathlib import Path
 
 import pytest
+from poweretl.defs import Meta, Model, Operation, Status
 
 from poweretl.common import FileMetaProvider
-from poweretl.defs import Meta, Model, Operation, Status
 
 
 class DummyStorageProvider:
