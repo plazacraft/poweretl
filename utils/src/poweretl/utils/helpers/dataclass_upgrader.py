@@ -3,7 +3,6 @@ import copy
 from dataclasses import fields, is_dataclass
 from typing import Any, Generic, Type, TypeVar
 
-
 T = TypeVar("T")
 
 
