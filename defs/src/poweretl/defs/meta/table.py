@@ -1,17 +1,15 @@
 from dataclasses import dataclass, field
 
-from poweretl.defs.model import Table as mTable, Tables as mTables
+from poweretl.defs.model import Table as mTable
+from poweretl.defs.model import Tables as mTables
 
-from .column import Columns
 from .base import BaseItem
+from .column import Columns
 
 
 @dataclass
 class Table(BaseItem, mTable):
-    columns: Columns = field(
-        default_factory=Columns
-    )
-    pass
+    columns: Columns = field(default_factory=Columns)
 
 
 @dataclass

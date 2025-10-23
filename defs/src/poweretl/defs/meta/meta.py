@@ -8,6 +8,4 @@ from .table import Tables
 @dataclass
 class Meta(Model):
 
-    tables: Tables = field(
-        default_factory=Tables  
-    )
+    tables: Tables = field(default_factory=Tables)

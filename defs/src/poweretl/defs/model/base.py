@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
-from typing import TypeVar, Generic, Optional
 
 
 @dataclass
-class BaseCollection():
+class BaseCollection:
     """Base class for all model collections.
     Attributes:
         id (str): Identification of the table.
@@ -14,12 +13,11 @@ class BaseCollection():
     prune: bool = field(default=False)
 
 
-
 @dataclass
-class BaseItem():
+class BaseItem:
     """Base class for all model entities.
     Attributes:
         name (str): Full name of the entity
     """
 
-    name: str    
+    name: str

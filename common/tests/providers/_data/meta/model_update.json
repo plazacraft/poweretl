@@ -4,21 +4,21 @@
             "prd.test.table_1": {
                 "columns": {
                     "items": {
-                        "col_1": {
-                            "name": "col 1 new",
-                            "properties": null,
-                            "type": "type"
-                        },
                         "col_2": {
-                            "name": "col 2",
+                            "name": "col 2 new",
                             "properties": null,
                             "type": "type"
                         },
                         "col_3": {
-                            "name": "col 2",
+                            "name": "col 3",
                             "properties": null,
                             "type": "type"
                         },
+                        "col_4": {
+                            "name": "col 4",
+                            "properties": null,
+                            "type": "type"
+                        },                        
                         "last_modification": {
                             "name": "last modification",
                             "properties": null,
@@ -30,26 +30,39 @@
                             "type": "type"
                         }
                     },
-                    "prune": false
+                    "prune": true
                 },
-                "name": "table_1_new",
+                "name": "table_1",
                 "properties": null
             },
-            "prd.test.table_2": {
+            "prd.test.table_3": {
+                "columns": {
+                    "prune": false
+                },
+                "name": "table_3",
+                "properties": null
+            },
+            "prd.test.table_4": {
                 "columns": {
                     "items": {
                         "col_1": {
                             "name": "col 1",
                             "properties": null,
                             "type": "type"
+                        },
+                        "col_2": {
+                            "name": "col 2",
+                            "properties": null,
+                            "type": "type"
                         }
                     },
                     "prune": false
                 },
-                "name": "table_2",
+                "name": "table_4",
                 "properties": null
             }
+
         },
-        "prune": false
+        "prune": true
     }
 }

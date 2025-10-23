@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 
-from poweretl.defs.model import Column as mColumn, Columns as mColumns
+from poweretl.defs.model import Column as mColumn
+from poweretl.defs.model import Columns as mColumns
 
-from .base import MetaInfo, BaseItem
+from .base import BaseItem
 
 
 @dataclass

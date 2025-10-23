@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from .base import BaseItem, BaseCollection
+from .base import BaseCollection, BaseItem
 
 
 @dataclass

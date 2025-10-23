@@ -40,7 +40,7 @@ def deep_compare(a, b, exclude=None):
     return a == b
 
 
-def test_file_meta_provider_full():
+def test_file_meta_provider_int():
 
     module_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = f"{module_dir}/_data/meta"
@@ -51,10 +51,10 @@ def test_file_meta_provider_full():
         path=data_dir,
     )
 
-    # meta_provider_result = FileMetaProvider(
-    #     file_name="meta.json",
-    #     path=result_dir,
-    # )
+    meta_provider_result = FileMetaProvider(
+        file_name="meta.json",
+        path=result_dir,
+    )
 
     meta_provider_current = FileMetaProvider(
         file_name="meta_current.json",
@@ -66,15 +66,15 @@ def test_file_meta_provider_full():
         config_paths=[FileEntry(data_dir, r"model_init\.json?$")],
     )
 
-    # model_provider_update = FileModelProvider(
-    #     config_paths=[FileEntry(data_dir, r"model_update\.json?$")],
-    # )
+    model_provider_update = FileModelProvider(
+        config_paths=[FileEntry(data_dir, r"model_update\.json?$")],
+    )
 
     model_init = model_provider_init.get_model()
     # meta_provider_init.push_model_changes(model_init)
     meta_provider_current.push_model_changes(model_init)
 
-    meta_init = meta_provider_init.get_meta()   
+    meta_init = meta_provider_init.get_meta()
     meta_current = meta_provider_current.get_meta()
 
     assert deep_compare(
@@ -82,3 +82,17 @@ def test_file_meta_provider_full():
         meta_current,
         exclude=["object_id"],
     ), "Initial meta does not match"
+
+    model_update = model_provider_update.get_model()
+
+    # meta_provider_result.push_model_changes(model_init)
+    # meta_provider_result.push_model_changes(model_update)
+
+    meta_provider_current.push_model_changes(model_update)
+    meta_result = meta_provider_result.get_meta()
+    meta_current = meta_provider_current.get_meta()
+    assert deep_compare(
+        meta_result,
+        meta_current,
+        exclude=["object_id"],
+    ), "Updated meta does not match"

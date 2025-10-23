@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 
-from .base import BaseItem, BaseCollection
+from .base import BaseCollection, BaseItem
 from .column import Columns
+
 
 @dataclass
 class Table(BaseItem):
@@ -12,9 +13,8 @@ class Table(BaseItem):
         columns (dict[str, Column], optional): Columns in the table.
         properties (object, optional): Additional properties of the table.
     """
-    columns: Columns = field(
-        default_factory=Columns
-    )
+
+    columns: Columns = field(default_factory=Columns)
     properties: object = None
 
 

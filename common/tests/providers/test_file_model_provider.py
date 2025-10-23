@@ -1,5 +1,4 @@
-from dataclasses import asdict
-#import json
+# import json
 import os
 
 import pytest
@@ -29,7 +28,6 @@ def test_get_model():
 
     model_2 = model_2.get_model()
     assert model_1 == model_2, "Models are not equal"
-
 
 
 def test_get_model_empty():

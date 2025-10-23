@@ -8,7 +8,7 @@
                     "prune": false,
                     "items": {
                         "col_1": {
-                            "name": "col 1 new",
+                            "name": "col 1",
                             "type": "type",
                             "properties": null,
                             "meta": {
@@ -28,7 +28,7 @@
                             }
                         },
                         "col_3": {
-                            "name": "col 2",
+                            "name": "col 3",
                             "type": "type",
                             "properties": null,
                             "meta": {
@@ -86,6 +86,30 @@
                 "properties": null,
                 "meta": {
                     "object_id": "f28265dd-1980-4fef-a760-1af76d66a67c",
+                    "status": "pending",
+                    "operation": "new"
+                }
+            },
+            "prd.test.table_3": {
+                "name": "table_3",
+                "columns": {
+                    "prune": false,
+                    "items": {
+                        "col_1": {
+                            "name": "col 1",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "e74a8dca-dbcc-4c6a-bdf6-23ca08ea6c5c",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        }
+                    }
+                },
+                "properties": null,
+                "meta": {
+                    "object_id": "f28265dd-1980-4fef-a760-1af76d66a67d",
                     "status": "pending",
                     "operation": "new"
                 }

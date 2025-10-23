@@ -1,12 +1,14 @@
+# pylint: disable=R0914
+
 import copy
 import uuid
 from typing import Optional, Type, TypeVar
 
 from poweretl.defs import IMetaProvider, Meta, Model
-from poweretl.defs.meta import Column, Operation, Status, Table, BaseItem
+from poweretl.defs.meta import BaseItem, Column, Operation, Status, Table
 from poweretl.utils import DataclassUpgrader
 
-TBaseMetaItem = TypeVar("TBaseMetaItem", bound=BaseItem)
+T = TypeVar("T", bound=BaseItem)
 
 
 class BaseMetaProvider(IMetaProvider):
@@ -18,9 +20,9 @@ class BaseMetaProvider(IMetaProvider):
     def _v_create_or_update(
         self,
         source_obj,
-        dest_obj: Optional[TBaseMetaItem],
-        child_cls: Type[TBaseMetaItem],
-    ) -> TBaseMetaItem:
+        dest_obj: Optional[T],
+        child_cls: Type[T],
+    ) -> T:
         """
         Generic create-or-update for parent/child dataclasses.
 
@@ -32,12 +34,11 @@ class BaseMetaProvider(IMetaProvider):
         upgrader = DataclassUpgrader(child_cls)
 
         if dest_obj:
-            if not upgrader.are_the_same(source_obj, dest_obj):
-                new_child = upgrader.from_parent(source_obj)
-                new_child.meta.object_id = dest_obj.meta.object_id
-                new_child.meta.operation = Operation.UPDATED.value
-                new_child.meta.status = Status.PENDING.value
-                return new_child
+            if not upgrader.compare(source_obj, dest_obj):
+                upgrader.update_child(source_obj, dest_obj)
+                dest_obj.meta.operation = Operation.UPDATED.value
+                dest_obj.meta.status = Status.PENDING.value
+                return dest_obj
             # if no properties has been changed, we return object as it is
             return dest_obj
 
@@ -62,6 +63,8 @@ class BaseMetaProvider(IMetaProvider):
         """
         # don't update provided object, return new updated
         meta = copy.deepcopy(meta)
+        upgrader = DataclassUpgrader(Meta)
+        upgrader.update_child(model, meta)
 
         for table_id, table in model.tables.items.items():
 
@@ -105,7 +108,7 @@ class BaseMetaProvider(IMetaProvider):
         # mark not existed tables to remove
         if model.tables.prune:
             for meta_current_table_id, meta_current_table in meta.tables.items.items():
-                if meta_current_table_id not in model.tables.keys():
+                if meta_current_table_id not in model.tables.items.keys():
                     meta_current_table.meta.status = Status.PENDING.value
                     meta_current_table.meta.operation = Operation.DELETED.value
 

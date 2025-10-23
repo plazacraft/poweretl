@@ -7,7 +7,6 @@ from poweretl.defs import IModelProvider, Model
 from poweretl.utils import FileEntry, FileMerger, MultiFileReader, TokensReplacer
 
 
-
 class FileModelProvider(IModelProvider):
     """Provides model definition from files
 
@@ -63,7 +62,7 @@ class FileModelProvider(IModelProvider):
 
         if data:
             return from_dict(data_class=Model, data=data)
-            
+
         return {}
 
     def to_json(self, model: Model, dump_params={}) -> str:

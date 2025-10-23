@@ -30,6 +30,7 @@ class MetaInfo:
     # use str to avoid problems with serialization of Enums
     operation: str = None
 
+
 @dataclass
 class BaseItem:
     """Base class for metadata objects.
@@ -37,4 +38,4 @@ class BaseItem:
         meta (MetaInfo): Metadata information.
     """
 
-    meta: MetaInfo = field(default_factory=MetaInfo)    
+    meta: MetaInfo = field(default_factory=MetaInfo)
