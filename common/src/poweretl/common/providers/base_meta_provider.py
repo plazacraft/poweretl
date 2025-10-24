@@ -2,14 +2,18 @@
 
 import copy
 import uuid
-from typing import Optional, Type, TypeVar
+from typing import Container, Optional, Type, TypeVar, get_type_hints
+from dataclasses import fields
 
 from poweretl.defs import IMetaProvider, Meta, Model
-from poweretl.defs.meta import BaseItem, Column, Operation, Status, Table
+from poweretl.defs.meta import BaseItem, Column, Operation, Status, Table, BaseCollection
+from poweretl.defs.model import BaseCollection as ModelBaseCollection
 from poweretl.utils import DataclassUpgrader
+from tomlkit import table
 
-T = TypeVar("T", bound=BaseItem)
-
+BaseItemT = TypeVar("BaseItemT", bound=BaseItem)
+BaseCollectionT = TypeVar("BaseCollectionT", bound=BaseCollection)
+ModelBaseCollectionT = TypeVar("ModelBaseCollectionT", bound=ModelBaseCollection)
 
 class BaseMetaProvider(IMetaProvider):
     """Keeps Model metadata and it's provisioning state in file."""
@@ -20,9 +24,9 @@ class BaseMetaProvider(IMetaProvider):
     def _v_create_or_update(
         self,
         source_obj,
-        dest_obj: Optional[T],
-        child_cls: Type[T],
-    ) -> T:
+        dest_obj: Optional[BaseItemT],
+        child_cls: Type[BaseItemT],
+    ) -> BaseItemT:
         """
         Generic create-or-update for parent/child dataclasses.
 
@@ -48,6 +52,48 @@ class BaseMetaProvider(IMetaProvider):
         new_child.meta.status = Status.PENDING.value
         return new_child
 
+
+    def _v_update_collection(
+        self,
+        meta_collection: Type[BaseCollectionT],
+        model_collection: Type[ModelBaseCollectionT],
+        ):
+
+        for id, item in model_collection.items.items():
+
+            # update table properties in meta or create new object
+            dest_item = None
+            if id in meta_collection.items.keys():
+                dest_item = meta_collection.items[id]
+
+            value_type = get_type_hints(meta_collection.__class__)['items'].__args__[1]
+
+
+            meta_item: BaseItem = self._v_create_or_update(
+                item,
+                dest_item,
+                value_type,
+            )
+
+            for f in fields(item):
+                if isinstance(getattr(item, f.name), ModelBaseCollection):
+                    self._v_update_collection(
+                        getattr(meta_item, f.name),
+                        getattr(item, f.name),
+                    )    
+
+
+            meta_collection.items[id] = meta_item
+
+        # mark not existed tables to remove
+        if model_collection.prune:
+            for meta_current_item_id, meta_current_item in meta_collection.items.items():
+                if meta_current_item_id not in model_collection.items.keys():
+                    meta_current_item.meta.status = Status.PENDING.value
+                    meta_current_item.meta.operation = Operation.DELETED.value
+
+
+
     # Model vs Meta
     # detect what is new, what to delete and what to remove
     # this function can be generic!
@@ -66,50 +112,11 @@ class BaseMetaProvider(IMetaProvider):
         upgrader = DataclassUpgrader(Meta)
         upgrader.update_child(model, meta)
 
-        for table_id, table in model.tables.items.items():
-
-            # update table properties in meta or create new object
-            dest_table = None
-            if table_id in meta.tables.items.keys():
-                dest_table = meta.tables.items[table_id]
-
-            meta_table: Table = self._v_create_or_update(
-                table,
-                dest_table,
-                Table,
-            )
-
-            for column_id, column in table.columns.items.items():
-                # update column properties in meta or create new object
-                dest_column = None
-                if column_id in meta_table.columns.items.keys():
-                    dest_column = meta_table.columns.items[column_id]
-
-                meta_column = self._v_create_or_update(
-                    column,
-                    dest_column,
-                    Column,
-                )
-
-                meta_table.columns.items[column_id] = meta_column
-
-            meta.tables.items[table_id] = meta_table
-
-            # mark not existed columns to remove
-            if table.columns.prune:
-                for (
-                    meta_current_column_id,
-                    meta_current_column,
-                ) in meta_table.columns.items.items():
-                    if meta_current_column_id not in table.columns.items.keys():
-                        meta_current_column.meta.status = Status.PENDING.value
-                        meta_current_column.meta.operation = Operation.DELETED.value
-
-        # mark not existed tables to remove
-        if model.tables.prune:
-            for meta_current_table_id, meta_current_table in meta.tables.items.items():
-                if meta_current_table_id not in model.tables.items.keys():
-                    meta_current_table.meta.status = Status.PENDING.value
-                    meta_current_table.meta.operation = Operation.DELETED.value
+        for f in fields(model):
+            if isinstance(getattr(model, f.name), ModelBaseCollection):
+                self._v_update_collection(
+                    getattr(meta, f.name),
+                    getattr(model, f.name),
+                )    
 
         return meta

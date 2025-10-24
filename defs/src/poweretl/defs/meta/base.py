@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
-
+from poweretl.defs.model import BaseItem as mBaseItem, BaseCollection as mBaseCollection
 
 class Operation(Enum):
     NEW = "new"
@@ -32,10 +32,16 @@ class MetaInfo:
 
 
 @dataclass
-class BaseItem:
+class BaseItem(mBaseItem):
     """Base class for metadata objects.
     Attributes:
         meta (MetaInfo): Metadata information.
     """
 
     meta: MetaInfo = field(default_factory=MetaInfo)
+
+@dataclass
+class BaseCollection(mBaseCollection):
+
+    items: dict[str, BaseItem] = field(
+        default_factory=dict, metadata={"exclude_from_upgrader": True})

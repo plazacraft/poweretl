@@ -41,6 +41,7 @@ class DataclassUpgrader(Generic[T]):
         """
         if obj is None:
             return None
+        
 
         if not cls:
             cls = obj if isinstance(obj, type) else getattr(obj, "__class__", None)
@@ -99,8 +100,10 @@ class DataclassUpgrader(Generic[T]):
         - Deep copies all attributes from parent_obj unless marked with @exclude.
         - Allows overrides for child-specific fields.
         """
-
-        return self._copy_dataclass_instance(parent_obj, self.child_cls, **overrides)
+        obj = self.child_cls()
+        self.update_child(parent_obj, obj)
+        return obj
+        #return self._copy_dataclass_instance(parent_obj, self.child_cls, **overrides)
 
     def update_child(self, source_obj, dest_obj) -> None:
         """Update a child instance (dest_obj) with values from

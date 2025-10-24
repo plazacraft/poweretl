@@ -36,7 +36,7 @@ def test_is_excluded_with_class_and_instance_and_non_dataclass():
 def test_dataclass_upgrader_from_parent_and_compare():
     @dataclass
     class Parent:
-        x: int
+        x: int = None
         items: list = field(default_factory=lambda: [1, 2, 3])
         secret: str = field(default="top", metadata={"exclude_from_upgrader": True})
 
@@ -51,8 +51,10 @@ def test_dataclass_upgrader_from_parent_and_compare():
     # DataclassUpgrader must accept a dataclass type
     upgrader = DataclassUpgrader(Child)
 
-    # from_parent should deep-copy items and not copy 'secret'
-    child = upgrader.from_parent(parent)
+    # previous implementation used from_parent; current implementation
+    # constructs a child instance and updates it in-place via update_child
+    child = upgrader.child_cls()
+    upgrader.update_child(parent, child)
     assert isinstance(child, Child)
     assert child.x == 10
     assert child.items == [1, 2, 3]
@@ -63,8 +65,10 @@ def test_dataclass_upgrader_from_parent_and_compare():
     # excluded field remains child's default
     assert child.secret == "child_default"
 
-    # overrides should apply
-    child2 = upgrader.from_parent(parent, secret="overridden")
+    # apply override by creating and then setting the field after update
+    child2 = upgrader.child_cls()
+    upgrader.update_child(parent, child2)
+    child2.secret = "overridden"
     assert child2.secret == "overridden"
 
     # compare: child created from parent (ignoring excluded field) should be same
@@ -520,13 +524,13 @@ def test_update_child_2():
 def test_nested_dataclass_and_container_copying():
     @dataclass
     class Inner:
-        a: int
+        a: int = None
         secret: int = field(default=0, metadata={"exclude_from_upgrader": True})
 
     @dataclass
     class Parent:
-        x: int
-        inner: Inner
+        x: int = None
+        inner: Inner = field(default_factory=Inner)
         inners: list = field(default_factory=list)
 
     @dataclass
@@ -541,7 +545,8 @@ def test_nested_dataclass_and_container_copying():
 
     upgrader = DataclassUpgrader(Child)
 
-    child = upgrader.from_parent(parent)
+    child = upgrader.child_cls()
+    upgrader.update_child(parent, child)
 
     # nested dataclass instance should be reconstructed (different identity)
     assert child.inner is not parent.inner

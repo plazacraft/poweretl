@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from poweretl.defs.model import Table as mTable
 from poweretl.defs.model import Tables as mTables
 
-from .base import BaseItem
+from .base import BaseItem, BaseCollection
 from .column import Columns
 
 
@@ -13,7 +13,7 @@ class Table(BaseItem, mTable):
 
 
 @dataclass
-class Tables(mTables):
+class Tables(BaseCollection, mTables):
     items: dict[str, Table] = field(
         default_factory=dict, metadata={"exclude_from_upgrader": True}
     )

@@ -7,7 +7,7 @@ from .base import BaseCollection, BaseItem
 class Column(BaseItem):
     """Column definition in table."""
 
-    type: str
+    type: str = None
     properties: object = None
 
 
