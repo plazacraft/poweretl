@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+
 @dataclass
 class BaseItem:
     """Base class for all model entities.
@@ -21,6 +22,5 @@ class BaseCollection:
 
     prune: bool = field(default=False)
     items: dict[str, BaseItem] = field(
-        default_factory=dict, metadata={"exclude_from_upgrader": True})
-
-
+        default_factory=dict, metadata={"exclude_from_upgrader": True}
+    )

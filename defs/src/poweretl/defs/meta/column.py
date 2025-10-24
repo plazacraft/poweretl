@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from poweretl.defs.model import Column as mColumn
 from poweretl.defs.model import Columns as mColumns
 
-from .base import BaseItem, BaseCollection
+from .base import BaseCollection, BaseItem
 
 
 @dataclass

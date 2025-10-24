@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 
 from .base import BaseCollection, BaseItem
 from .column import Columns
+from .tag import Tags
 
 
 @dataclass
@@ -15,6 +16,7 @@ class Table(BaseItem):
     """
 
     columns: Columns = field(default_factory=Columns)
+    tags: Tags = field(default_factory=Tags)
     properties: object = None
 
 

@@ -1,5 +1,6 @@
 # flake8: noqa: F401
-from .base import BaseItem, MetaInfo, Operation, Status, BaseCollection
-from .column import Column
+from .base import BaseCollection, BaseItem, MetaInfo, Operation, Status
+from .column import Column, Columns
 from .meta import Meta
-from .table import Table
+from .table import Table, Tables
+from .tag import Tag, Tags
