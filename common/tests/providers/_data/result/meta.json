@@ -4,154 +4,271 @@
         "items": {
             "prd.test.table_1": {
                 "name": "table_1",
+                "external_location": null,
+                "comment": null,
+                "cluster_by": [],
                 "columns": {
                     "prune": true,
                     "items": {
                         "col_1": {
                             "name": "col 1",
                             "type": "type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "5ea08fd5-683b-43c6-af2e-506c25ce4006",
                                 "status": "pending",
-                                "operation": "deleted"
+                                "operation": "deleted",
+                                "error_msg": null,
+                                "updated_fields": []
                             }
                         },
                         "col_2": {
                             "name": "col 2 new",
-                            "type": "type",
+                            "type": "new type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "31074095-9fbe-459a-8b82-73c839c108a2",
                                 "status": "pending",
-                                "operation": "updated"
+                                "operation": "updated",
+                                "error_msg": null,
+                                "updated_fields": [
+                                    "name",
+                                    "type"
+                                ]
                             }
                         },
                         "col_3": {
                             "name": "col 3",
                             "type": "type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "77c56731-1a08-4af7-bafe-f9e5533495ce",
                                 "status": "pending",
-                                "operation": "new"
+                                "operation": "new",
+                                "error_msg": null,
+                                "updated_fields": []
                             }
                         },
                         "last_modification": {
                             "name": "last modification",
                             "type": "type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "48499f4c-4c70-40ef-b448-507a6f0ff6b9",
                                 "status": "pending",
-                                "operation": "new"
+                                "operation": "new",
+                                "error_msg": null,
+                                "updated_fields": []
                             }
                         },
                         "version": {
                             "name": "version",
                             "type": "type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "3e414ec5-f1cb-47d6-a722-d0bc7ba69ccf",
                                 "status": "pending",
-                                "operation": "new"
+                                "operation": "new",
+                                "error_msg": null,
+                                "updated_fields": []
                             }
                         },
                         "col_4": {
                             "name": "col 4",
                             "type": "type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "4eab6182-ceda-4b53-9639-800ba462576b",
                                 "status": "pending",
-                                "operation": "new"
+                                "operation": "new",
+                                "error_msg": null,
+                                "updated_fields": []
                             }
                         }
                     }
+                },
+                "tags": {
+                    "prune": false,
+                    "items": {}
+                },
+                "properties": {
+                    "prune": false,
+                    "items": {}
                 },
                 "meta": {
                     "object_id": "bddbb5ba-c5c4-425a-9168-fae5c0d9def1",
                     "status": "pending",
-                    "operation": "updated"
+                    "operation": "updated",
+                    "error_msg": null,
+                    "updated_fields": [
+                        "name"
+                    ]
                 }
             },
             "prd.test.table_2": {
                 "name": "table_2",
+                "external_location": null,
+                "comment": null,
+                "cluster_by": [],
                 "columns": {
                     "prune": false,
                     "items": {
                         "col_1": {
                             "name": "col 1",
                             "type": "type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "5b3b3fbc-2225-4d9b-a78f-2c5bd294f14d",
                                 "status": "pending",
-                                "operation": "new"
+                                "operation": "new",
+                                "error_msg": null,
+                                "updated_fields": []
                             }
                         }
                     }
+                },
+                "tags": {
+                    "prune": false,
+                    "items": {}
+                },
+                "properties": {
+                    "prune": false,
+                    "items": {}
                 },
                 "meta": {
                     "object_id": "efa9a27a-7f4e-4a6b-b8f9-f255a70e3178",
                     "status": "pending",
-                    "operation": "deleted"
+                    "operation": "deleted",
+                    "error_msg": null,
+                    "updated_fields": []
                 }
             },
             "prd.test.table_3": {
                 "name": "table_3",
+                "external_location": null,
+                "comment": null,
+                "cluster_by": [],
                 "columns": {
                     "prune": false,
                     "items": {
                         "col_1": {
                             "name": "col 1",
                             "type": "type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "c0250e79-a2bd-4829-ab54-8f9eedb69205",
                                 "status": "pending",
-                                "operation": "new"
+                                "operation": "new",
+                                "error_msg": null,
+                                "updated_fields": []
                             }
                         }
                     }
                 },
+                "tags": {
+                    "prune": false,
+                    "items": {}
+                },
+                "properties": {
+                    "prune": false,
+                    "items": {}
+                },
                 "meta": {
                     "object_id": "7908ab3f-73f8-4b94-93b8-4c571dac0909",
                     "status": "pending",
-                    "operation": "new"
+                    "operation": "new",
+                    "error_msg": null,
+                    "updated_fields": []
                 }
             },
             "prd.test.table_4": {
                 "name": "table_4",
+                "external_location": null,
+                "comment": null,
+                "cluster_by": [],
                 "columns": {
                     "prune": false,
                     "items": {
                         "col_1": {
                             "name": "col 1",
                             "type": "type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "e2ca9678-06fe-4016-9dfb-b6b476155d5d",
                                 "status": "pending",
-                                "operation": "new"
+                                "operation": "new",
+                                "error_msg": null,
+                                "updated_fields": []
                             }
                         },
                         "col_2": {
                             "name": "col 2",
                             "type": "type",
+                            "tags": {
+                                "prune": false,
+                                "items": {}
+                            },
                             "properties": null,
                             "meta": {
                                 "object_id": "fccdfc54-bef8-4426-bc47-05d8861230a2",
                                 "status": "pending",
-                                "operation": "new"
+                                "operation": "new",
+                                "error_msg": null,
+                                "updated_fields": []
                             }
                         }
                     }
                 },
+                "tags": {
+                    "prune": false,
+                    "items": {}
+                },
+                "properties": {
+                    "prune": false,
+                    "items": {}
+                },
                 "meta": {
                     "object_id": "cf84ed06-1f5f-4bd5-8a35-d6cec0a3eb43",
                     "status": "pending",
-                    "operation": "new"
+                    "operation": "new",
+                    "error_msg": null,
+                    "updated_fields": []
                 }
             }
         }

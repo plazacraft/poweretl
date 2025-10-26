@@ -261,36 +261,53 @@ def test_get_meta_filters_by_status(monkeypatch):
             "items": {
                 "t1": {
                     "name": "t1",
-                    "meta": {"object_id": "1", "operation": Operation.NEW.value, "status": Status.SUCCESS.value},
+                    "meta": {
+                        "object_id": "1",
+                        "operation": Operation.NEW.value,
+                        "status": Status.SUCCESS.value,
+                    },
                     "columns": {
                         "items": {
                             "c1": {
                                 "name": "c1",
-                                "meta": {"object_id": "c1", "operation": Operation.NEW.value, "status": Status.FAILED.value},
+                                "meta": {
+                                    "object_id": "c1",
+                                    "operation": Operation.NEW.value,
+                                    "status": Status.FAILED.value,
+                                },
                             },
                             "c2": {
                                 "name": "c2",
-                                "meta": {"object_id": "c2", "operation": Operation.NEW.value, "status": Status.SUCCESS.value},
+                                "meta": {
+                                    "object_id": "c2",
+                                    "operation": Operation.NEW.value,
+                                    "status": Status.SUCCESS.value,
+                                },
                             },
                         }
                     },
                 },
                 "t2": {
                     "name": "t2",
-                    "meta": {"object_id": "2", "operation": Operation.NEW.value, "status": Status.SUCCESS.value},
+                    "meta": {
+                        "object_id": "2",
+                        "operation": Operation.NEW.value,
+                        "status": Status.SUCCESS.value,
+                    },
                     "columns": {"items": {}},
                 },
             }
         }
     }
 
-
-
     # Store the JSON at the expected path
     storage._store["/tmp/status"] = {"metadata.json": json.dumps(meta)}
 
     # Monkeypatch provider to return the file path
-    provider._storage_provider.get_first_file_or_folder = lambda p, _: ("/tmp/status/metadata.json", False)
+    provider._storage_provider.get_first_file_or_folder = lambda p, _: (
+        "/tmp/status/metadata.json",
+        False,
+    )
 
     # Request only FAILED items
     result = provider.get_meta(status=Status.FAILED.value)

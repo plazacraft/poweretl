@@ -1,16 +1,17 @@
-# pylint: disable=R0914
+# pylint: disable=R0914, W0511, R0912
 
 import copy
 from dataclasses import fields
-from typing import Optional, TypeVar, get_type_hints, cast
+from typing import Optional, TypeVar, cast, get_type_hints
 
+from deepdiff import DeepDiff
 from poweretl.defs.meta import BaseCollection, BaseItem, Operation, Status
 from poweretl.defs.model import BaseCollection as ModelBaseCollection
 from poweretl.utils import DataclassUpgrader
 
 BaseItemT = TypeVar("BaseItemT", bound=BaseItem)
-BaseCollectionT = TypeVar("BaseCollectionT", bound=BaseCollection)
-ModelBaseCollectionT = TypeVar("ModelBaseCollectionT", bound=ModelBaseCollection)
+# BaseCollectionT = TypeVar("BaseCollectionT", bound=BaseCollection)
+# ModelBaseCollectionT = TypeVar("ModelBaseCollectionT", bound=ModelBaseCollection)
 
 
 class MetaModelUpdater:
@@ -25,7 +26,7 @@ class MetaModelUpdater:
         self,
         source_obj,
         dest_obj: Optional[BaseItem],
-        child_cls: type,
+        child_cls: type[BaseItemT],
     ) -> BaseItem:
         """Generic create-or-update for parent/child dataclasses.
 
@@ -37,11 +38,25 @@ class MetaModelUpdater:
         """
         upgrader = DataclassUpgrader(child_cls)
 
-        if dest_obj:
+        if dest_obj:  # pylint: disable=R1702
             if not upgrader.compare(source_obj, dest_obj):
+                # find what was updated
+                updated_fields = []
+                for f in fields(source_obj):
+
+                    if hasattr(dest_obj, f.name):
+                        source_attr = getattr(source_obj, f.name)
+                        dest_attr = getattr(dest_obj, f.name)
+                        # diff only attributes that are copied by upgrader
+                        if not isinstance(dest_attr, (BaseItem, BaseCollection)):
+                            diff = DeepDiff(source_attr, dest_attr)
+                            if diff:
+                                updated_fields.append(f.name)
+
                 upgrader.update_child(source_obj, dest_obj)
                 dest_obj.meta.operation = Operation.UPDATED.value
                 dest_obj.meta.status = Status.PENDING.value
+                dest_obj.meta.updated_fields = updated_fields
                 return dest_obj
             return dest_obj
 
@@ -93,6 +108,13 @@ class MetaModelUpdater:
                     meta_current_item.meta.operation = Operation.DELETED.value
 
     def get_updated_meta(self, model, meta):
+        # TODO: This code doesn't assume BaseItem to be directly a child of BaseItem,
+        # if such situation happens, it needs to be updated
+        # TODO: Fields under items(prune) will be copied (not BaseItems) and will
+        # change parent status to Updated if changed,
+        # however not be in list of updated fields
+        # on the other hand this behavior is good for prune
+
         """Return an updated Meta object based on provided model.
 
         This makes a deepcopy of meta, updates its fields from model while
@@ -111,17 +133,13 @@ class MetaModelUpdater:
 
         return meta_copy
 
-
-
-
-
-    def _apply_status_filter(self, meta, status: str):
+    def _apply_status_filter(self, meta, status: set[str]):
         """Recursively filter object and all its collections by status.
-        
+
         Args:
             obj: Object to filter
             status: Status to filter by
-            
+
         Returns:
             Filtered object with only matching status branches
         """
@@ -135,41 +153,45 @@ class MetaModelUpdater:
             if isinstance(obj, BaseItem):
                 item = cast(BaseItem, obj)
                 attr, current_child_included = self._apply_status_filter(item, status)
-                if (attr and current_child_included):
-                    setattr(meta_copy, field.name, attr)
-                    child_included = True
-            
-            elif isinstance(obj, BaseCollection):
-                attr, current_child_included = self._apply_status_filter(obj, status)
-                if (attr and current_child_included):
+                if attr and current_child_included:
                     setattr(meta_copy, field.name, attr)
                     child_included = True
 
-            elif isinstance(meta, BaseCollection) and field.name =="items" and isinstance(obj, dict):
+            elif isinstance(obj, BaseCollection):
+                attr, current_child_included = self._apply_status_filter(obj, status)
+                if attr and current_child_included:
+                    setattr(meta_copy, field.name, attr)
+                    child_included = True
+
+            elif (
+                isinstance(meta, BaseCollection)
+                and field.name == "items"
+                and isinstance(obj, dict)
+            ):
                 items = {}
                 for obj_key, obj_item in obj.items():
-                    attr, current_child_included = self._apply_status_filter(obj_item, status)
-                    if (attr and current_child_included):
+                    attr, current_child_included = self._apply_status_filter(
+                        obj_item, status
+                    )
+                    if attr and current_child_included:
                         items[obj_key] = attr
-                
-                if (items):
+
+                if items:
                     setattr(meta_copy, field.name, items)
                     child_included = True
 
             else:
                 setattr(meta_copy, field.name, copy.deepcopy(obj))
-        
-        if (isinstance(meta, BaseItem)):
+
+        if isinstance(meta, BaseItem):
             item = cast(BaseItem, meta)
-            if (not child_included and item.meta.status != status):
+            if not child_included and item.meta.status not in status:
                 return None, False
-            elif (item.meta.status == status):
+            if item.meta.status in status:
                 return meta_copy, True
 
         return meta_copy, child_included
-            
 
-    def apply_status_filter(self, meta, status: str):
+    def apply_status_filter(self, meta, status: set[str]):
         ret, _ = self._apply_status_filter(meta, status)
         return ret
-

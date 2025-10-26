@@ -3,8 +3,9 @@ from typing import Optional
 
 from .base import BaseCollection, BaseItem
 from .column import Columns
-from .tag import Tags
 from .property import Properties
+from .tag import Tags
+
 
 @dataclass
 class Table(BaseItem):
@@ -22,7 +23,6 @@ class Table(BaseItem):
     columns: Columns = field(default_factory=Columns)
     tags: Tags = field(default_factory=Tags)
     properties: Properties = field(default_factory=Properties)
-
 
 
 @dataclass

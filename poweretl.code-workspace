@@ -24,4 +24,10 @@
         "path": "."
     }
 ]
+"todo-tree.exclude": [
+    "**/node_modules",
+    "**/dist",
+    "project-to-ignore/**"
+]
+
 }

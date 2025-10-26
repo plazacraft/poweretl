@@ -36,6 +36,8 @@ class MetaInfo:
 
     error_msg: Optional[str] = None
 
+    updated_fields: list[str] = field(default_factory=list)
+
 
 @dataclass
 class BaseItem(mBaseItem):

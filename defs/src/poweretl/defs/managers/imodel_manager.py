@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 
-from poweretl.defs.meta import Meta
-
 
 class IModelManager(ABC):
     """Provides configuration of model."""
@@ -10,5 +8,5 @@ class IModelManager(ABC):
         pass
 
     @abstractmethod
-    def provision_model():
+    def provision_model(self):
         pass

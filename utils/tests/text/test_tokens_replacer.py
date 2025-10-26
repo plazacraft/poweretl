@@ -1,3 +1,4 @@
+# pylint: disable=R0801
 import pytest
 
 from poweretl.utils import TokensReplacer

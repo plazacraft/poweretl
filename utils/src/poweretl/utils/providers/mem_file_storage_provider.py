@@ -1,3 +1,4 @@
+# pylint: disable=R0914
 from pathlib import Path
 
 from .ifile_storage_provider import IFileStorageWriter
@@ -20,11 +21,11 @@ class MemFileStorageProvider(IFileStorageWriter):
 
         prefix = Path(path).as_posix().rstrip("/") + "/"
         children = {}
-        for full in self._mem_storage.keys():
+        for full in self._mem_storage.keys():  # pylint: disable=C0201
             full_path = Path(full).as_posix()
             if not full_path.startswith(prefix):
                 continue
-            remainder = full_path[len(prefix) :]
+            remainder = full_path[len(prefix) :]  # noqa: E203
             if not remainder:
                 # exact file equals prefix (unlikely since prefix ends with /)
                 child_name = Path(full_path).name
@@ -50,22 +51,24 @@ class MemFileStorageProvider(IFileStorageWriter):
         def pick_from(lst):
             if not lst:
                 return None
-            sorted_list = sorted(lst, key=lambda n: n.lower(), reverse=(not ascending))
+            sorted_list = sorted(lst, key=lambda n: n.lower(), reverse=not ascending)
             return sorted_list[0]
 
         chosen = pick_from(dirs) or pick_from(files)
         chosen_path = Path(prefix).joinpath(chosen).as_posix()
-        is_dir = any(p.startswith(chosen_path.rstrip("/") + "/") for p in children[chosen])
+        is_dir = any(
+            p.startswith(chosen_path.rstrip("/") + "/") for p in children[chosen]
+        )
         return (chosen_path, is_dir)
 
     def get_folders_list(self, path: str, recursive: bool = False) -> list[str]:
         prefix = Path(path).as_posix().rstrip("/") + "/"
         folders = set()
-        for full in self._mem_storage.keys():
+        for full in self._mem_storage.keys():  # pylint: disable=C0201
             full_path = Path(full).as_posix()
             if not full_path.startswith(prefix):
                 continue
-            remainder = full_path[len(prefix) :]
+            remainder = full_path[len(prefix) :]  # noqa: E203
             parts = remainder.split("/")
             # build folder paths
             if len(parts) >= 2:
@@ -73,7 +76,9 @@ class MemFileStorageProvider(IFileStorageWriter):
                 if recursive:
                     # include all intermediate folder levels
                     for i in range(1, len(parts)):
-                        folders.add(Path(prefix).joinpath("/".join(parts[:i])).as_posix())
+                        folders.add(
+                            Path(prefix).joinpath("/".join(parts[:i])).as_posix()
+                        )
                 else:
                     # only immediate child folder
                     folders.add(Path(prefix).joinpath(parts[0]).as_posix())

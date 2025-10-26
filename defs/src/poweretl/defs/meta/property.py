@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from poweretl.defs.model import Property as mProperty
 from poweretl.defs.model import Properties as mProperties
+from poweretl.defs.model import Property as mProperty
 
 from .base import BaseCollection, BaseItem
 

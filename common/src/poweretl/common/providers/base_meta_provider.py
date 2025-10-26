@@ -21,6 +21,5 @@ class BaseMetaProvider(IMetaProvider):
         """
         return self._meta_updater.get_updated_meta(model, meta)
 
-
-    def _v_apply_status_filter(self, meta: Meta, status) -> Meta:
+    def _v_apply_status_filter(self, meta: Meta, status: set[str]) -> Meta:
         return self._meta_updater.apply_status_filter(meta, status)
