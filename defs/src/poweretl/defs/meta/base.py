@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Optional
 
 from poweretl.defs.model import BaseCollection as mBaseCollection
 from poweretl.defs.model import BaseItem as mBaseItem
@@ -33,7 +34,7 @@ class MetaInfo:
     # use str to avoid problems with serialization of Enums
     operation: str = None
 
-    error_msg: str = ''
+    error_msg: Optional[str] = None
 
 
 @dataclass

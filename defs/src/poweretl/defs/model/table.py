@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
+from typing import Optional
 
 from .base import BaseCollection, BaseItem
 from .column import Columns
 from .tag import Tags
-
+from .property import Properties
 
 @dataclass
 class Table(BaseItem):
@@ -15,9 +16,13 @@ class Table(BaseItem):
         properties (object, optional): Additional properties of the table.
     """
 
+    external_location: Optional[str] = None
+    comment: Optional[str] = None
+    cluster_by: list = field(default_factory=list)
     columns: Columns = field(default_factory=Columns)
     tags: Tags = field(default_factory=Tags)
-    properties: object = None
+    properties: Properties = field(default_factory=Properties)
+
 
 
 @dataclass

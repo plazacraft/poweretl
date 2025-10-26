@@ -1,0 +1,16 @@
+create_table: |
+  CREATE {external} TABLE {table} {location} {comment}
+alter_table_rename: |
+  ALTER TABLE {table} RENAME TO {value}
+
+alter_table_comment: |
+
+alter_table_create_column: |
+  ALTER TABLE {table} ADD COLUMN ...
+
+alter_table_drop_column: |
+
+alter_table_rename_column: |
+
+alter_table_alter_column: |
+

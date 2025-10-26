@@ -4,14 +4,12 @@ from .base import BaseCollection, BaseItem
 
 
 @dataclass
-class Tag(BaseItem):
-    """Column definition in table."""
-
+class Property(BaseItem):
     value: str = None
 
 
 @dataclass
-class Tags(BaseCollection):
-    items: dict[str, Tag] = field(
+class Properties(BaseCollection):
+    items: dict[str, Property] = field(
         default_factory=dict, metadata={"exclude_from_upgrader": True}
     )

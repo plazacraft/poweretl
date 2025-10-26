@@ -32,15 +32,13 @@
                     },
                     "prune": true
                 },
-                "name": "table_1",
-                "properties": null
+                "name": "table_1"
             },
             "prd.test.table_3": {
                 "columns": {
                     "prune": false
                 },
-                "name": "table_3",
-                "properties": null
+                "name": "table_3"
             },
             "prd.test.table_4": {
                 "columns": {
@@ -58,8 +56,7 @@
                     },
                     "prune": false
                 },
-                "name": "table_4",
-                "properties": null
+                "name": "table_4"
             }
 
         },
