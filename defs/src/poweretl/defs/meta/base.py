@@ -33,6 +33,8 @@ class MetaInfo:
     # use str to avoid problems with serialization of Enums
     operation: str = None
 
+    error_msg: str = ''
+
 
 @dataclass
 class BaseItem(mBaseItem):

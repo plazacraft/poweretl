@@ -234,3 +234,76 @@ def test_get_meta_with_table_id_filters(monkeypatch, table_id):
         # expecting only the matching table in result.tables
         assert len(result.tables.items) == 1
         assert result.tables.items[table_id].name == table_id
+
+
+def test_get_meta_filters_by_status(monkeypatch):
+    """Ensure get_meta(status=...) returns only branches that contain
+    at least one BaseItem with matching status anywhere in their subtree.
+
+    We construct a meta with two tables. Table t1 has two columns where
+    column c1 has status FAILED and c2 SUCCESS. Table t2 has no FAILED
+    status anywhere. Expect the result to keep only t1 and only column c1.
+    """
+    storage = DummyStorageProvider()
+    serializer = DummySerializer()
+
+    provider = FileMetaProvider(
+        file_name="metadata.json",
+        path="/tmp/status",
+        store_versions=False,
+        storage_provider=storage,
+        file_serializer=serializer,
+    )
+
+    # Build meta with nested columns
+    meta = {
+        "tables": {
+            "items": {
+                "t1": {
+                    "name": "t1",
+                    "meta": {"object_id": "1", "operation": Operation.NEW.value, "status": Status.SUCCESS.value},
+                    "columns": {
+                        "items": {
+                            "c1": {
+                                "name": "c1",
+                                "meta": {"object_id": "c1", "operation": Operation.NEW.value, "status": Status.FAILED.value},
+                            },
+                            "c2": {
+                                "name": "c2",
+                                "meta": {"object_id": "c2", "operation": Operation.NEW.value, "status": Status.SUCCESS.value},
+                            },
+                        }
+                    },
+                },
+                "t2": {
+                    "name": "t2",
+                    "meta": {"object_id": "2", "operation": Operation.NEW.value, "status": Status.SUCCESS.value},
+                    "columns": {"items": {}},
+                },
+            }
+        }
+    }
+
+
+
+    # Store the JSON at the expected path
+    storage._store["/tmp/status"] = {"metadata.json": json.dumps(meta)}
+
+    # Monkeypatch provider to return the file path
+    provider._storage_provider.get_first_file_or_folder = lambda p, _: ("/tmp/status/metadata.json", False)
+
+    # Request only FAILED items
+    result = provider.get_meta(status=Status.FAILED.value)
+
+    # Expect only t1 to remain
+    assert result is not None
+    assert isinstance(result.tables.items, dict)
+    assert "t1" in result.tables.items
+    assert "t2" not in result.tables.items
+
+    # Inside t1, expect only column c1 to remain (the FAILED one)
+    t1 = result.tables.items["t1"]
+    assert hasattr(t1, "columns")
+    assert isinstance(t1.columns.items, dict)
+    assert "c1" in t1.columns.items
+    assert "c2" not in t1.columns.items

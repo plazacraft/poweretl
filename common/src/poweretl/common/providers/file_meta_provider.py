@@ -6,6 +6,7 @@ from typing import TypeVar
 from dacite import from_dict  # pylint: disable=C0411
 from deepmerge import always_merger  # pylint: disable=C0411
 from poweretl.defs import Meta, Model
+from poweretl.defs.meta.base import MetaInfo
 from poweretl.utils import (
     FilePathOrganizer,
     FileSerializer,
@@ -69,7 +70,7 @@ class FileMetaProvider(BaseMetaProvider):
             Path(output_dir).joinpath(output_file), content
         )
 
-    def update_self_model(self):
+    def self_update(self):
         return
 
     def push_model_changes(self, model: Model):
@@ -84,7 +85,8 @@ class FileMetaProvider(BaseMetaProvider):
         meta_merged = always_merger.merge(meta_current_model, meta)
         self._save_meta(meta_merged)
 
-    def get_meta(self, table_id: str = None) -> Meta:
+
+    def get_meta(self, status: str = None, table_id: str = None) -> Meta:
         file = self._find_latest_file(self._path)
         if file:
             content = self._storage_provider.get_file_str_content(file)
@@ -98,6 +100,10 @@ class FileMetaProvider(BaseMetaProvider):
                         for key, table in meta.tables.items.items()
                         if key == table_id
                     }
+
+                if status and meta:
+                    meta = self._v_apply_status_filter(meta, status)
+
                 return meta
         # new meta if there is no file found
         return Meta()

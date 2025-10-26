@@ -11,7 +11,7 @@ class IMetaProvider(ABC):
         pass
 
     @abstractmethod
-    def update_self_model(self):
+    def self_update(self):
         pass
 
     @abstractmethod
@@ -31,5 +31,5 @@ class IMetaProvider(ABC):
         """
 
     @abstractmethod
-    def get_meta(self, table_id: str = None) -> Meta:
+    def get_meta(self, status: str = None, table_id: str = None) -> Meta:
         """Returns Model together with its metadata."""

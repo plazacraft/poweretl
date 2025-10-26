@@ -2,3 +2,4 @@
 from .meta import *
 from .model import *
 from .providers import *
+from .managers import *

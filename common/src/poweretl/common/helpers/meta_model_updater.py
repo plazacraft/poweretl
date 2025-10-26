@@ -2,7 +2,7 @@
 
 import copy
 from dataclasses import fields
-from typing import Optional, TypeVar, get_type_hints
+from typing import Optional, TypeVar, get_type_hints, cast
 
 from poweretl.defs.meta import BaseCollection, BaseItem, Operation, Status
 from poweretl.defs.model import BaseCollection as ModelBaseCollection
@@ -110,3 +110,66 @@ class MetaModelUpdater:
                 )
 
         return meta_copy
+
+
+
+
+
+    def _apply_status_filter(self, meta, status: str):
+        """Recursively filter object and all its collections by status.
+        
+        Args:
+            obj: Object to filter
+            status: Status to filter by
+            
+        Returns:
+            Filtered object with only matching status branches
+        """
+
+        child_included = False
+        meta_copy = type(meta)()
+
+        for field in fields(meta):
+            obj = getattr(meta, field.name)
+
+            if isinstance(obj, BaseItem):
+                item = cast(BaseItem, obj)
+                attr, current_child_included = self._apply_status_filter(item, status)
+                if (attr and current_child_included):
+                    setattr(meta_copy, field.name, attr)
+                    child_included = True
+            
+            elif isinstance(obj, BaseCollection):
+                attr, current_child_included = self._apply_status_filter(obj, status)
+                if (attr and current_child_included):
+                    setattr(meta_copy, field.name, attr)
+                    child_included = True
+
+            elif isinstance(meta, BaseCollection) and field.name =="items" and isinstance(obj, dict):
+                items = {}
+                for obj_key, obj_item in obj.items():
+                    attr, current_child_included = self._apply_status_filter(obj_item, status)
+                    if (attr and current_child_included):
+                        items[obj_key] = attr
+                
+                if (items):
+                    setattr(meta_copy, field.name, items)
+                    child_included = True
+
+            else:
+                setattr(meta_copy, field.name, copy.deepcopy(obj))
+        
+        if (isinstance(meta, BaseItem)):
+            item = cast(BaseItem, meta)
+            if (not child_included and item.meta.status != status):
+                return None, False
+            elif (item.meta.status == status):
+                return meta_copy, True
+
+        return meta_copy, child_included
+            
+
+    def apply_status_filter(self, meta, status: str):
+        ret, _ = self._apply_status_filter(meta, status)
+        return ret
+
