@@ -126,10 +126,12 @@ def test_file_meta_provider_int():
     meta_init = meta_provider_init.get_meta()
     meta_current = meta_provider_current.get_meta()
 
+    exclude = ["object_id", "model_last_update", "meta_last_update"]
+
     assert deep_compare(
         meta_init,
         meta_current,
-        exclude=["object_id"],
+        exclude=exclude,
     ), "Initial meta does not match"
 
     model_update = model_provider_update.get_model()
@@ -141,5 +143,5 @@ def test_file_meta_provider_int():
     meta_result = meta_provider_result.get_meta()
     meta_current = meta_provider_current.get_meta()
 
-    assert deep_compare(meta_result, meta_current, exclude=["object_id"])
-    assert deep_compare_true(meta_result, meta_current, exclude=["object_id"])
+    assert deep_compare(meta_result, meta_current, exclude=exclude)
+    assert deep_compare_true(meta_result, meta_current, exclude=exclude)

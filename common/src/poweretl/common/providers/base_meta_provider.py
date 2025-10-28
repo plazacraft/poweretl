@@ -13,7 +13,7 @@ class BaseMetaProvider(IMetaProvider):
         # instantiate helper that encapsulates _v... logic
         self._meta_updater = MetaModelUpdater()
 
-    def _v_get_updated_meta(self, model: Model, meta: Meta) -> Meta:
+    def _get_updated_meta(self, model: Model, meta: Meta) -> Meta:
         """Return an updated Meta object based on provided model.
 
         This makes a deepcopy of meta, updates its fields from model while
@@ -21,5 +21,13 @@ class BaseMetaProvider(IMetaProvider):
         """
         return self._meta_updater.get_updated_meta(model, meta)
 
-    def _v_apply_status_filter(self, meta: Meta, status: set[str]) -> Meta:
+    def _apply_status_filter(self, meta: Meta, status: set[str]) -> Meta:
         return self._meta_updater.apply_status_filter(meta, status)
+
+    def _find_by_object_id(self, meta: Meta, object_id: str):
+        """Find a meta item by object id or by passing a
+        dataclass item with .meta.object_id.
+
+        Returns the found dataclass instance or None.
+        """
+        return self._meta_updater.find_by_object_id(meta, object_id)

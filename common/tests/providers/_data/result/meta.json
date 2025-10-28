@@ -6,7 +6,6 @@
                 "name": "table_1",
                 "external_location": null,
                 "comment": null,
-                "cluster_by": [],
                 "columns": {
                     "prune": true,
                     "items": {
@@ -133,7 +132,6 @@
                 "name": "table_2",
                 "external_location": null,
                 "comment": null,
-                "cluster_by": [],
                 "columns": {
                     "prune": false,
                     "items": {
@@ -175,7 +173,6 @@
                 "name": "table_3",
                 "external_location": null,
                 "comment": null,
-                "cluster_by": [],
                 "columns": {
                     "prune": false,
                     "items": {
@@ -217,7 +214,6 @@
                 "name": "table_4",
                 "external_location": null,
                 "comment": null,
-                "cluster_by": [],
                 "columns": {
                     "prune": false,
                     "items": {

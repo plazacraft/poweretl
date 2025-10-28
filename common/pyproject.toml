@@ -40,7 +40,9 @@ isort = "^7.0.0"
 
 [tool.poetry.dependencies]
 poweretl-defs = "*"
+poweretl-utils = "*"
 dacite = "^1.9.2"
+deepdiff = "^8.6.1"
 deepmerge = "^2.0"
 pyyaml = "^6.0.3"
 json5 = "^0.12.1"

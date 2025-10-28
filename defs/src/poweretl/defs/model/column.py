@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Optional
 
 from .base import BaseCollection, BaseItem
 from .tag import Tags
@@ -9,6 +10,7 @@ class Column(BaseItem):
     """Column definition in table."""
 
     type: str = None
+    comment: Optional[str] = None
     tags: Tags = field(default_factory=Tags)
     properties: object = None
 

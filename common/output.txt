@@ -1,0 +1,22 @@
+CREATE EXTERNAL TABLE t_new LOCATION '/mnt/external/t_new' COMMENT 'table new' CLUSTER BY (c1, c2)
+COMMENT ON TABLE t_upd IS 'table upd'
+ALTER TABLE t_upd CLUSTER BY (c3)
+ALTER TABLE t_upd SET LOCATION '/mnt/external/t_upd_new'
+ALTER TABLE t_upd ADD COLUMN c_new INT 
+ALTER TABLE t_upd RENAME COLUMN c_upd TO c_upd
+ALTER TABLE t_upd ALTER COLUMN c_upd SET DATA TYPE STRING
+ALTER TABLE t_upd ALTER COLUMN c_upd SET TAGS ('ctag_new' = 'v1')
+ALTER TABLE t_upd ALTER COLUMN c_upd SET TAGS ('ctag_upd' = 'v2')
+ALTER TABLE t_upd ALTER COLUMN c_upd UNSET TAGS ('ctag_del')
+ALTER TABLE t_upd DROP COLUMN c_del
+ALTER TABLE t_upd SET TAGS ('tag_new' = 'tv1')
+ALTER TABLE t_upd SET TAGS ('tag_upd' = 'tv2')
+ALTER TABLE t_upd UNSET TAGS ('tag_del')
+ALTER TABLE t_upd SET TBLPROPERTIES ('prop_new' = 'pv1')
+ALTER TABLE t_upd SET TBLPROPERTIES ('prop_upd' = 'pv2')
+ALTER TABLE t_upd UNSET TBLPROPERTIES ('prop_del')
+ALTER TABLE t_cols_only ADD COLUMN c2_new BOOLEAN 
+ALTER TABLE t_cols_only RENAME COLUMN c2_upd TO c2_upd
+ALTER TABLE t_cols_only ALTER COLUMN c2_upd SET DATA TYPE DOUBLE
+ALTER TABLE t_cols_only DROP COLUMN c2_del
+DROP TABLE t_del

@@ -19,7 +19,7 @@ class Table(BaseItem):
 
     external_location: Optional[str] = None
     comment: Optional[str] = None
-    cluster_by: list = field(default_factory=list)
+    cluster_by: Optional[str] = None
     columns: Columns = field(default_factory=Columns)
     tags: Tags = field(default_factory=Tags)
     properties: Properties = field(default_factory=Properties)

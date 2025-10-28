@@ -6,7 +6,9 @@ from typing import TypeVar
 from dacite import from_dict  # pylint: disable=C0411
 from deepmerge import always_merger  # pylint: disable=C0411
 from poweretl.defs import Meta, Model
+from poweretl.defs.meta import BaseItem
 from poweretl.utils import (
+    DataclassUpgrader,
     FilePathOrganizer,
     FileSerializer,
     IFileStorageWriter,
@@ -76,13 +78,20 @@ class FileMetaProvider(BaseMetaProvider):
         # for file we take always whole file, but for database
         # it would be better to query by tables
         meta = self.get_meta()
-        updated_meta = self._v_get_updated_meta(model, meta)
+        updated_meta = self._get_updated_meta(model, meta)
         self.push_meta_changes(updated_meta)
 
     def push_meta_changes(self, meta: Meta):
         meta_current_model = self.get_meta()
         meta_merged = always_merger.merge(meta_current_model, meta)
         self._save_meta(meta_merged)
+
+    def push_meta_item_changes(self, item: BaseItem):
+        meta_current_model = self.get_meta()
+        item_to_update = self._find_by_object_id(meta_current_model, item)
+        upgrader = DataclassUpgrader(BaseItem)
+        upgrader.update_child(item, item_to_update)
+        self._save_meta(meta_current_model)
 
     def get_meta(self, status: set[str] = None, table_id: str = None) -> Meta:
         file = self._find_latest_file(self._path)
@@ -100,7 +109,7 @@ class FileMetaProvider(BaseMetaProvider):
                     }
 
                 if status and meta:
-                    meta = self._v_apply_status_filter(meta, status)
+                    meta = self._apply_status_filter(meta, status)
 
                 return meta
         # new meta if there is no file found

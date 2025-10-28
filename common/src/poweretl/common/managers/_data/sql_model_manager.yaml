@@ -1,16 +1,66 @@
+# Table operations
 create_table: |
-  CREATE {external} TABLE {table} {location} {comment}
-alter_table_rename: |
-  ALTER TABLE {table} RENAME TO {value}
+  CREATE {external_clause} TABLE {table_name} {location_clause} {comment_clause} {cluster_by_clause}
+
+drop_table: |
+  DROP TABLE {table_name}
+
+alter_table_name: |
+  ALTER TABLE {table_name} RENAME TO {value}
 
 alter_table_comment: |
+  COMMENT ON TABLE {table_name} IS '{value}'
 
-alter_table_create_column: |
-  ALTER TABLE {table} ADD COLUMN ...
+alter_table_cluster_by: |
+  ALTER TABLE {table_name} CLUSTER BY {value}
 
-alter_table_drop_column: |
+alter_table_external_location: |
+  ALTER TABLE {table_name} SET LOCATION '{value}'
 
-alter_table_rename_column: |
+# Column operations
+create_column: |
+  ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type} {comment_clause}
 
-alter_table_alter_column: |
+drop_column: |
+  ALTER TABLE {table_name} DROP COLUMN {column_name}
+
+alter_column_name: |
+  ALTER TABLE {table_name} RENAME COLUMN {column_name} TO {value}
+
+alter_column_type: |
+  ALTER TABLE {table_name} ALTER COLUMN {column_name} SET DATA TYPE {value}
+
+alter_column_comment: |
+  ALTER TABLE {table_name} ALTER COLUMN {column_name} COMMENT '{value}'
+
+# Table tag operations
+create_table_tag: |
+  ALTER TABLE {table_name} SET TAGS ('{tag_name}' = '{tag_value}')
+
+drop_table_tag: |
+  ALTER TABLE {table_name} UNSET TAGS ('{tag_name}')
+
+alter_table_tag_value: |
+  ALTER TABLE {table_name} SET TAGS ('{tag_name}' = '{value}')
+
+# Column tag operations
+create_column_tag: |
+  ALTER TABLE {table_name} ALTER COLUMN {column_name} SET TAGS ('{tag_name}' = '{tag_value}')
+
+drop_column_tag: |
+  ALTER TABLE {table_name} ALTER COLUMN {column_name} UNSET TAGS ('{tag_name}')
+
+alter_column_tag_value: |
+  ALTER TABLE {table_name} ALTER COLUMN {column_name} SET TAGS ('{tag_name}' = '{value}')
+
+# Table property operations
+create_table_property: |
+  ALTER TABLE {table_name} SET TBLPROPERTIES ('{property_name}' = '{property_value}')
+
+drop_table_property: |
+  ALTER TABLE {table_name} UNSET TBLPROPERTIES ('{property_name}')
+
+alter_table_property_value: |
+  ALTER TABLE {table_name} SET TBLPROPERTIES ('{property_name}' = '{value}')
+
 

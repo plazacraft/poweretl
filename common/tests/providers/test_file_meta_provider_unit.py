@@ -1,5 +1,6 @@
 # pylint: disable=W0212, W0613
 
+import copy
 import json
 from dataclasses import asdict
 from datetime import datetime
@@ -324,3 +325,57 @@ def test_get_meta_filters_by_status(monkeypatch):
     assert isinstance(t1.columns.items, dict)
     assert "c1" in t1.columns.items
     assert "c2" not in t1.columns.items
+
+
+def test_push_meta_item_changes_updates_item():
+    """Ensure push_meta_item_changes updates a single item in stored meta.
+
+    We store a meta with one table 't1'. We then fetch that table object,
+    modify its `name` and call `push_meta_item_changes` with the modified
+    dataclass. The provider should save the updated meta with the changed
+    table name.
+    """
+
+    storage = DummyStorageProvider()
+    serializer = DummySerializer()
+
+    provider = FileMetaProvider(
+        file_name="metadata.json",
+        path="/tmp/update",
+        store_versions=False,
+        storage_provider=storage,
+        file_serializer=serializer,
+    )
+
+    # initial meta with one table t1
+    meta = {
+        "tables": {
+            "items": {
+                "t1": {
+                    "name": "t1",
+                    "meta": {
+                        "object_id": "1",
+                        "operation": Operation.NEW.value,
+                        "status": Status.SUCCESS.value,
+                    },
+                }
+            }
+        }
+    }
+    storage._store["/tmp/update"] = {"metadata.json": json.dumps(meta)}
+
+    # load current meta as dataclass and prepare modified item
+    current = provider.get_meta()
+    assert "t1" in current.tables.items
+    item = copy.deepcopy(current.tables.items["t1"])
+    # change a property
+    item.name = "t1-renamed"
+
+    # push change
+    provider.push_meta_item_changes(item)
+
+    # read saved content and verify change persisted
+    saved = storage.get_file_str_content(Path("/tmp/update/metadata.json"))
+    assert saved is not None
+    saved_dict = json.loads(saved)
+    assert saved_dict["tables"]["items"]["t1"]["name"] == "t1-renamed"

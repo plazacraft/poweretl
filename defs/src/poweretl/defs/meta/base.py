@@ -38,6 +38,9 @@ class MetaInfo:
 
     updated_fields: list[str] = field(default_factory=list)
 
+    model_last_update: Optional[str] = None
+    meta_last_update: Optional[str] = None
+
 
 @dataclass
 class BaseItem(mBaseItem):

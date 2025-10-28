@@ -1,8 +1,9 @@
-# pylint: disable=R0914, W0511, R0912
+# pylint: disable=R0914, W0511, R0912, W0718
 
 import copy
-from dataclasses import fields
-from typing import Optional, TypeVar, cast, get_type_hints
+from dataclasses import fields, is_dataclass
+from datetime import datetime
+from typing import Any, Optional, TypeVar, Union, cast, get_type_hints
 
 from deepdiff import DeepDiff
 from poweretl.defs.meta import BaseCollection, BaseItem, Operation, Status
@@ -22,7 +23,7 @@ class MetaModelUpdater:
     def __init__(self):
         pass
 
-    def _v_create_or_update(
+    def _create_or_update(
         self,
         source_obj,
         dest_obj: Optional[BaseItem],
@@ -57,6 +58,7 @@ class MetaModelUpdater:
                 dest_obj.meta.operation = Operation.UPDATED.value
                 dest_obj.meta.status = Status.PENDING.value
                 dest_obj.meta.updated_fields = updated_fields
+                dest_obj.meta.model_last_update = datetime.now().isoformat()
                 return dest_obj
             return dest_obj
 
@@ -67,9 +69,10 @@ class MetaModelUpdater:
         # if meta.object_id should be generated here, set uuid when caller expects
         new_child.meta.operation = Operation.NEW.value
         new_child.meta.status = Status.PENDING.value
+        new_child.meta.model_last_update = datetime.now().isoformat()
         return new_child
 
-    def _v_update_collection(
+    def _update_collection(
         self, meta_collection: BaseCollection, model_collection: ModelBaseCollection
     ):
         """Synchronize items from model_collection into meta_collection.
@@ -83,7 +86,7 @@ class MetaModelUpdater:
             # Determine the value type for items (second generic arg of items)
             value_type = get_type_hints(meta_collection.__class__)["items"].__args__[1]
 
-            meta_item: BaseItem = self._v_create_or_update(
+            meta_item: BaseItem = self._create_or_update(
                 item,
                 dest_item,
                 value_type,
@@ -91,7 +94,7 @@ class MetaModelUpdater:
 
             for f in fields(item):
                 if isinstance(getattr(item, f.name), ModelBaseCollection):
-                    self._v_update_collection(
+                    self._update_collection(
                         getattr(meta_item, f.name),
                         getattr(item, f.name),
                     )
@@ -126,7 +129,7 @@ class MetaModelUpdater:
 
         for f in fields(model):
             if isinstance(getattr(model, f.name), ModelBaseCollection):
-                self._v_update_collection(
+                self._update_collection(
                     getattr(meta_copy, f.name),
                     getattr(model, f.name),
                 )
@@ -195,3 +198,64 @@ class MetaModelUpdater:
     def apply_status_filter(self, meta, status: set[str]):
         ret, _ = self._apply_status_filter(meta, status)
         return ret
+
+    def find_by_object_id(self, data: Union[dict, list, Any], target: Any):
+        """
+        Traverse nested dicts/lists/dataclasses looking for a dataclass
+        instance whose .meta.object_id equals the provided target id.
+
+        The `target` may be:
+        - a dataclass (e.g. a BaseItem) in which case its `.meta.object_id`
+          will be used as the search key, or
+        - a scalar object_id (str/int) to search for directly.
+
+        Returns the first matching dataclass instance found or None.
+        Assumes at most one object will match the target id.
+        """
+        # normalize target to object_id value
+        target_id = None
+        try:
+            # if target is a dataclass with `.meta.object_id`
+            if is_dataclass(target) and hasattr(target, "meta"):
+                target_id = getattr(getattr(target, "meta"), "object_id", None)
+        except Exception:
+            target_id = None
+
+        if target_id is None:
+            # fallback: target might already be an id
+            target_id = target
+
+        # internal recursive search
+        def _search(node) -> Any:
+            # dataclass instances: check .meta.object_id
+            if is_dataclass(node):
+                if hasattr(node, "meta") and hasattr(node.meta, "object_id"):
+                    if node.meta.object_id == target_id:
+                        return node
+                # recurse into fields
+                for f in fields(node):
+                    try:
+                        val = getattr(node, f.name)
+                    except Exception:
+                        continue
+                    found = _search(val)
+                    if found is not None:
+                        return found
+
+            # dict: recurse into values
+            elif isinstance(node, dict):
+                for v in node.values():
+                    found = _search(v)
+                    if found is not None:
+                        return found
+
+            # list/tuple: recurse into items
+            elif isinstance(node, (list, tuple)):
+                for it in node:
+                    found = _search(it)
+                    if found is not None:
+                        return found
+
+            return None
+
+        return _search(data)

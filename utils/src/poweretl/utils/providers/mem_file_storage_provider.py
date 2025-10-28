@@ -21,7 +21,7 @@ class MemFileStorageProvider(IFileStorageWriter):
 
         prefix = Path(path).as_posix().rstrip("/") + "/"
         children = {}
-        for full in self._mem_storage.keys():  # pylint: disable=C0201
+        for full in self._mem_storage:
             full_path = Path(full).as_posix()
             if not full_path.startswith(prefix):
                 continue
@@ -64,7 +64,7 @@ class MemFileStorageProvider(IFileStorageWriter):
     def get_folders_list(self, path: str, recursive: bool = False) -> list[str]:
         prefix = Path(path).as_posix().rstrip("/") + "/"
         folders = set()
-        for full in self._mem_storage.keys():  # pylint: disable=C0201
+        for full in self._mem_storage:
             full_path = Path(full).as_posix()
             if not full_path.startswith(prefix):
                 continue
@@ -101,4 +101,5 @@ class MemFileStorageProvider(IFileStorageWriter):
         return self._mem_storage.get(Path(full_path).as_posix())
 
     def upload_file_str(self, full_path: str, content: str):
-        self._mem_storage[full_path] = content
+        # Normalize path to POSIX for consistent keying
+        self._mem_storage[Path(full_path).as_posix()] = content

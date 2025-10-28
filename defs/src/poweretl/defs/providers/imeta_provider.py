@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from poweretl.defs.meta import Meta
-from poweretl.defs.model import Model
+from poweretl.defs.model import BaseItem, Model
 
 
 class IMetaProvider(ABC):
@@ -29,6 +29,10 @@ class IMetaProvider(ABC):
         Args:
             meta (Meta): Meta information that needs to be updated
         """
+
+    @abstractmethod
+    def push_meta_item_changes(self, item: BaseItem):
+        pass
 
     @abstractmethod
     def get_meta(self, status: set[str] = None, table_id: str = None) -> Meta:
