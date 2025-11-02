@@ -9,7 +9,7 @@ class BaseItem:
     """
 
     name: str = None
-
+    linked: bool = False
 
 @dataclass
 class BaseCollection:

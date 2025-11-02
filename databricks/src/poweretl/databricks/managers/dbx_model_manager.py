@@ -1,10 +1,14 @@
-from poweretl.defs import IModelManager, Meta
+from poweretl.common import BaseModelManager
+from poweretl.defs import IMetaProvider
+from pyspark.sql import SparkSession
 
 
-class DbxModelManager(IModelManager):
+class DbxModelManager(BaseModelManager):
 
-    def __init__(self):
-        pass
+    def __init__(self, spark: SparkSession, meta_provider: IMetaProvider):
+        super().__init__(meta_provider = meta_provider)
+        self._spark = spark
 
-    def provision_model():
-        pass
+    def _execute_command(self, command: str):
+        self._spark.sql(command)
+

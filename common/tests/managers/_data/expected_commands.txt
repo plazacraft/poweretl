@@ -22,3 +22,10 @@ ALTER TABLE t_cols_only ALTER COLUMN c2_upd SET DATA TYPE DOUBLE
 ALTER TABLE t_cols_only ALTER COLUMN c2_upd COMMENT 'cols only comment'
 ALTER TABLE t_cols_only DROP COLUMN c2_del
 DROP TABLE t_del
+ALTER TABLE t_linked RENAME TO t_linked
+ALTER TABLE t_linked SET LOCATION '/mnt/linked/t_linked'
+COMMENT ON TABLE t_linked IS 'linked table comment'
+ALTER TABLE t_linked CLUSTER BY (l1, l2)
+ALTER TABLE t_linked RENAME COLUMN c_linked TO c_linked
+ALTER TABLE t_linked ALTER COLUMN c_linked SET DATA TYPE BIGINT
+ALTER TABLE t_linked ALTER COLUMN c_linked COMMENT 'linked column comment'

@@ -7,7 +7,7 @@ authors = [
 ]
 readme = "README.md"
 keywords = ["python", "etl", "database", "data-lakehouse", "data-warehouse"]
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = []
 
 [tool.poetry]

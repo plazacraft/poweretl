@@ -8,5 +8,5 @@ class IModelManager(ABC):
         pass
 
     @abstractmethod
-    def provision_model(self):
+    def provision_model(self, table_id: str = None):
         pass

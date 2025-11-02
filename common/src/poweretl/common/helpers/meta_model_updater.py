@@ -37,23 +37,29 @@ class MetaModelUpdater:
             and return it.
         - If dest_obj exists and is the same, return dest_obj unchanged.
         """
+
+        def _get_updated_fields(src, dst):
+            updated_fields = []
+            for f in fields(dst):
+                if (not src):
+                    updated_fields.append(f.name)
+                    continue
+
+                if hasattr(src, f.name):
+                    src_attr = getattr(src, f.name)
+                    dst_attr = getattr(dst, f.name)
+                    # diff only attributes that are copied by upgrader
+                    if not isinstance(dst_attr, (BaseItem, BaseCollection)):
+                        diff = DeepDiff(src_attr, dst_attr)
+                        if diff:
+                            updated_fields.append(f.name)
+            return updated_fields
+
         upgrader = DataclassUpgrader(child_cls)
 
         if dest_obj:  # pylint: disable=R1702
             if not upgrader.compare(source_obj, dest_obj):
-                # find what was updated
-                updated_fields = []
-                for f in fields(source_obj):
-
-                    if hasattr(dest_obj, f.name):
-                        source_attr = getattr(source_obj, f.name)
-                        dest_attr = getattr(dest_obj, f.name)
-                        # diff only attributes that are copied by upgrader
-                        if not isinstance(dest_attr, (BaseItem, BaseCollection)):
-                            diff = DeepDiff(source_attr, dest_attr)
-                            if diff:
-                                updated_fields.append(f.name)
-
+                updated_fields = _get_updated_fields(source_obj, dest_obj)
                 upgrader.update_child(source_obj, dest_obj)
                 dest_obj.meta.operation = Operation.UPDATED.value
                 dest_obj.meta.status = Status.PENDING.value
@@ -66,8 +72,13 @@ class MetaModelUpdater:
         new_child.meta.object_id = (
             str(copy.deepcopy(getattr(new_child.meta, "object_id", ""))) or None
         )
-        # if meta.object_id should be generated here, set uuid when caller expects
-        new_child.meta.operation = Operation.NEW.value
+
+        # for linked item is not created, however all fields are updated
+        if (new_child.linked):
+            new_child.meta.operation = Operation.UPDATED.value
+            new_child.meta.updated_fields = _get_updated_fields(None, new_child)
+        else:
+            new_child.meta.operation = Operation.NEW.value
         new_child.meta.status = Status.PENDING.value
         new_child.meta.model_last_update = datetime.now().isoformat()
         return new_child

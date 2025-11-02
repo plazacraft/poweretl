@@ -1,0 +1,53 @@
+{
+  "tables": {
+    "items": {
+      "table_01": {
+        "name": "workspace.poweretl_tests.table_01",
+        "comment": "table_01:\nTest table for unit tests.",
+        "cluster_by": "(col_01, col_02)",
+        "columns": {"items": {
+            "col_01": {
+              "name": "col_01",
+              "type": "STRING",
+              "comment": "col_01:\nFirst column.",
+              "tags": {
+                "items": {
+                    "ctag_01": {
+                    "name": "ctag_01",
+                    "value": "ctag_value_01",
+                    "meta": {"object_id": "ctg-01", "operation": "new", "status": "pending"}
+                    },
+                    "ctag_02": {
+                    "name": "ctag_02",
+                    "value": "ctag_value_02",
+                    "meta": {"object_id": "ctg-02", "operation": "new", "status": "pending"}
+                    }
+                }},
+                "meta": {"object_id": "col-001", "operation": "new", "status": "pending"}
+            },
+            "col_02": {
+              "name": "col_02",
+              "type": "INT",
+              "comment": "col_02:\nSecond column.",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-002", "operation": "new", "status": "pending"}
+            }
+        }},
+        "tags": {"items": {
+            "tag_01": {
+              "name": "tag_01",
+              "value": "value_01",
+              "meta": {"object_id": "tg-01", "operation": "new", "status": "pending"}
+            },
+            "tag_02": {
+              "name": "tag_02",
+              "value": "value_02",
+              "meta": {"object_id": "tg-02", "operation": "new", "status": "pending"}
+            }
+        }},
+        "properties": {"items": {}},
+        "meta": {"object_id": "tbl-01", "operation": "new", "status": "pending"}
+      }
+    }
+  }
+}

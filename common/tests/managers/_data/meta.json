@@ -134,6 +134,28 @@
         "tags": {"items": {}},
         "properties": {"items": {}},
         "meta": {"object_id": "tbl-3", "operation": "deleted", "status": "pending"}
+      },
+      "t_linked": {
+        "name": "t_linked",
+        "linked": true,
+        "external_location": "/mnt/linked/t_linked",
+        "comment": "linked table comment",
+        "cluster_by": "(l1, l2)",
+        "columns": {
+          "items": {
+            "c_linked": {
+              "name": "c_linked",
+              "linked": true,
+              "type": "BIGINT",
+              "comment": "linked column comment",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-linked", "operation": "updated", "status": "pending", "updated_fields": ["name", "type", "comment"]}
+            }
+          }
+        },
+        "tags": {"items": {}},
+        "properties": {"items": {}},
+        "meta": {"object_id": "tbl-linked", "operation": "updated", "status": "pending", "updated_fields": ["name", "external_location", "comment", "cluster_by"]}
       }
     }
   }

@@ -86,8 +86,8 @@ class BaseModelManager(IModelManager):
             item.meta.error_msg = str(e)
             self._meta_provider.push_meta_item_changes(item)
 
-    def provision_model(self):
-        meta = self._meta_provider.get_meta(status={Status.PENDING.value})
+    def provision_model(self, table_id: str = None):
+        meta = self._meta_provider.get_meta(table_id = table_id, status={Status.PENDING.value})
         for table in meta.tables.items.values():
             if table.meta.operation == Operation.NEW.value:
                 external_clause = ""
