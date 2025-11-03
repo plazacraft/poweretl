@@ -77,10 +77,12 @@ class VolumeDbxFileStorageProvider(IFileStorageWriter):
             # File doesn't exist or path is invalid
             return None
 
-        df = self._spark.read.text(full_path)
+        #df = self._spark.read.text(full_path)
+        #text_str = "\n".join(row["value"] for row in df.collect())
+        
+        df = self._spark.read.option("wholetext", "true").text(full_path)
+        text_str = df.collect()[0]["value"]
 
-        # Collect the rows and join them into a single string
-        text_str = "\n".join(row["value"] for row in df.collect())
 
         return text_str
 

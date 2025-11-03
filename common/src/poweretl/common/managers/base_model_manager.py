@@ -98,9 +98,6 @@ class BaseModelManager(IModelManager):
                 comment_clause = ""
                 if table.comment:
                     comment_clause = f"COMMENT '{table.comment}'"
-                cluster_by_clause = ""
-                if table.cluster_by:
-                    cluster_by_clause = f"CLUSTER BY {table.cluster_by}"
                 self._call_execute_command(
                     "create_table",
                     table,
@@ -108,7 +105,6 @@ class BaseModelManager(IModelManager):
                     external_clause=external_clause,
                     location_clause=location_clause,
                     comment_clause=comment_clause,
-                    cluster_by_clause=cluster_by_clause,
                 )
             elif table.meta.operation == Operation.UPDATED.value:
                 self._call_execute_command("alter_table", table, table_name=table.name)
@@ -224,3 +220,14 @@ class BaseModelManager(IModelManager):
                         table_name=table.name,
                         property_name=current_property.name,
                     )
+
+
+            # Process post settings
+            for current_setting in table.post_settings.items.values():
+                self._call_execute_command(
+                    "alter_table_setting_value",
+                    current_setting,
+                    table_name=table.name,
+                    setting_name=current_setting.name,
+                    value=current_setting.value,
+                )

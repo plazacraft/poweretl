@@ -1,6 +1,5 @@
-CREATE EXTERNAL TABLE t_new LOCATION '/mnt/external/t_new' COMMENT 'table new' CLUSTER BY (c1, c2)
+CREATE EXTERNAL TABLE t_new LOCATION '/mnt/external/t_new' COMMENT 'table new'
 COMMENT ON TABLE t_upd IS 'table upd'
-ALTER TABLE t_upd CLUSTER BY (c3)
 ALTER TABLE t_upd SET LOCATION '/mnt/external/t_upd_new'
 ALTER TABLE t_upd ADD COLUMN c_new INT COMMENT 'new column comment'
 ALTER TABLE t_upd RENAME COLUMN c_upd TO c_upd
@@ -25,7 +24,6 @@ DROP TABLE t_del
 ALTER TABLE t_linked RENAME TO t_linked
 ALTER TABLE t_linked SET LOCATION '/mnt/linked/t_linked'
 COMMENT ON TABLE t_linked IS 'linked table comment'
-ALTER TABLE t_linked CLUSTER BY (l1, l2)
 ALTER TABLE t_linked RENAME COLUMN c_linked TO c_linked
 ALTER TABLE t_linked ALTER COLUMN c_linked SET DATA TYPE BIGINT
 ALTER TABLE t_linked ALTER COLUMN c_linked COMMENT 'linked column comment'

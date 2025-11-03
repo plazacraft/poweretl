@@ -14,7 +14,7 @@ class Table(BaseItem, mTable):
     columns: Columns = field(default_factory=Columns)
     tags: Tags = field(default_factory=Tags)
     properties: Properties = field(default_factory=Properties)
-
+    post_settings: Properties = field(default_factory=Properties)
 
 @dataclass
 class Tables(BaseCollection, mTables):

@@ -4,7 +4,6 @@
       "table_01": {
         "name": "workspace.poweretl_tests.table_01",
         "comment": "table_01:\nTest table for unit tests.",
-        "cluster_by": "(col_01, col_02)",
         "columns": {"items": {
             "col_01": {
               "name": "col_01",
@@ -46,6 +45,13 @@
             }
         }},
         "properties": {"items": {}},
+        "post_settings": {"items": {
+            "cluster_by": {
+              "name": "CLUSTER BY",
+              "value": "(col_01, col_02)",
+              "meta": {"object_id": "cs-01", "operation": "new", "status": "success"}
+            }
+        }},           
         "meta": {"object_id": "tbl-01", "operation": "new", "status": "success"}
       }
     }

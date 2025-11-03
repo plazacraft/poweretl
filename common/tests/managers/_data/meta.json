@@ -5,7 +5,6 @@
         "name": "t_new",
         "external_location": "/mnt/external/t_new",
         "comment": "table new",
-        "cluster_by": "(c1, c2)",
         "columns": {"items": {}},
         "tags": {"items": {}},
         "properties": {"items": {}},
@@ -15,7 +14,6 @@
         "name": "t_upd",
         "external_location": "/mnt/external/t_upd_new",
         "comment": "table upd",
-        "cluster_by": "(c3)",
         "columns": {
           "items": {
             "c_new": {
@@ -96,7 +94,7 @@
             }
           }
         },
-        "meta": {"object_id": "tbl-2", "operation": "updated", "status": "pending", "updated_fields": ["comment", "cluster_by", "external_location"]}
+        "meta": {"object_id": "tbl-2", "operation": "updated", "status": "pending", "updated_fields": ["comment", "external_location"]}
       },
       "t_cols_only": {
         "name": "t_cols_only",
@@ -140,7 +138,6 @@
         "linked": true,
         "external_location": "/mnt/linked/t_linked",
         "comment": "linked table comment",
-        "cluster_by": "(l1, l2)",
         "columns": {
           "items": {
             "c_linked": {
@@ -155,7 +152,7 @@
         },
         "tags": {"items": {}},
         "properties": {"items": {}},
-        "meta": {"object_id": "tbl-linked", "operation": "updated", "status": "pending", "updated_fields": ["name", "external_location", "comment", "cluster_by"]}
+        "meta": {"object_id": "tbl-linked", "operation": "updated", "status": "pending", "updated_fields": ["name", "external_location", "comment"]}
       }
     }
   }

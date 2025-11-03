@@ -1,6 +1,6 @@
 # Table operations
 create_table: |
-  CREATE {external_clause} TABLE {table_name} {location_clause} {comment_clause} {cluster_by_clause}
+  CREATE {external_clause} TABLE {table_name} {location_clause} {comment_clause}
 
 drop_table: |
   DROP TABLE {table_name}
@@ -11,9 +11,7 @@ alter_table_name: |
 alter_table_comment: |
   COMMENT ON TABLE {table_name} IS '{value}'
 
-alter_table_cluster_by: |
-  ALTER TABLE {table_name} CLUSTER BY {value}
-
+ 
 alter_table_external_location: |
   ALTER TABLE {table_name} SET LOCATION '{value}'
 
@@ -63,4 +61,6 @@ drop_table_property: |
 alter_table_property_value: |
   ALTER TABLE {table_name} SET TBLPROPERTIES ('{property_name}' = '{value}')
 
+alter_table_setting_value: |
+  ALTER TABLE {table_name} {setting_name} {value}
 
