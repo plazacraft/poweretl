@@ -14,6 +14,14 @@ dependencies = [
 packages = [{include = "poweretl", from = "src"}]
 
 
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.black]
+line-length = 88
+
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
@@ -39,4 +47,4 @@ import-ipynb = "*"
 poweretl-utils = "*"
 poweretl-defs = "*"
 poweretl-common = "*"
-databricks-connect = "~17.3"
+databricks-connect = "~17.2"

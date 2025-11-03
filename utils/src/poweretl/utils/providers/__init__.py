@@ -2,4 +2,4 @@
 
 from .ifile_storage_provider import IFileStorageReader, IFileStorageWriter
 from .mem_file_storage_provider import MemFileStorageProvider
-from .osfile_storage_provider import OSFileStorageProvider
+from .os_file_storage_provider import OSFileStorageProvider

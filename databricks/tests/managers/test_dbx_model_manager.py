@@ -22,12 +22,12 @@ def test_dbx_model_manager():
     mem_path = "/tmp/manager"
 
     with open(
-        Path(f"{data_dir}/meta_init.json"), "r", encoding="utf-8"
+        Path(f"{data_dir}/01.meta_init.json"), "r", encoding="utf-8"
     ) as f:
-        storage.upload_file_str(Path(mem_path).joinpath("meta_init.json").as_posix, f.read())
+        storage.upload_file_str(Path(mem_path).joinpath("meta_init.json").as_posix(), f.read())
 
     with open(
-        Path(f"{data_dir}/meta_cleanup.json"), "r", encoding="utf-8"
+        Path(f"{data_dir}/03.meta_cleanup.json"), "r", encoding="utf-8"
     ) as f:
         storage.upload_file_str(Path(mem_path).joinpath("meta_cleanup.json").as_posix(), f.read())
 
@@ -39,7 +39,7 @@ def test_dbx_model_manager():
     )
 
     meta_provider_init_result = FileMetaProvider(
-        file_name="meta_init_result.json",
+        file_name="01.meta_init_result.json",
         path=data_dir,
         store_versions=False,
     )

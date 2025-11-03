@@ -1,16 +1,18 @@
 from dataclasses import dataclass
 from pyspark.sql.functions import array
 from pyspark.sql import SparkSession
-
+from databricks.sdk.dbutils import RemoteDbUtils
+from typing import Any
 import os
 import json
 import base64
 
 @dataclass
 class Session:
-    dbutils = None
-    display = None  
-    spark = None
+
+    dbutils: RemoteDbUtils = None
+    display: Any = None
+    spark: SparkSession = None
 
 class _MockWidgets:
     def __init__(self):
