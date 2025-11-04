@@ -223,7 +223,7 @@ class BaseModelManager(IModelManager):
 
 
             # Process post settings
-            for current_setting in table.post_settings.items.values():
+            for current_setting in table.settings.items.values():
                 self._call_execute_command(
                     "alter_table_setting_value",
                     current_setting,

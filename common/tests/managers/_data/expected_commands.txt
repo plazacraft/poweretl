@@ -15,6 +15,8 @@ ALTER TABLE t_upd UNSET TAGS ('tag_del')
 ALTER TABLE t_upd SET TBLPROPERTIES ('prop_new' = 'pv1')
 ALTER TABLE t_upd SET TBLPROPERTIES ('prop_upd' = 'pv2')
 ALTER TABLE t_upd UNSET TBLPROPERTIES ('prop_del')
+ALTER TABLE t_upd ENABLE CHANGE DATA FEED true
+ALTER TABLE t_upd SET TBLPROPERTIES ('delta.autoOptimize.optimizeWrite' = 'true')
 ALTER TABLE t_cols_only ADD COLUMN c2_new BOOLEAN COMMENT 'another comment'
 ALTER TABLE t_cols_only RENAME COLUMN c2_upd TO c2_upd
 ALTER TABLE t_cols_only ALTER COLUMN c2_upd SET DATA TYPE DOUBLE
@@ -27,3 +29,4 @@ COMMENT ON TABLE t_linked IS 'linked table comment'
 ALTER TABLE t_linked RENAME COLUMN c_linked TO c_linked
 ALTER TABLE t_linked ALTER COLUMN c_linked SET DATA TYPE BIGINT
 ALTER TABLE t_linked ALTER COLUMN c_linked COMMENT 'linked column comment'
+ALTER TABLE t_linked ENABLE CHANGE DATA FEED false

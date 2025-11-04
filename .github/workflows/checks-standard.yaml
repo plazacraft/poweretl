@@ -16,5 +16,5 @@ jobs:
     uses: plazacraft/poweretl-pipelines/.github/workflows/code-checks.yaml@main
     with:
       python-version: '3.13'
-      projects: '["utils", "defs", "common", "examples"]'
+      projects: '["utils", "defs", "common", "databricks", "examples"]'
     secrets: inherit      

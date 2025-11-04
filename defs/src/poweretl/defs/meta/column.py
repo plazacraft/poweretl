@@ -4,12 +4,12 @@ from poweretl.defs.model import Column as mColumn
 from poweretl.defs.model import Columns as mColumns
 
 from .base import BaseCollection, BaseItem
-from .tag import Tags
+from .name_value import NameValues
 
 
 @dataclass
 class Column(BaseItem, mColumn):
-    tags: Tags = field(default_factory=Tags)
+    tags: NameValues = field(default_factory=NameValues)
 
 
 @dataclass

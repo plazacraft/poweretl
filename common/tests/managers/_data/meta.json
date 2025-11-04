@@ -8,6 +8,7 @@
         "columns": {"items": {}},
         "tags": {"items": {}},
         "properties": {"items": {}},
+        "settings": {"items": {}},
         "meta": {"object_id": "tbl-1", "operation": "new", "status": "pending"}
       },
       "t_upd": {
@@ -94,6 +95,20 @@
             }
           }
         },
+        "settings": {
+          "items": {
+            "setting1": {
+              "name": "ENABLE CHANGE DATA FEED",
+              "value": "true",
+              "meta": {"object_id": "ps-1", "operation": "new", "status": "pending"}
+            },
+            "setting2": {
+              "name": "SET TBLPROPERTIES",
+              "value": "('delta.autoOptimize.optimizeWrite' = 'true')",
+              "meta": {"object_id": "ps-2", "operation": "new", "status": "pending"}
+            }
+          }
+        },
         "meta": {"object_id": "tbl-2", "operation": "updated", "status": "pending", "updated_fields": ["comment", "external_location"]}
       },
       "t_cols_only": {
@@ -124,6 +139,7 @@
         },
         "tags": {"items": {}},
         "properties": {"items": {}},
+        "settings": {"items": {}},
         "meta": {"object_id": "tbl-4", "operation": "updated", "status": "success"}
       },
       "t_del": {
@@ -131,6 +147,7 @@
         "columns": {"items": {}},
         "tags": {"items": {}},
         "properties": {"items": {}},
+        "settings": {"items": {}},
         "meta": {"object_id": "tbl-3", "operation": "deleted", "status": "pending"}
       },
       "t_linked": {
@@ -152,6 +169,15 @@
         },
         "tags": {"items": {}},
         "properties": {"items": {}},
+        "settings": {
+          "items": {
+            "setting3": {
+              "name": "ENABLE CHANGE DATA FEED",
+              "value": "false",
+              "meta": {"object_id": "ps-3", "operation": "new", "status": "pending"}
+            }
+          }
+        },
         "meta": {"object_id": "tbl-linked", "operation": "updated", "status": "pending", "updated_fields": ["name", "external_location", "comment"]}
       }
     }

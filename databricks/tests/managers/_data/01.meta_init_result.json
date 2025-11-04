@@ -45,7 +45,7 @@
             }
         }},
         "properties": {"items": {}},
-        "post_settings": {"items": {
+        "settings": {"items": {
             "cluster_by": {
               "name": "CLUSTER BY",
               "value": "(col_01, col_02)",

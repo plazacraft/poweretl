@@ -4,12 +4,12 @@ from .base import BaseCollection, BaseItem
 
 
 @dataclass
-class Property(BaseItem):
+class NameValue(BaseItem):
     value: str = None
 
 
 @dataclass
-class Properties(BaseCollection):
-    items: dict[str, Property] = field(
+class NameValues(BaseCollection):
+    items: dict[str, NameValue] = field(
         default_factory=dict, metadata={"exclude_from_upgrader": True}
     )

@@ -2,8 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from .base import BaseCollection, BaseItem
-from .tag import Tags
-
+from .name_value import NameValues
 
 @dataclass
 class Column(BaseItem):
@@ -11,7 +10,7 @@ class Column(BaseItem):
 
     type: str = None
     comment: Optional[str] = None
-    tags: Tags = field(default_factory=Tags)
+    tags: NameValues = field(default_factory=NameValues)
     properties: object = None
 
 

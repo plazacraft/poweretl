@@ -22,5 +22,5 @@ jobs:
     uses: plazacraft/poweretl-pipelines/.github/workflows/run-tests.yaml@main
     with:
       python-version: '3.13'
-      projects: '["utils","common", "examples"]'
+      projects: '["utils", "defs","common", "databricks","examples"]'
     secrets: inherit      

@@ -5,16 +5,16 @@ from poweretl.defs.model import Tables as mTables
 
 from .base import BaseCollection, BaseItem
 from .column import Columns
-from .property import Properties
-from .tag import Tags
+from .name_value import NameValues
+
 
 
 @dataclass
 class Table(BaseItem, mTable):
     columns: Columns = field(default_factory=Columns)
-    tags: Tags = field(default_factory=Tags)
-    properties: Properties = field(default_factory=Properties)
-    post_settings: Properties = field(default_factory=Properties)
+    tags: NameValues = field(default_factory=NameValues)
+    properties: NameValues = field(default_factory=NameValues)
+    settings: NameValues = field(default_factory=NameValues)
 
 @dataclass
 class Tables(BaseCollection, mTables):
