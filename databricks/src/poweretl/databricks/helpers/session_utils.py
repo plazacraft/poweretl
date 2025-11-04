@@ -1,9 +1,10 @@
 from pyspark.sql import SparkSession
 
 
-# if not in databricks environment, define None for dbutils and display for globals
 try:
-    spark = SparkSession.builder.getOrCreate()
-except:
+    from databricks.connect import DatabricksSession
     dbutils = None
     display = None
+except ImportError:
+    pass
+
