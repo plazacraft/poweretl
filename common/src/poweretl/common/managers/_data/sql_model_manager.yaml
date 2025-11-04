@@ -6,7 +6,7 @@ drop_table: |
   DROP TABLE {table_name}
 
 alter_table_name: |
-  ALTER TABLE {table_name} RENAME TO {value}
+  ALTER TABLE {old_value} RENAME TO {value}
 
 alter_table_comment: |
   COMMENT ON TABLE {table_name} IS '{value}'
@@ -23,10 +23,10 @@ drop_column: |
   ALTER TABLE {table_name} DROP COLUMN {column_name}
 
 alter_column_name: |
-  ALTER TABLE {table_name} RENAME COLUMN {column_name} TO {value}
+  ALTER TABLE {table_name} RENAME COLUMN {old_value} TO {value}
 
 alter_column_type: |
-  ALTER TABLE {table_name} ALTER COLUMN {column_name} SET DATA TYPE {value}
+  ALTER TABLE {table_name} ALTER COLUMN {column_name} TYPE {value}
 
 alter_column_comment: |
   ALTER TABLE {table_name} ALTER COLUMN {column_name} COMMENT '{value}'

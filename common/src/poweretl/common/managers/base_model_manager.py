@@ -39,6 +39,9 @@ class BaseModelManager(IModelManager):
         pass
 
     def _call_execute_command(self, command: str, item: BaseItem, **kwargs):
+        if (item.meta.status != Status.PENDING.value) or (item.meta.operation == None):
+            return
+        
         try:
             commands = {}
             # Expand UPDATED only for structural alters that map
@@ -50,8 +53,8 @@ class BaseModelManager(IModelManager):
                 # For each updated field, create a command like
                 # "alter_table_name", "alter_table_comment", etc.
                 commands = {
-                    f"{command}_{updated}": getattr(item, updated, None)
-                    for updated in (item.meta.updated_fields or [])
+                    f"{command}_{updated}": { "new_value": getattr(item, updated, None), "field": updated, "old_value": value } 
+                    for updated, value in (item.meta.updated_fields.items())
                 }
             else:
                 # Execute the provided command as-is
@@ -61,18 +64,21 @@ class BaseModelManager(IModelManager):
             item.meta.status = Status.RUNNING.value
             self._meta_provider.push_meta_item_changes(item)
 
-            for current_command, value in commands.items():
-                if current_command not in self._config:
-                    raise NotImplementedError(
-                        f"Command not implemented: {current_command}"
-                    )
+            # ensure commands are executed in the order of config (e.g. first rename)
+            to_execute = []
+            for config_command, _ in self._config.items():
+                if config_command in commands:
+                    to_execute.append(config_command)
 
+            for current_command in to_execute:
+                command_item = commands[current_command]
                 query = self._config[current_command]
                 # Build tokens dict (stringified, ignore None).
                 # If value is provided for the command, include it.
                 tokens = {k: str(v) for k, v in kwargs.items() if v is not None}
-                if value is not None:
-                    tokens["value"] = str(value)
+                if command_item:
+                    tokens["value"] = str(command_item["new_value"])
+                    tokens["old_value"] = str(command_item["old_value"])
                 query = self._tokens_replacer.replace(query, tokens=tokens)
                 self._execute_command(query)
 
@@ -111,6 +117,60 @@ class BaseModelManager(IModelManager):
 
             elif table.meta.operation == Operation.DELETED.value:
                 self._call_execute_command("drop_table", table, table_name=table.name)
+
+
+            # Process table tags
+            for tag in table.tags.items.values():
+                if tag.meta.operation == Operation.NEW.value:
+                    self._call_execute_command(
+                        "create_table_tag",
+                        tag,
+                        table_name=table.name,
+                        tag_name=tag.name,
+                        tag_value=tag.value if tag.value else "",
+                    )
+                elif tag.meta.operation == Operation.UPDATED.value:
+                    self._call_execute_command(
+                        "alter_table_tag_value",
+                        tag,
+                        table_name=table.name,
+                        tag_name=tag.name,
+                        value=tag.value,
+                    )
+                elif tag.meta.operation == Operation.DELETED.value:
+                    self._call_execute_command(
+                        "drop_table_tag", tag, table_name=table.name, tag_name=tag.name
+                    )
+
+            # Process table properties
+            for current_property in table.properties.items.values():
+                if current_property.meta.operation == Operation.NEW.value:
+                    self._call_execute_command(
+                        "create_table_property",
+                        current_property,
+                        table_name=table.name,
+                        property_name=current_property.name,
+                        property_value=(
+                            current_property.value if current_property.value else ""
+                        ),
+                    )
+                elif current_property.meta.operation == Operation.UPDATED.value:
+                    self._call_execute_command(
+                        "alter_table_property_value",
+                        current_property,
+                        table_name=table.name,
+                        property_name=current_property.name,
+                        value=current_property.value,
+                    )
+                elif current_property.meta.operation == Operation.DELETED.value:
+                    self._call_execute_command(
+                        "drop_table_property",
+                        current_property,
+                        table_name=table.name,
+                        property_name=current_property.name,
+                    )
+
+
 
             # Process columns
             for column in table.columns.items.values():
@@ -170,59 +230,8 @@ class BaseModelManager(IModelManager):
                             tag_name=column_tag.name,
                         )
 
-            # Process table tags
-            for tag in table.tags.items.values():
-                if tag.meta.operation == Operation.NEW.value:
-                    self._call_execute_command(
-                        "create_table_tag",
-                        tag,
-                        table_name=table.name,
-                        tag_name=tag.name,
-                        tag_value=tag.value if tag.value else "",
-                    )
-                elif tag.meta.operation == Operation.UPDATED.value:
-                    self._call_execute_command(
-                        "alter_table_tag_value",
-                        tag,
-                        table_name=table.name,
-                        tag_name=tag.name,
-                        value=tag.value,
-                    )
-                elif tag.meta.operation == Operation.DELETED.value:
-                    self._call_execute_command(
-                        "drop_table_tag", tag, table_name=table.name, tag_name=tag.name
-                    )
 
-            # Process table properties
-            for current_property in table.properties.items.values():
-                if current_property.meta.operation == Operation.NEW.value:
-                    self._call_execute_command(
-                        "create_table_property",
-                        current_property,
-                        table_name=table.name,
-                        property_name=current_property.name,
-                        property_value=(
-                            current_property.value if current_property.value else ""
-                        ),
-                    )
-                elif current_property.meta.operation == Operation.UPDATED.value:
-                    self._call_execute_command(
-                        "alter_table_property_value",
-                        current_property,
-                        table_name=table.name,
-                        property_name=current_property.name,
-                        value=current_property.value,
-                    )
-                elif current_property.meta.operation == Operation.DELETED.value:
-                    self._call_execute_command(
-                        "drop_table_property",
-                        current_property,
-                        table_name=table.name,
-                        property_name=current_property.name,
-                    )
-
-
-            # Process post settings
+            # Process settings
             for current_setting in table.settings.items.values():
                 self._call_execute_command(
                     "alter_table_setting_value",

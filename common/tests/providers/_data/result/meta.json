@@ -22,7 +22,7 @@
                                 "status": "pending",
                                 "operation": "deleted",
                                 "error_msg": null,
-                                "updated_fields": []
+                                "updated_fields": {}
                             }
                         },
                         "col_2": {
@@ -38,10 +38,10 @@
                                 "status": "pending",
                                 "operation": "updated",
                                 "error_msg": null,
-                                "updated_fields": [
-                                    "name",
-                                    "type"
-                                ]
+                                "updated_fields": {
+                                    "name" : "col 2",
+                                    "type" : "type"
+                                }
                             }
                         },
                         "col_3": {
@@ -57,7 +57,7 @@
                                 "status": "pending",
                                 "operation": "new",
                                 "error_msg": null,
-                                "updated_fields": []
+                                "updated_fields": {}
                             }
                         },
                         "last_modification": {
@@ -73,7 +73,7 @@
                                 "status": "pending",
                                 "operation": "new",
                                 "error_msg": null,
-                                "updated_fields": []
+                                "updated_fields": {}
                             }
                         },
                         "version": {
@@ -89,7 +89,7 @@
                                 "status": "pending",
                                 "operation": "new",
                                 "error_msg": null,
-                                "updated_fields": []
+                                "updated_fields": {}
                             }
                         },
                         "col_4": {
@@ -105,7 +105,7 @@
                                 "status": "pending",
                                 "operation": "new",
                                 "error_msg": null,
-                                "updated_fields": []
+                                "updated_fields": {}
                             }
                         }
                     }
@@ -123,9 +123,9 @@
                     "status": "pending",
                     "operation": "updated",
                     "error_msg": null,
-                    "updated_fields": [
-                        "name"
-                    ]
+                    "updated_fields": {
+                        "name": "table_1_new"
+                    }
                 }
             },
             "prd.test.table_2": {
@@ -148,7 +148,7 @@
                                 "status": "pending",
                                 "operation": "new",
                                 "error_msg": null,
-                                "updated_fields": []
+                                "updated_fields": {}
                             }
                         }
                     }
@@ -166,7 +166,7 @@
                     "status": "pending",
                     "operation": "deleted",
                     "error_msg": null,
-                    "updated_fields": []
+                    "updated_fields": {}
                 }
             },
             "prd.test.table_3": {
@@ -189,7 +189,7 @@
                                 "status": "pending",
                                 "operation": "new",
                                 "error_msg": null,
-                                "updated_fields": []
+                                "updated_fields": {}
                             }
                         }
                     }
@@ -207,7 +207,7 @@
                     "status": "pending",
                     "operation": "new",
                     "error_msg": null,
-                    "updated_fields": []
+                    "updated_fields": {}
                 }
             },
             "prd.test.table_4": {
@@ -230,7 +230,7 @@
                                 "status": "pending",
                                 "operation": "new",
                                 "error_msg": null,
-                                "updated_fields": []
+                                "updated_fields": {}
                             }
                         },
                         "col_2": {
@@ -246,7 +246,7 @@
                                 "status": "pending",
                                 "operation": "new",
                                 "error_msg": null,
-                                "updated_fields": []
+                                "updated_fields": {}
                             }
                         }
                     }
@@ -264,7 +264,7 @@
                     "status": "pending",
                     "operation": "new",
                     "error_msg": null,
-                    "updated_fields": []
+                    "updated_fields": {}
                 }
             }
         }

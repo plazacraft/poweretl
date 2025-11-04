@@ -87,22 +87,22 @@ def get_or_connect(*,
                 pass  # If the attribute doesn't exist, do nothing
 
 
-    if (dbutils is None):
+            if (dbutils is None):
 
-        workspace_client = WorkspaceClient(host=host, token=token)
+                workspace_client = WorkspaceClient(host=host, token=token)
 
-        dbutils = workspace_client.dbutils
+                dbutils = workspace_client.dbutils
 
-        mock_widgets =  _MockWidgets()
-        dbutils.widgets.get = mock_widgets.get
-        dbutils.widgets.text = mock_widgets.text
+                mock_widgets =  _MockWidgets()
+                dbutils.widgets.get = mock_widgets.get
+                dbutils.widgets.text = mock_widgets.text
 
-    if (display is None):    
-        def display(df):
-            if hasattr(df, "show") and callable(getattr(df, "show")):
-                df.show()
-            else:
-                print(df)
+            if (display is None):    
+                def display(df):
+                    if hasattr(df, "show") and callable(getattr(df, "show")):
+                        df.show()
+                    else:
+                        print(df)
 
     return Session(
         dbutils=dbutils,

@@ -36,7 +36,7 @@ class MetaInfo:
 
     error_msg: Optional[str] = None
 
-    updated_fields: list[str] = field(default_factory=list)
+    updated_fields: dict[str, str] = field(default_factory=dict)
 
     model_last_update: Optional[str] = None
     meta_last_update: Optional[str] = None

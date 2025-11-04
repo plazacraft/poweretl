@@ -29,7 +29,7 @@
               "type": "BIGINT",
               "comment": "col_02_02:\nSecond column.",
               "tags": {"items": {}},
-              "meta": {"object_id": "col-002", "operation": "updated", "status": "pending", "updated_fields": ["name", "type", "comment"]}
+              "meta": {"object_id": "col-002", "operation": "updated", "status": "pending", "updated_fields": {"name" :"col_02", "type": "INT", "comment": "col_02:\nSecond column."}}
             },
             "col_03": {
               "name": "col_03",
@@ -48,7 +48,7 @@
             "tag_02": {
               "name": "tag_02",
               "value": "value_02_02",
-              "meta": {"object_id": "tg-02", "operation": "updated", "status": "pending", "updated_fields": ["value"]}
+              "meta": {"object_id": "tg-02", "operation": "updated", "status": "pending", "updated_fields": {"value" :"value_02"}}
             },
             "tag_03": {
               "name": "tag_03",
@@ -56,7 +56,18 @@
               "meta": {"object_id": "tg-03", "operation": "new", "status": "pending"}
             }
         }},
-        "properties": {"items": {}},
+        "properties": {"items": {
+            "column_mapping": {
+              "name": "delta.columnMapping.mode",
+              "value": "name",
+              "meta": {"object_id": "property-01", "operation": "new", "status": "pending"}
+            },
+            "column_widening": {
+              "name": "delta.enableTypeWidening",
+              "value": "true",
+              "meta": {"object_id": "property-02", "operation": "new", "status": "pending"}
+            }
+        }},
         "settings": {"items": {
             "cluster_by": {
               "name": "CLUSTER BY",

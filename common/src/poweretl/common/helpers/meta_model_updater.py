@@ -39,20 +39,21 @@ class MetaModelUpdater:
         """
 
         def _get_updated_fields(src, dst):
-            updated_fields = []
+            updated_fields = {}
             for f in fields(dst):
+                # if there is no field in model, new value is None, old is from meta
+                dst_attr = getattr(dst, f.name)
                 if (not src):
-                    updated_fields.append(f.name)
+                    updated_fields[f.name] = dst_attr
                     continue
 
                 if hasattr(src, f.name):
                     src_attr = getattr(src, f.name)
-                    dst_attr = getattr(dst, f.name)
                     # diff only attributes that are copied by upgrader
                     if not isinstance(dst_attr, (BaseItem, BaseCollection)):
                         diff = DeepDiff(src_attr, dst_attr)
                         if diff:
-                            updated_fields.append(f.name)
+                            updated_fields[f.name] = dst_attr
             return updated_fields
 
         upgrader = DataclassUpgrader(child_cls)

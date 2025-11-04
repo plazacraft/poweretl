@@ -47,7 +47,7 @@
                   }
                 }
               },
-              "meta": {"object_id": "col-2", "operation": "updated", "status": "pending", "updated_fields": ["name", "type", "comment"]}
+              "meta": {"object_id": "col-2", "operation": "updated", "status": "pending", "updated_fields": {"name": "c", "type": "STRING", "comment": "old"}}
             },
             "c_del": {
               "name": "c_del",
@@ -109,7 +109,7 @@
             }
           }
         },
-        "meta": {"object_id": "tbl-2", "operation": "updated", "status": "pending", "updated_fields": ["comment", "external_location"]}
+        "meta": {"object_id": "tbl-2", "operation": "updated", "status": "pending", "updated_fields": {"name":"t", "comment": "old", "external_location": "old"}}
       },
       "t_cols_only": {
         "name": "t_cols_only",
@@ -127,7 +127,7 @@
               "type": "DOUBLE",
               "comment": "cols only comment",
               "tags": {"items": {}},
-              "meta": {"object_id": "col-22", "operation": "updated", "status": "pending", "updated_fields": ["name", "type", "comment"]}
+              "meta": {"object_id": "col-22", "operation": "updated", "status": "pending", "updated_fields": {"name": "c2", "type": "DOUBLE", "comment": "cols only comment"}}
             },
             "c2_del": {
               "name": "c2_del",
@@ -163,7 +163,7 @@
               "type": "BIGINT",
               "comment": "linked column comment",
               "tags": {"items": {}},
-              "meta": {"object_id": "col-linked", "operation": "updated", "status": "pending", "updated_fields": ["name", "type", "comment"]}
+              "meta": {"object_id": "col-linked", "operation": "updated", "status": "pending", "updated_fields": {"name":"c", "type": "BIGINT", "comment": "linked column comment"}}    
             }
           }
         },
@@ -178,7 +178,7 @@
             }
           }
         },
-        "meta": {"object_id": "tbl-linked", "operation": "updated", "status": "pending", "updated_fields": ["name", "external_location", "comment"]}
+        "meta": {"object_id": "tbl-linked", "operation": "updated", "status": "pending", "updated_fields": {"external_location": "old", "comment": "old"}}  
       }
     }
   }
