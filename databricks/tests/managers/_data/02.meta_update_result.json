@@ -29,14 +29,14 @@
               "type": "BIGINT",
               "comment": "col_02_02:\nSecond column.",
               "tags": {"items": {}},
-              "meta": {"object_id": "col-002", "operation": "updated", "status": "pending", "updated_fields": ["name", "type", "comment"]}
+              "meta": {"object_id": "col-002", "operation": "updated", "status": "success", "updated_fields": ["name", "type", "comment"]}
             },
             "col_03": {
               "name": "col_03",
               "type": "INT",
               "comment": "col_03:\nThird column.",
               "tags": {"items": {}},
-              "meta": {"object_id": "col-003", "operation": "new", "status": "pending"}
+              "meta": {"object_id": "col-003", "operation": "new", "status": "success"}
             }
         }},
         "tags": {"items": {
@@ -48,12 +48,12 @@
             "tag_02": {
               "name": "tag_02",
               "value": "value_02_02",
-              "meta": {"object_id": "tg-02", "operation": "updated", "status": "pending", "updated_fields": ["value"]}
+              "meta": {"object_id": "tg-02", "operation": "updated", "status": "success", "updated_fields": ["value"]}
             },
             "tag_03": {
               "name": "tag_03",
               "value": "value_03",
-              "meta": {"object_id": "tg-03", "operation": "new", "status": "pending"}
+              "meta": {"object_id": "tg-03", "operation": "new", "status": "success"}
             }
         }},
         "properties": {"items": {}},
