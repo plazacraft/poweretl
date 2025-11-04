@@ -6,11 +6,20 @@ from databricks.sdk.dbutils import RemoteDbUtils
 from poweretl.utils import IFileStorageWriter
 
 
-class VolumeDbxFileStorageProvider(IFileStorageWriter):
+class DbxVolumeFileStorageProvider(IFileStorageWriter):
 
     def __init__(self, spark: SparkSession, dbutils):
         self._spark = spark
         self._dbutils: RemoteDbUtils = dbutils
+
+    def _is_dir(self, file_info) -> bool:
+        if hasattr(file_info, 'isDir') and callable(getattr(file_info, 'isDir')):
+            return file_info.isDir()
+        
+        if (not file_info.name):
+            return True
+        
+        return False
 
     def get_first_file_or_folder(
         self, path: str, ascending: bool = True
@@ -21,7 +30,7 @@ class VolumeDbxFileStorageProvider(IFileStorageWriter):
                 files, key=lambda f: f.name.lower(), reverse=(not ascending)
             )
             first_file = files[0]
-            return (first_file.path, first_file.isDir())
+            return (first_file.path, self._is_dir(first_file))
         return None
 
     def get_folders_list(self, path: str, recursive: bool = False) -> list[str]:
@@ -33,7 +42,7 @@ class VolumeDbxFileStorageProvider(IFileStorageWriter):
                 try:
                     items = self._dbutils.fs.ls(current_path)
                     for item in items:
-                        if item.isDir():
+                        if self._is_dir(item):
                             all_items.append(item.path)
                             _collect_recursive(item.path)
                 except Exception:
@@ -44,7 +53,7 @@ class VolumeDbxFileStorageProvider(IFileStorageWriter):
         else:
             # Get only immediate subdirectories
             items = self._dbutils.fs.ls(path)
-            return [item.path for item in items if item.isDir()]
+            return [item.path for item in items if self._is_dir(item)]
 
     def get_files_list(self, path: str, recursive: bool = False) -> list[str]:
         if recursive:
@@ -55,7 +64,7 @@ class VolumeDbxFileStorageProvider(IFileStorageWriter):
                 try:
                     items = self._dbutils.fs.ls(current_path)
                     for item in items:
-                        if item.isDir():
+                        if self._is_dir(item):
                             _collect_recursive(item.path)
                         else:
                             all_files.append(item.path)
@@ -67,7 +76,7 @@ class VolumeDbxFileStorageProvider(IFileStorageWriter):
         else:
             # Get only immediate files
             items = self._dbutils.fs.ls(path)
-            return [item.path for item in items if not item.isDir()]
+            return [item.path for item in items if not self._is_dir(item)]
 
     def get_file_str_content(self, full_path: str) -> str:
         try:

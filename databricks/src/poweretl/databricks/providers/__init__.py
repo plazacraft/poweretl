@@ -1,2 +1,2 @@
 # flake8: noqa: F401
-from .volume_dbx_file_storage_provider import VolumeDbxFileStorageProvider
+from .dbx_volume_file_storage_provider import DbxVolumeFileStorageProvider

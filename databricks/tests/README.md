@@ -1,4 +1,4 @@
-# Tests config
+# Tests Prerequisites
 
 ## Databricks connection
 In *src/poweretl/databricks/helpers* create **.databricks.conf.json** in format: 
@@ -13,3 +13,5 @@ In *src/poweretl/databricks/helpers* create **.databricks.conf.json** in format:
 ## Databricks environment
 - Create catalog: **workspace** and schema: **poweretl_tests**
 - Create volume: **workspace.poweretl_tests.meta**
+- Create volume: **workspace.poweretl_tests.unit_tests**
+- Create volume: **workspace.poweretl_tests.model**
