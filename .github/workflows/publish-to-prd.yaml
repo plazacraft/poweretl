@@ -13,25 +13,16 @@ jobs:
     name: Publish to PyPI Production
     runs-on: ubuntu-latest
     environment: prd
-    strategy:
-      fail-fast: false
-      matrix:
-        project:
-          - utils
-          - defs
-          - common
-          - databricks
-          - examples
+    
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Publish ${{ matrix.project }} to PyPI
-        uses: plazacraft/poweretl-pipelines/actions/publish-packages@feature/pylint
+      - name: Publish ${{ github.ref_name }} to PyPI
+        uses: plazacraft/poweretl-pipelines/actions/publish-packages@main
         with:
-          project-path: ${{ matrix.project }}
           tag: ${{ github.ref_name }}
           python-version: '3.13'
           poetry-pypi-url: ${{ vars.POETRY_PYPI_URL }}
-          poetry-pypi-token: ${{ secrets.POETRY_PYPI_TOKEN }}   
+          poetry-pypi-token: ${{ secrets.POETRY_PYPI_TOKEN }}      
