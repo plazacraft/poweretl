@@ -39,9 +39,9 @@ class BaseModelManager(IModelManager):
         pass
 
     def _call_execute_command(self, command: str, item: BaseItem, **kwargs):
-        if (item.meta.status != Status.PENDING.value) or (item.meta.operation == None):
+        if (item.meta.status != Status.PENDING.value) or (item.meta.operation is None):
             return
-        
+
         try:
             commands = {}
             # Expand UPDATED only for structural alters that map
@@ -53,7 +53,11 @@ class BaseModelManager(IModelManager):
                 # For each updated field, create a command like
                 # "alter_table_name", "alter_table_comment", etc.
                 commands = {
-                    f"{command}_{updated}": { "new_value": getattr(item, updated, None), "field": updated, "old_value": value } 
+                    f"{command}_{updated}": {
+                        "new_value": getattr(item, updated, None),
+                        "field": updated,
+                        "old_value": value,
+                    }
                     for updated, value in (item.meta.updated_fields.items())
                 }
             else:
@@ -93,7 +97,9 @@ class BaseModelManager(IModelManager):
             self._meta_provider.push_meta_item_changes(item)
 
     def provision_model(self, table_id: str = None):
-        meta = self._meta_provider.get_meta(table_id = table_id, status={Status.PENDING.value})
+        meta = self._meta_provider.get_meta(
+            table_id=table_id, status={Status.PENDING.value}
+        )
         for table in meta.tables.items.values():
             if table.meta.operation == Operation.NEW.value:
                 external_clause = ""
@@ -117,7 +123,6 @@ class BaseModelManager(IModelManager):
 
             elif table.meta.operation == Operation.DELETED.value:
                 self._call_execute_command("drop_table", table, table_name=table.name)
-
 
             # Process table tags
             for tag in table.tags.items.values():
@@ -169,8 +174,6 @@ class BaseModelManager(IModelManager):
                         table_name=table.name,
                         property_name=current_property.name,
                     )
-
-
 
             # Process columns
             for column in table.columns.items.values():
@@ -229,7 +232,6 @@ class BaseModelManager(IModelManager):
                             column_name=column.name,
                             tag_name=column_tag.name,
                         )
-
 
             # Process settings
             for current_setting in table.settings.items.values():

@@ -6,7 +6,6 @@ from .column import Columns
 from .name_value import NameValues
 
 
-
 @dataclass
 class Table(BaseItem):
     """Table definition in model.
@@ -19,7 +18,7 @@ class Table(BaseItem):
 
     external_location: Optional[str] = None
     comment: Optional[str] = None
-    #cluster_by: Optional[str] = None
+    # cluster_by: Optional[str] = None
     columns: Columns = field(default_factory=Columns)
     tags: NameValues = field(default_factory=NameValues)
     properties: NameValues = field(default_factory=NameValues)

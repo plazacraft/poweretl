@@ -43,7 +43,7 @@ class MetaModelUpdater:
             for f in fields(dst):
                 # if there is no field in model, new value is None, old is from meta
                 dst_attr = getattr(dst, f.name)
-                if (not src):
+                if not src:
                     updated_fields[f.name] = dst_attr
                     continue
 
@@ -75,7 +75,7 @@ class MetaModelUpdater:
         )
 
         # for linked item is not created, however all fields are updated
-        if (new_child.linked):
+        if new_child.linked:
             new_child.meta.operation = Operation.UPDATED.value
             new_child.meta.updated_fields = _get_updated_fields(None, new_child)
         else:

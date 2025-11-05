@@ -3,10 +3,10 @@
 import os
 
 from poweretl.utils import FileEntry, OSFileStorageProvider
+from poweretl.utils.tests import deep_compare, deep_compare_true
 
 from poweretl.common import FileMetaProvider, FileModelProvider
 
-from poweretl.utils.tests import deep_compare, deep_compare_true
 
 class CacheStorageProvider(OSFileStorageProvider):
     """A fake storage provider that stores files in-memory keyed by path."""
@@ -26,7 +26,6 @@ class CacheStorageProvider(OSFileStorageProvider):
             self._cache = content
         else:
             super().upload_file_str(full_path, content)
-
 
 
 def test_file_meta_provider_int():

@@ -8,12 +8,12 @@ from deepmerge import always_merger  # pylint: disable=C0411
 from poweretl.defs import Meta, Model
 from poweretl.defs.meta import BaseItem
 from poweretl.utils import (
+    DataclassUpgrader,
     FilePathOrganizer,
     FileSerializer,
     IFileStorageWriter,
     OSFileStorageProvider,
 )
-from poweretl.utils import DataclassUpgrader
 
 from .base_meta_provider import BaseMetaProvider
 

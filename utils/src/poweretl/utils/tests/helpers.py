@@ -1,3 +1,6 @@
+# pylint: disable=R0911
+
+
 def deep_compare(a, b, exclude=None):
     """Original less strict comparison function kept for backward compatibility."""
     exclude = set(exclude or [])
@@ -58,4 +61,3 @@ def deep_compare_true(a, b, exclude=None):
         return deep_compare_true(vars(a), vars(b), exclude)
 
     return a == b
-

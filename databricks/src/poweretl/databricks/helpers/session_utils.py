@@ -1,10 +1,9 @@
-from pyspark.sql import SparkSession
-
-
+# pylint: disable=C0411, C0103, W0611
 try:
-    from databricks.connect import DatabricksSession
+
+    from databricks.connect import DatabricksSession  # noqa: F401
+
     dbutils = None
     display = None
 except ImportError:
     pass
-

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from poweretl.defs.model import NameValues as mNameValues
 from poweretl.defs.model import NameValue as mNameValue
+from poweretl.defs.model import NameValues as mNameValues
 
 from .base import BaseCollection, BaseItem
 

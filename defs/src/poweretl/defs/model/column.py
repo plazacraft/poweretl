@@ -4,6 +4,7 @@ from typing import Optional
 from .base import BaseCollection, BaseItem
 from .name_value import NameValues
 
+
 @dataclass
 class Column(BaseItem):
     """Column definition in table."""

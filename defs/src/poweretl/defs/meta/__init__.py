@@ -4,4 +4,3 @@ from .column import Column, Columns
 from .meta import Meta
 from .name_value import NameValue, NameValues
 from .table import Table, Tables
-
