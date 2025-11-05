@@ -27,7 +27,7 @@ jobs:
     defaults:
       run:
         working-directory: ${{ matrix.project }}
-        
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -60,3 +60,4 @@ jobs:
         with:
           project-path: ${{ matrix.project }}
           python-version: '3.13'      
+
