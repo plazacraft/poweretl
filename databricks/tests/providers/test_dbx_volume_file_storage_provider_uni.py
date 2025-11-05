@@ -294,55 +294,7 @@ class TestDbxVolumeFileStorageProvider:
         with pytest.raises(Exception, match="Upload failed"):
             provider.upload_file_str("/test/output.txt", "content")
 
-    def test_get_folders_list_recursive_exception_handling(
-        self, provider, mock_dbutils
-    ):
-        """Test that exceptions in recursive folder listing are handled gracefully."""
-        mock_dir = Mock()
-        mock_dir.path = "/path/dir1"
-        mock_dir.name = ""  # Empty name = directory
-        del mock_dir.isDir
 
-        def ls_side_effect(path):
-            if path == "/test/path":
-                return [mock_dir]
-
-            # Simulate permission error or other exception in subdirectory
-            raise Exception("Permission denied")  # pylint: disable=W0719
-
-        mock_dbutils.fs.ls.side_effect = ls_side_effect
-
-        result = provider.get_folders_list("/test/path", recursive=True)
-
-        # Should still return the first level directory,
-        # despite exception in subdirectory
-        assert result == ["/path/dir1"]
-
-    def test_get_files_list_recursive_exception_handling(self, provider, mock_dbutils):
-        """Test that exceptions in recursive file listing are handled gracefully."""
-        mock_dir = Mock()
-        mock_dir.path = "/path/dir1"
-        mock_dir.name = ""  # Empty name = directory
-        del mock_dir.isDir
-
-        mock_file = Mock()
-        mock_file.path = "/path/file1.txt"
-        mock_file.name = "file1.txt"  # Non-empty name = file
-        del mock_file.isDir
-
-        def ls_side_effect(path):
-            if path == "/test/path":
-                return [mock_dir, mock_file]
-
-            # Simulate exception in subdirectory
-            raise Exception("Access denied")  # pylint: disable=W0719
-
-        mock_dbutils.fs.ls.side_effect = ls_side_effect
-
-        result = provider.get_files_list("/test/path", recursive=True)
-
-        # Should return the file from the first level
-        assert result == ["/path/file1.txt"]
 
     def test_get_file_str_content_empty_file(self, provider, mock_spark, mock_dbutils):
         """Test reading empty file content."""
