@@ -13,24 +13,15 @@ jobs:
     name: Publish to PyPI Test
     runs-on: ubuntu-latest
     environment: tst
-    strategy:
-      fail-fast: false
-      matrix:
-        project:
-          - utils
-          - defs
-          - common
-          - databricks
-          - examples
+    
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Publish ${{ matrix.project }} to PyPI
+      - name: Publish ${{ github.ref_name }} to PyPI
         uses: plazacraft/poweretl-pipelines/actions/publish-packages@feature/pylint
         with:
-          project-path: ${{ matrix.project }}
           tag: ${{ github.ref_name }}
           python-version: '3.13'
           poetry-pypi-url: ${{ vars.POETRY_PYPI_URL }}
