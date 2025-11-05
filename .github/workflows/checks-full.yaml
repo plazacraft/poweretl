@@ -1,4 +1,4 @@
-name: Run All Project Checks (Push, Pull Request)
+name: Run Project All Checks (Push, Pull Request)
 on:
   push:
     branches: [main, develop]

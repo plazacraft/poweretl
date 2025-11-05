@@ -1,4 +1,4 @@
-name: Run Standard Project Checks (Push)
+name: Run Project Standard Checks (Push)
 on:
   push:
     branches-ignore:
