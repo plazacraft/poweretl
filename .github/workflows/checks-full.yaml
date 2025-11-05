@@ -11,16 +11,48 @@ permissions:
   checks: write
   
 jobs:
-  run-checks:
-    uses: plazacraft/poweretl-pipelines/.github/workflows/code-checks.yaml@main
-    with:
-      python-version: '3.13'
-      projects: '["utils", "defs", "common", "databricks", "examples"]'
-    secrets: inherit      
-        
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - utils
+          - defs
+          - common
+          - databricks
+          - examples
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run code quality checks for ${{ matrix.project }}
+        uses: plazacraft/poweretl-pipelines/actions/code-checks@feature/pylint
+        with:
+          project-path: ${{ matrix.project }}
+          python-version: '3.13'
+
   run-tests:
-    uses: plazacraft/poweretl-pipelines/.github/workflows/run-tests.yaml@main
-    with:
-      python-version: '3.13'
-      projects: '["utils", "defs","common", "databricks","examples"]'
-    secrets: inherit      
+    name: Run Tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - utils
+          - defs
+          - common
+          - databricks
+          - examples
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run tests for ${{ matrix.project }}
+        uses: plazacraft/poweretl-pipelines/actions/run-tests@feature/pylint
+        with:
+          project-path: ${{ matrix.project }}
+          python-version: '3.13'      
