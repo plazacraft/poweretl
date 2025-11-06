@@ -2,7 +2,7 @@
 try:
 
     from databricks.connect import DatabricksSession  # noqa: F401
-
+    spark = None
     dbutils = None
     display = None
 except ImportError:

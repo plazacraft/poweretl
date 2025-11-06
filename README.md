@@ -1,17 +1,33 @@
 
 # Overview
-**poweretl** is library to support *etl* processes and tasks. 
+**poweretl** is library to support data warehouse/lakehouse processes and tasks. It is build a way to allow constructor dependency injection for own customizations and extensions.
+
+# Naming convention
+In this project follow names are used in context:
+
+- Model: definition of database structure (e.g. tables, views)
+- Meta: metadata, e.g. for Model it contains information about it's deployment state
+- Provider: an object that provides some resources and functions that are finally used by managers
+- Manager: a final object that do the desired job (e.g. provision Model to database)
+
+# Features
+Currently library provides following features:
+
+ - Define a database model based on definition stored in yaml or json files
+ - Parametrize database model based on definition stored in yaml or json files
+ - Provision and update database model to target database/warehouse/lakehouse
+  
 
 # High Level Design
 
-| Package                       | Description 
-| ----------------------------- | --------------------------------------------------------------- |
-| **poweretl.utils**            | Independent package for tools. |
-| **poweretl.defs**             | Definition of data classes used to communication between providers and executors. Contains also interfaces for providers. |
-| **poweretl.common**           | Implementation of processes (executors). |
-| **poweretl.databricks**       | Implementation of providers for databricks. |
+| Package                             | Description 
+| ----------------------------------- | --------------------------------------------------------------- |
+| [poweretl.utils](utils)             | Independent package for helper tools. |
+| [poweretl.defs](defs)               | Definition of data classes used to communication between providers and managers. Contains also interfaces for providers. |
+| [poweretl.common](common)           | General implementation of providers and managers. |
+| [poweretl.databricks](databricks)   | Implementation of providers and managers for databricks. |
 
-Examples of usage can be find in poweretl repostiory, project - *examples* folder *tests* (implemented as tests).
+Examples of library usage can be find in [Examples](examples/tests/).
 
 ```mermaid
 ---

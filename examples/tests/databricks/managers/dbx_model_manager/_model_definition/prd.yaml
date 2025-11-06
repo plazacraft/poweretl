@@ -1,0 +1,7 @@
+catalog: workspace
+schema: poweretl_tests
+env_tags: |
+  "tag_env": { 
+    "name": "environment", 
+    "value": "prd" 
+  }

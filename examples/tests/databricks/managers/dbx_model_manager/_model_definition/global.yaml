@@ -1,0 +1,19 @@
+dlh_columns: |
+  "dlh_version": { 
+    "name": "dlh_version", 
+    "type": "INT" 
+  },
+  "dlh_last_modification": { 
+    "name": "dlh_last_modification", 
+    "type": "TIMESTAMP" 
+  }
+
+dlh_table_properties: |
+    "column_mapping": {
+      "name": "delta.columnMapping.mode",
+      "value": "name",
+    },
+    "column_widening": {
+      "name": "delta.enableTypeWidening",
+      "value": "true",
+    }  

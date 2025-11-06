@@ -8,7 +8,7 @@ from poweretl.utils.text import TokensReplacer
 
 def test_get_commands():
     module_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = f"{module_dir}/_data/commands_splitter"
+    data_dir = f"{module_dir}/_commands"
 
     # use default configurations
     command_splitter = FileCommandSplitter()
@@ -40,7 +40,7 @@ def test_get_commands():
 
     # extract commands to csv
     with open(
-        f"{module_dir}/_data/commands_splitter_results/commands.csv",
+        f"{module_dir}/_results/commands.csv",
         "w",
         newline="",
         encoding="utf-8",

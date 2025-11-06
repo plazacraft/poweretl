@@ -5,7 +5,7 @@ description = "poweretl is library to support database, data-warehouse, data-lak
 authors = [
     {name = "plazacraft",email = "r.plazaman@gmail.com"}
 ]
-readme = "README.md"
+readme = "README-PIP.md"
 keywords = ["python", "etl", "database", "data-lakehouse", "data-warehouse"]
 requires-python = ">=3.12"
 dependencies = []

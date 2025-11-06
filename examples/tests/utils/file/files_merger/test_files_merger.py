@@ -6,7 +6,7 @@ from poweretl.utils import FileEntry, FileMerger, MultiFileReader, TokensReplace
 
 def test_merge_files():
     module_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = f"{module_dir}/_data/files_merger"
+    data_dir = f"{module_dir}/_configs"
 
     tokens_replacer = TokensReplacer(
         re_start=r"(/\*<)|(<)", re_end=r"(>\*/)|(>)", re_escape=r"\^"
@@ -28,5 +28,5 @@ def test_merge_files():
     config = merger.merge(config_contents)
 
     json_str = json.dumps(config, indent=4, sort_keys=True)
-    with open(f"{module_dir}/config.json", "w+", encoding="utf-8") as f:
+    with open(f"{module_dir}/_results/config.json", "w+", encoding="utf-8") as f:
         f.write(json_str)

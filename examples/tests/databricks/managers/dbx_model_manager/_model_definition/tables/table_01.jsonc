@@ -1,0 +1,35 @@
+{
+	
+	"tables":{
+		"<catalog>.<schema>.table_01": 
+		{ 
+			"name": "table_01",
+			"columns":
+			{
+                "items": {
+					"name": { "name": "name", "type": "STRING" },
+					/*<dwh_columns>*/
+                }
+            },
+            "tags": 
+            {
+                "items": {
+					/*<env_tags>*/
+                }
+            },
+            "properties": {
+                "items": {
+                    /*<dlh_table_properties>*/
+                }
+            },
+            "settings" : {
+                "cluster_by": {
+                    "name": "CLUSTER BY",
+                    "value": "(name)"
+                }                
+            }
+
+		}
+	}
+	
+}
