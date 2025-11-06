@@ -1,6 +1,6 @@
 
 # Overview
-**poweretl** is library to support data warehouse/lakehouse processes and tasks. It is build a way to allow constructor dependency injection for own customizations and extensions.
+**poweretl** is library to support database, data warehouse/lakehouse python projects. It is build a way to allow constructor dependency injection for own customizations and extensions.
 
 # Naming convention
 In this project follow names are used in context:
