@@ -46,10 +46,11 @@ def test_get_model_empty():
 def test_get_model_unsupported():
     module_dir = os.path.dirname(os.path.abspath(__file__))
 
-    model_1 = FileModelProvider(
-        config_paths=[FileEntry(f"{module_dir}/_data/model", r"\.txt$")],
-        encoding="utf-8",
-    )
+
 
     with pytest.raises(ValueError, match="Unsupported file format: .txt"):
+        model_1 = FileModelProvider(
+            config_paths=[FileEntry(f"{module_dir}/_data/model", r"\.txt$")],
+            encoding="utf-8",
+        )        
         model_1.get_model()

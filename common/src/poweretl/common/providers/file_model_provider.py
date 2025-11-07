@@ -33,34 +33,33 @@ class FileModelProvider(IModelProvider):
         self._tokens_replacer = tokens_replacer
         self._file_merger = FileMerger()
 
-    def get_model(self) -> Model:
-        data = None
+        self.params = None
+        params_content = self._param_reader.get_files_with_content()
+        if params_content:
+            self.params = self._file_merger.merge(params_content)
 
-        params = self._param_reader.get_files_with_content()
-        configs = self._config_reader.get_files_with_content()
-        params_data = None
+        self.config = {}
+        configs_content = self._config_reader.get_files_with_content()
 
-        if not configs:
-            return {}
-
-        if params:
-            params_data = self._file_merger.merge(params)
-
-        if params_data:
-            config_contents = [
+        if self.params:
+            configs_content_final = [
                 (
                     config,
-                    self._tokens_replacer.replace(tokens=params_data, text=content),
+                    self._tokens_replacer.replace(tokens=self.params, text=content),
                 )
-                for config, content in configs
+                for config, content in configs_content
             ]
         else:
-            config_contents = configs
+            configs_content_final = configs_content
 
-        data = self._file_merger.merge(config_contents)
+        if configs_content_final:
+            self.config = self._file_merger.merge(configs_content_final)
 
-        if data:
-            return from_dict(data_class=Model, data=data)
+
+    def get_model(self) -> Model:
+
+        if self.config:
+            return from_dict(data_class=Model, data=self.config)
 
         return {}
 

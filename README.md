@@ -27,7 +27,7 @@ Currently library provides following features:
 | [poweretl.common](common)           | General implementation of providers and managers. |
 | [poweretl.databricks](databricks)   | Implementation of providers and managers for databricks. |
 
-Examples of library usage can be find in [Examples](examples/tests/).
+Examples of library usage can be find in [Examples](examples/).
 
 ```mermaid
 ---
