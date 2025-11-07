@@ -1,5 +1,6 @@
 # pylint: disable=R0801
 
+from pathlib import Path
 from poweretl.utils import IFileStorageWriter
 from pyspark.sql import SparkSession  # pylint: disable=C0411
 
@@ -71,9 +72,10 @@ class DbxVolumeFileStorageProvider(IFileStorageWriter):
         return [item.path for item in items if not self._is_dir(item)]
 
     def get_file_str_content(self, full_path: str) -> str:
+        path = str(Path(full_path).as_posix())
         try:
             # Check if file exists first
-            self._dbutils.fs.ls(full_path)
+            self._dbutils.fs.ls(path)
         except Exception:  # pylint: disable=W0718
             # File doesn't exist or path is invalid
             return None
@@ -81,11 +83,11 @@ class DbxVolumeFileStorageProvider(IFileStorageWriter):
         # df = self._spark.read.text(full_path)
         # text_str = "\n".join(row["value"] for row in df.collect())
 
-        df = self._spark.read.option("wholetext", "true").text(full_path)
+        df = self._spark.read.option("wholetext", "true").text(path)
         text_str = df.collect()[0]["value"]
 
         return text_str
 
     def upload_file_str(self, full_path: str, content: str):
         # Use dbutils.fs.put to write content directly to the volume
-        self._dbutils.fs.put(full_path, content, overwrite=True)
+        self._dbutils.fs.put(str(Path(full_path).as_posix()), content, overwrite=True)

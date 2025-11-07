@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from poweretl.defs.meta import Status
 
 class IModelManager(ABC):
     """Provides configuration of model."""
@@ -8,5 +8,5 @@ class IModelManager(ABC):
         pass
 
     @abstractmethod
-    def provision_model(self, table_id: str = None):
+    def provision_model(self, statuses: set[Status] = {Status.PENDING.value}, table_id: str = None):
         pass

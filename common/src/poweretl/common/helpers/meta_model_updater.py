@@ -4,11 +4,13 @@ import copy
 from dataclasses import fields, is_dataclass
 from datetime import datetime
 from typing import Any, Optional, TypeVar, Union, cast, get_type_hints
+import uuid
 
 from deepdiff import DeepDiff
 from poweretl.defs.meta import BaseCollection, BaseItem, Operation, Status
 from poweretl.defs.model import BaseCollection as ModelBaseCollection
 from poweretl.utils import DataclassUpgrader
+
 
 BaseItemT = TypeVar("BaseItemT", bound=BaseItem)
 # BaseCollectionT = TypeVar("BaseCollectionT", bound=BaseCollection)
@@ -70,9 +72,7 @@ class MetaModelUpdater:
             return dest_obj
 
         new_child = upgrader.from_parent(source_obj)
-        new_child.meta.object_id = (
-            str(copy.deepcopy(getattr(new_child.meta, "object_id", ""))) or None
-        )
+        new_child.meta.object_id = str(uuid.uuid4())
 
         # for linked item is not created, however all fields are updated
         if new_child.linked:

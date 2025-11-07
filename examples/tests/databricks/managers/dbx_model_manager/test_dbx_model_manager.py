@@ -12,7 +12,7 @@ from poweretl.databricks.providers import DbxVolumeFileStorageProvider
 
 
 def run_cleanup(spark, dbutils, env):
-    model_manager = get_manager(
+    model_manager, volume_path, session = get_manager(
         spark=spark,
         dbutils=dbutils,
         env=env,
@@ -20,7 +20,9 @@ def run_cleanup(spark, dbutils, env):
         model_path="_model_cleanup"
     )
 
+
     model_manager.provision_model()
+    session.dbutils.fs.rm(volume_path, True)
 
 
 def get_manager(spark, dbutils, env, params_path, model_path):
@@ -37,7 +39,7 @@ def get_manager(spark, dbutils, env, params_path, model_path):
     # Load models from json files. Load parameters based on env selected
     model_provider = FileModelProvider(
         config_paths=[FileEntry(f"{model_dir}", r"\.jsonc?$")],
-        param_paths=[FileEntry(f"{params_dir}", f"(01\\.global|01\\.{env})\\.yaml$")],
+        param_paths=[FileEntry(f"{params_dir}", f"(global|{env})\\.yaml$")],
     )
 
     # Get schema and catalog from parameters
@@ -58,20 +60,23 @@ def get_manager(spark, dbutils, env, params_path, model_path):
         storage_provider=volume_storage_provider,
     )
 
+    # Update model in meta
+    meta_provider.push_model_changes(model_provider.get_model())
+
     # Create model manager that works with target meta provider
     model_manager = DbxModelManager(
-        spark=spark, meta_provider=meta_provider
+        spark=session.spark, meta_provider=meta_provider
     )
 
-    return model_manager
+    return model_manager, volume_path, session
 
 def test_dbx_model_manager(
         spark = None, 
         dbutils = None, 
         env = "tst", 
-        run_cleanup = True):
+        do_cleanup = True):
 
-    model_manager = get_manager(
+    model_manager, _, _ = get_manager(
         spark=spark,
         dbutils=dbutils,
         env=env,
@@ -81,7 +86,8 @@ def test_dbx_model_manager(
 
     was_exception = False
     try:
-        # All the magic here - Provision model
+        
+        # All the magic here - Provision model, by default only PENDING are processed, but can be changed to process other statuses as well
         model_manager.provision_model()
 
     except Exception as e:
@@ -90,5 +96,5 @@ def test_dbx_model_manager(
         raise
     finally:
         # Do cleanup if required
-        if run_cleanup or was_exception:
+        if do_cleanup or was_exception:
             run_cleanup(spark, dbutils, env)

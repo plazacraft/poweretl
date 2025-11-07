@@ -4,13 +4,13 @@
         "items": {
             "<catalog>.<schema>.table_02": 
             { 
-                "name": "table_02",
+                "name": "<catalog>.<schema>.table_02",
                 "columns":
                 {
                     "items": {
                         "name": { "name": "name", "type": "STRING" },
                         "count": { "name": "count", "type": "INT" },
-                        /*<dwh_columns>*/
+                        /*<dlh_columns>*/
                     }
                     
                 },

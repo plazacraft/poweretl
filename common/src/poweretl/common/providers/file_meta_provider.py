@@ -68,7 +68,7 @@ class FileMetaProvider(BaseMetaProvider):
         output_dir = str(Path(self._path).joinpath(output_dir))
         content = self._file_serializer.to_file_content(output_file, asdict(meta))
         self._storage_provider.upload_file_str(
-            Path(output_dir).joinpath(output_file), content
+            str(Path(output_dir).joinpath(output_file).as_posix()), content
         )
 
     def self_update(self):

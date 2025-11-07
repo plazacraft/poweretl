@@ -2,7 +2,7 @@
   "tables": {
     "items": {
       "table_01": {
-        "name": "workspace.poweretl_tests.table_01",
+        "name": "workspace.poweretl_tests.unit_table_01",
         "comment": "table_01:\nTest table for unit tests.",
         "columns": {"items": {
             "col_01": {
