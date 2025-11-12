@@ -19,7 +19,7 @@
                             "properties": null,
                             "meta": {
                                 "object_id": "5ea08fd5-683b-43c6-af2e-506c25ce4006",
-                                "status": "pending",
+                                "status": "success",
                                 "operation": "deleted",
                                 "error_msg": null,
                                 "updated_fields": {}
@@ -36,12 +36,9 @@
                             "meta": {
                                 "object_id": "31074095-9fbe-459a-8b82-73c839c108a2",
                                 "status": "pending",
-                                "operation": "updated",
+                                "operation": "new",
                                 "error_msg": null,
-                                "updated_fields": {
-                                    "name" : "col 2",
-                                    "type" : "type"
-                                }
+                                "updated_fields": {}
                             }
                         },
                         "col_3": {
@@ -121,11 +118,9 @@
                 "meta": {
                     "object_id": "bddbb5ba-c5c4-425a-9168-fae5c0d9def1",
                     "status": "pending",
-                    "operation": "updated",
+                    "operation": "new",
                     "error_msg": null,
-                    "updated_fields": {
-                        "name": "table_1_new"
-                    }
+                    "updated_fields": {}
                 }
             },
             "prd.test.table_2": {
@@ -163,7 +158,7 @@
                 },
                 "meta": {
                     "object_id": "efa9a27a-7f4e-4a6b-b8f9-f255a70e3178",
-                    "status": "pending",
+                    "status": "success",
                     "operation": "deleted",
                     "error_msg": null,
                     "updated_fields": {}
