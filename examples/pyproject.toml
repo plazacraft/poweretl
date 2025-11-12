@@ -40,9 +40,10 @@ black = "^25.9.0"
 pylint = "^4.0.0"
 flake8 = "^7.3.0"
 isort = "^7.0.0"
+databricks-connect = "~17.2"
 
 [tool.poetry.dependencies]
 poweretl-utils = "*"
 poweretl-common = "*"
 poweretl-databricks = "*"
-
+#databricks-connect = "~17.2"

@@ -10,4 +10,4 @@ from poweretl.databricks.helpers.session_utils import *  # if run not from datab
 
 #test_dbx_model_manager(spark, dbutils, env="tst", do_cleanup=False)
 
-#run_cleanup(spark, dbutils, env="tst")
+run_cleanup(spark, dbutils, env="tst")

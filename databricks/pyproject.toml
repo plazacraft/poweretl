@@ -42,9 +42,11 @@ isort = "^7.0.0"
 ipykernel = "~6.30"
 nbconvert = "*"
 import-ipynb = "*"
+databricks-connect = "~17.2"
 
 [tool.poetry.dependencies]
 poweretl-utils = "*"
 poweretl-defs = "*"
 poweretl-common = "*"
-databricks-connect = "~17.2"
+#databricks-connect = "~17.2"
+databricks-sdk = "~0.70"
