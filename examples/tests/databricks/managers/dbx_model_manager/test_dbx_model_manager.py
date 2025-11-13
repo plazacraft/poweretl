@@ -13,7 +13,7 @@ from poweretl.databricks.providers import DbxVolumeFileStorageProvider
 
 
 def run_cleanup(spark, dbutils, env):
-    model_manager, volume_path, session, _, _ = get_manager(
+    model_manager, volume_path, session, volume_storage_provider, mem_storage_provider = get_manager(
         spark=spark,
         dbutils=dbutils,
         env=env,
@@ -23,6 +23,8 @@ def run_cleanup(spark, dbutils, env):
 
 
     model_manager.provision_model()
+    meta_file = Path(volume_path).joinpath("meta.json").as_posix()
+    volume_storage_provider.upload_file_str(meta_file,mem_storage_provider.get_file_str_content(meta_file))
     session.dbutils.fs.rm(volume_path, True)
 
 

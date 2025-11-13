@@ -19,15 +19,15 @@ Currently library provides following features:
   
 
 # High Level Design
+Library is designed in a way to allow easy extension. Following list and graph show main role of target packages. Examples of library usage can be find in [Examples](examples/).
 
 | Package                             | Description 
 | ----------------------------------- | --------------------------------------------------------------- |
 | [poweretl.utils](utils)             | Independent package for helper tools. |
-| [poweretl.defs](defs)               | Definition of data classes used to communication between providers and managers. Contains also interfaces for providers. |
+| [poweretl.defs](defs)               | Definition of data classes used to communication between providers and managers. Contains also interfaces for providers. It provides abstraction that allows to work with different kinds of storages and databases. |
 | [poweretl.common](common)           | General implementation of providers and managers. |
 | [poweretl.databricks](databricks)   | Implementation of providers and managers for databricks. |
 
-Examples of library usage can be find in [Examples](examples/).
 
 ```mermaid
 ---
@@ -38,20 +38,23 @@ config:
 flowchart BT
 subgraph "**poweretl**"
   direction BT
+  utils("`**utils**
+  Independed helpers.`")  
   defs("**defs**
   Contains definitions and interfaces.") 
   common("**common**
   Standard implementation of poweretl processes.")
   databricks@{shape: procs, label: "**databricks**
   Implementations of providers for databricks and other data lake/ware houses." }
-  utils("`**utils**
-  Independed helpers.`")  
 
+  
   common -- "Uses" --> defs
+  databricks -- "Uses and Inherits" --> common  
   databricks -- "Uses" --> defs
+  
 end
 code("**User code**
 Execution of common classes with proper data ware/lake house providers.")
-code -- "Used for process execution" --> common
-code -- "Used for target data ware/lake house selection" --> databricks
+code -- "Used for implementations that are platform independent" --> common
+code -- "Used for target data ware/lake house specific implementation." --> databricks
 ```

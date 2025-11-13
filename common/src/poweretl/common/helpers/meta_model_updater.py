@@ -58,34 +58,53 @@ class MetaModelUpdater:
                             updated_fields[f.name] = dst_attr
             return updated_fields
 
+        def _merge_updated_fields(src, to_merge):
+            for key, value in to_merge.items():
+                if key in src:
+                    src[key] = value
+
         upgrader = DataclassUpgrader(child_cls)
 
         if dest_obj:  # pylint: disable=R1702
            
+            updated_fields = {}
+            updated = False
             if not upgrader.compare(source_obj, dest_obj):
                 updated_fields = _get_updated_fields(source_obj, dest_obj)
                 upgrader.update_child(source_obj, dest_obj)
+                
+            # Define the action base on the previous status
+
+            
+            if dest_obj.meta.operation == Operation.DELETED.value:
+                # if it was not removed then it will be updated, if it was successfully removed then it will be added as new
+                if dest_obj.meta.status != Status.SUCCESS.value or dest_obj.linked:
+                    dest_obj.meta.operation = Operation.UPDATED.value
+                    dest_obj.meta.updated_fields = updated_fields
+                else:
+                    dest_obj.meta.operation = Operation.NEW.value
+                updated = True
+            elif dest_obj.meta.operation == Operation.NEW.value:
+                # if previous status was New but not success it should stays as new, it should change status only if was success
+                if (dest_obj.meta.status == Status.SUCCESS.value):
+                    dest_obj.meta.operation = Operation.UPDATED.value
+                    updated = True
+           
+            elif dest_obj.meta.operation == Operation.UPDATED.value and updated_fields:
+                # for update we change only if there are updated fields, for not success we need to merge not updated fields
+                if (dest_obj.meta.status == Status.SUCCESS.value):
+                    dest_obj.meta.updated_fields = updated_fields
+                else:
+                    _merge_updated_fields(dest_obj.meta.updated_fields, updated_fields)
+                updated = True
+
+            if updated:
                 dest_obj.meta.status = Status.PENDING.value
                 dest_obj.meta.model_last_update = datetime.now().isoformat()
 
 
-                # if item was previously deleted then restore it as new or updated
-                if dest_obj.meta.operation == Operation.DELETED.value:
-                    # if it was not removed then it will be updated, if it was successfully removed then it will be added as new
-                    if dest_obj.meta.status != Status.SUCCESS.value or dest_obj.linked:
-                        dest_obj.meta.operation = Operation.UPDATED.value
-                        dest_obj.meta.updated_fields = updated_fields
-                    else:
-                        dest_obj.meta.operation = Operation.NEW.value
-                else:
-                    # changing of operation type only if previous one was success                    
-                    if (dest_obj.meta.status == Status.SUCCESS.value):
-                        dest_obj.meta.operation = Operation.UPDATED.value
-                        dest_obj.meta.updated_fields = updated_fields
-
-
-
             return dest_obj
+
 
         new_child = upgrader.from_parent(source_obj)
         new_child.meta.object_id = str(uuid.uuid4())
@@ -129,21 +148,33 @@ class MetaModelUpdater:
 
             meta_collection.items[item_id] = meta_item
 
+        def _set_deletion_status(current_item: BaseItem, operation, status):
+            current_item.meta.operation = operation
+            current_item.meta.status = status
+            for f in fields(current_item):
+                if isinstance(getattr(current_item, f.name), ModelBaseCollection):
+                    collection_item: ModelBaseCollection = getattr(current_item, f.name)
+                    for inner_item in collection_item.items.values():
+                        _set_deletion_status(inner_item, operation, status)
+            
         # mark not existed items to remove
         if getattr(model_collection, "prune", False):
             for meta_current_item_id, meta_current_item in list(
                 meta_collection.items.items()
             ):
                 # if item is already deleted, then it's status shouldn't be changed for double deletion
-                if meta_current_item_id not in model_collection.items.keys() and meta_current_item.meta.status != Operation.DELETED.value:
+                if (meta_current_item_id not in model_collection.items.keys()) \
+                    and (not meta_current_item.linked) \
+                    and (meta_current_item.meta.operation != Operation.DELETED.value):
 
                     # if item was new but not provisioned correctly, then set it automatically to Deleted
                     if (meta_current_item.meta.operation == Operation.NEW.value and meta_current_item.meta.status != Status.SUCCESS.value):
-                        meta_current_item.meta.status = Status.SUCCESS.value
+                        new_status = Status.SUCCESS.value
                     else:
-                        meta_current_item.meta.status = Status.PENDING.value
+                        new_status = Status.PENDING.value
 
-                    meta_current_item.meta.operation = Operation.DELETED.value
+                    new_operation = Operation.DELETED.value
+                    _set_deletion_status(meta_current_item, new_operation, new_status)
 
 
     def get_updated_meta(self, model, meta):

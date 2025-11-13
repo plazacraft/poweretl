@@ -143,9 +143,14 @@ class BaseModelManager(IModelManager):
                         value=tag.value,
                     )
                 elif tag.meta.operation == Operation.DELETED.value:
-                    self._call_execute_command(
-                        "drop_table_tag", tag, table_name=table.name, tag_name=tag.name
-                    )
+                    if (table.meta.operation == Operation.DELETED.value):
+                        tag.meta.status = table.meta.status
+                        tag.meta.meta_last_update = datetime.now().isoformat()
+                        self._meta_provider.push_meta_item_changes(tag)                        
+                    else:
+                        self._call_execute_command(
+                            "drop_table_tag", tag, table_name=table.name, tag_name=tag.name
+                        )
 
             # Process table properties
             for current_property in table.properties.items.values():
@@ -168,12 +173,18 @@ class BaseModelManager(IModelManager):
                         value=current_property.value,
                     )
                 elif current_property.meta.operation == Operation.DELETED.value:
-                    self._call_execute_command(
-                        "drop_table_property",
-                        current_property,
-                        table_name=table.name,
-                        property_name=current_property.name,
-                    )
+                    if (table.meta.operation == Operation.DELETED.value):
+                        current_property.meta.status = table.meta.status
+                        current_property.meta.meta_last_update = datetime.now().isoformat()
+                        self._meta_provider.push_meta_item_changes(current_property)                        
+
+                    else:
+                        self._call_execute_command(
+                            "drop_table_property",
+                            current_property,
+                            table_name=table.name,
+                            property_name=current_property.name,
+                        )
 
             # Process columns
             for column in table.columns.items.values():
@@ -197,12 +208,18 @@ class BaseModelManager(IModelManager):
                         column_name=column.name,
                     )
                 elif column.meta.operation == Operation.DELETED.value:
-                    self._call_execute_command(
-                        "drop_column",
-                        column,
-                        table_name=table.name,
-                        column_name=column.name,
-                    )
+                    if (table.meta.operation == Operation.DELETED.value):
+                        column.meta.status = table.meta.status
+                        column.meta.meta_last_update = datetime.now().isoformat()
+                        self._meta_provider.push_meta_item_changes(column)                        
+
+                    else:
+                        self._call_execute_command(
+                            "drop_column",
+                            column,
+                            table_name=table.name,
+                            column_name=column.name,
+                        )
 
                 # Process column tags
                 for column_tag in column.tags.items.values():
@@ -225,13 +242,19 @@ class BaseModelManager(IModelManager):
                             value=column_tag.value,
                         )
                     elif column_tag.meta.operation == Operation.DELETED.value:
-                        self._call_execute_command(
-                            "drop_column_tag",
-                            column_tag,
-                            table_name=table.name,
-                            column_name=column.name,
-                            tag_name=column_tag.name,
-                        )
+                        if (column.meta.operation == Operation.DELETED.value):
+                            column_tag.meta.status = table.meta.status
+                            column_tag.meta.meta_last_update = datetime.now().isoformat()
+                            self._meta_provider.push_meta_item_changes(column_tag)                        
+
+                        else:
+                            self._call_execute_command(
+                                "drop_column_tag",
+                                column_tag,
+                                table_name=table.name,
+                                column_name=column.name,
+                                tag_name=column_tag.name,
+                            )
 
             # Process settings
             for current_setting in table.settings.items.values():

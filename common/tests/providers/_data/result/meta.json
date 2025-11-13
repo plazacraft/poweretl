@@ -140,8 +140,8 @@
                             "properties": null,
                             "meta": {
                                 "object_id": "5b3b3fbc-2225-4d9b-a78f-2c5bd294f14d",
-                                "status": "pending",
-                                "operation": "new",
+                                "status": "success",
+                                "operation": "deleted",
                                 "error_msg": null,
                                 "updated_fields": {}
                             }
