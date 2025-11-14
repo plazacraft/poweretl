@@ -311,7 +311,7 @@ def test_get_meta_filters_by_status(monkeypatch):
     )
 
     # Request only FAILED items
-    result = provider.get_meta(status=Status.FAILED.value)
+    result = provider.get_meta(statuses={Status.FAILED.value})
 
     # Expect only t1 to remain
     assert result is not None

@@ -7,8 +7,9 @@ from typing import Any, Optional, TypeVar, Union, cast, get_type_hints
 import uuid
 
 from deepdiff import DeepDiff
-from poweretl.defs.meta import BaseCollection, BaseItem, Operation, Status
-from poweretl.defs.model import BaseCollection as ModelBaseCollection
+from poweretl.defs.meta import BaseCollection, BaseItem, Operation, Status, Table, Meta
+from poweretl.defs.model import Model, BaseCollection as ModelBaseCollection, BaseItem as ModelBaseItem
+from poweretl.defs.model import Table as ModelTable
 from poweretl.utils import DataclassUpgrader
 
 
@@ -119,6 +120,18 @@ class MetaModelUpdater:
         new_child.meta.model_last_update = datetime.now().isoformat()
         return new_child
 
+    def _set_deletion_status(self, current_item: BaseItem, operation, status):
+        current_item.meta.operation = operation
+        current_item.meta.status = status
+        current_item.meta.model_last_update = datetime.now().isoformat()
+
+        for f in fields(current_item):
+            if isinstance(getattr(current_item, f.name), ModelBaseCollection):
+                collection_item: ModelBaseCollection = getattr(current_item, f.name)
+                for inner_item in collection_item.items.values():
+                    self._set_deletion_status(inner_item, operation, status)
+
+
     def _update_collection(
         self, meta_collection: BaseCollection, model_collection: ModelBaseCollection
     ):
@@ -148,14 +161,7 @@ class MetaModelUpdater:
 
             meta_collection.items[item_id] = meta_item
 
-        def _set_deletion_status(current_item: BaseItem, operation, status):
-            current_item.meta.operation = operation
-            current_item.meta.status = status
-            for f in fields(current_item):
-                if isinstance(getattr(current_item, f.name), ModelBaseCollection):
-                    collection_item: ModelBaseCollection = getattr(current_item, f.name)
-                    for inner_item in collection_item.items.values():
-                        _set_deletion_status(inner_item, operation, status)
+
             
         # mark not existed items to remove
         if getattr(model_collection, "prune", False):
@@ -174,10 +180,46 @@ class MetaModelUpdater:
                         new_status = Status.PENDING.value
 
                     new_operation = Operation.DELETED.value
-                    _set_deletion_status(meta_current_item, new_operation, new_status)
+                    self._set_deletion_status(meta_current_item, new_operation, new_status)
+
+    
+    def _update_synced_meta(self, meta_item: BaseItem, model_item:  ModelBaseItem):
+        if (not model_item):
+            self._set_deletion_status(meta_item, Operation.DELETED.value, Status.SUCCESS.value)
+        else:
+            upgrader = DataclassUpgrader(type(meta_item))
+            upgrader.update_child(model_item, meta_item)
+
+            for f in fields(meta_item):
+                if hasattr(model_item, f.name):
+                    meta_attr = getattr(meta_item, f.name)
+                    model_attr = getattr(model_item, f.name)
+                    if isinstance(meta_attr, BaseCollection):
+                        meta_collection: BaseCollection = meta_attr
+                        model_collection: ModelBaseCollection = model_attr
+                        for item in meta_collection.items.values():
+
+                            # match model item by name
+                            model_matched_item = next(
+                                (model_item for model_item in model_collection.items.values() 
+                                 if model_item.name == item.name), 
+                                None
+                            )
+                            self._update_synced_meta(item, model_matched_item)
 
 
-    def get_updated_meta(self, model, meta):
+            meta_item.meta.status = Status.SUCCESS.value
+            meta_item.meta.operation = Operation.UPDATED.value
+            meta_item.meta.model_last_update = datetime.now().isoformat()
+
+        meta_item.meta.error_msg = None
+
+    def get_synced_meta(self, model_table: ModelTable, meta_table: Table) -> Table:
+        table_copy = copy.deepcopy(meta_table)
+        self._update_synced_meta(table_copy, model_table)
+        return table_copy
+
+    def get_updated_meta(self, model: Model, meta: Meta) -> Meta:
         # TODO: This code doesn't assume BaseItem to be directly a child of BaseItem,
         # if such situation happens, it needs to be updated
         # TODO: Fields under items(prune) will be copied (not BaseItems) and will
@@ -203,12 +245,12 @@ class MetaModelUpdater:
 
         return meta_copy
 
-    def _apply_status_filter(self, meta, status: set[str]):
+    def _apply_status_filter(self, meta, statuses: set[str]):
         """Recursively filter object and all its collections by status.
 
         Args:
             obj: Object to filter
-            status: Status to filter by
+            statuses: Statuses to filter by
 
         Returns:
             Filtered object with only matching status branches
@@ -222,13 +264,13 @@ class MetaModelUpdater:
 
             if isinstance(obj, BaseItem):
                 item = cast(BaseItem, obj)
-                attr, current_child_included = self._apply_status_filter(item, status)
+                attr, current_child_included = self._apply_status_filter(item, statuses)
                 if attr and current_child_included:
                     setattr(meta_copy, field.name, attr)
                     child_included = True
 
             elif isinstance(obj, BaseCollection):
-                attr, current_child_included = self._apply_status_filter(obj, status)
+                attr, current_child_included = self._apply_status_filter(obj, statuses)
                 if attr and current_child_included:
                     setattr(meta_copy, field.name, attr)
                     child_included = True
@@ -241,7 +283,7 @@ class MetaModelUpdater:
                 items = {}
                 for obj_key, obj_item in obj.items():
                     attr, current_child_included = self._apply_status_filter(
-                        obj_item, status
+                        obj_item, statuses
                     )
                     if attr and current_child_included:
                         items[obj_key] = attr
@@ -255,15 +297,15 @@ class MetaModelUpdater:
 
         if isinstance(meta, BaseItem):
             item = cast(BaseItem, meta)
-            if not child_included and item.meta.status not in status:
+            if not child_included and item.meta.status not in statuses:
                 return None, False
-            if item.meta.status in status:
+            if item.meta.status in statuses:
                 return meta_copy, True
 
         return meta_copy, child_included
 
-    def apply_status_filter(self, meta, status: set[str]):
-        ret, _ = self._apply_status_filter(meta, status)
+    def apply_status_filter(self, meta, statuses: set[str]):
+        ret, _ = self._apply_status_filter(meta, statuses)
         return ret
 
     def find_by_object_id(self, data: Union[dict, list, Any], target: Any):

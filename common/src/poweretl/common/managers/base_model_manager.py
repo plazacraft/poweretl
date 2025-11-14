@@ -6,9 +6,10 @@ from datetime import datetime
 from pathlib import Path
 
 from poweretl.defs import IMetaProvider, IModelManager
-from poweretl.defs.meta import BaseItem, Operation, Status
+from poweretl.defs.meta import BaseItem, Operation, Status, Meta
 from poweretl.utils import FileEntry, FileMerger, MultiFileReader, TokensReplacer
-
+from poweretl.defs.model import Table
+from poweretl.common.helpers import MetaModelUpdater
 
 class BaseModelManager(IModelManager):
 
@@ -33,6 +34,7 @@ class BaseModelManager(IModelManager):
             self._config_reader.get_files_with_content()
         )
         self._tokens_replacer = TokensReplacer()
+        self._meta_updater = MetaModelUpdater()
 
     @abstractmethod
     def _execute_command(self, command: str):
@@ -87,6 +89,7 @@ class BaseModelManager(IModelManager):
                 self._execute_command(query)
 
             item.meta.status = Status.SUCCESS.value
+            item.meta.error_msg = None
             item.meta.meta_last_update = datetime.now().isoformat()
             self._meta_provider.push_meta_item_changes(item)
 
@@ -96,9 +99,9 @@ class BaseModelManager(IModelManager):
             item.meta.error_msg = str(e)
             self._meta_provider.push_meta_item_changes(item)
 
-    def provision_model(self, statuses: set[Status] = {Status.PENDING.value}, table_id: str = None):
+    def provision_model(self, statuses: set[str] = {Status.PENDING.value}, table_id: str = None):
         meta = self._meta_provider.get_meta(
-            table_id=table_id, status=statuses
+            table_id=table_id, statuses=statuses
         )
         for table in meta.tables.items.values():
             if table.meta.operation == Operation.NEW.value:
@@ -265,3 +268,21 @@ class BaseModelManager(IModelManager):
                     setting_name=current_setting.name,
                     value=current_setting.value,
                 )
+
+    def get_table_model_from_source(table_name) -> Table:
+        pass
+
+
+    def sync_meta(self, statuses: set[str] = {Status.PENDING.value}, table_id: str = None):
+
+        meta = self._meta_provider.get_meta(statuses=statuses, table_id=table_id)
+        for table_id_key, table in meta.tables.items.items():
+            table_model = self.get_table_model_from_source(table.name)
+            table_meta = self._meta_updater.get_synced_meta(table_model, table)
+            meta.tables.items[table_id_key] = table_meta
+            
+        self._meta_provider.push_meta_changes(meta)
+            
+
+
+        

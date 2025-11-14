@@ -21,8 +21,8 @@ class BaseMetaProvider(IMetaProvider):
         """
         return self._meta_updater.get_updated_meta(model, meta)
 
-    def _apply_status_filter(self, meta: Meta, status: set[str]) -> Meta:
-        return self._meta_updater.apply_status_filter(meta, status)
+    def _apply_status_filter(self, meta: Meta, statuses: set[str]) -> Meta:
+        return self._meta_updater.apply_status_filter(meta, statuses)
 
     def _find_by_object_id(self, meta: Meta, object_id: str):
         """Find a meta item by object id or by passing a

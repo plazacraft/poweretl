@@ -93,7 +93,7 @@ class FileMetaProvider(BaseMetaProvider):
         upgrader.update_child(item, item_to_update)
         self._save_meta(meta_current_model)
 
-    def get_meta(self, status: set[str] = None, table_id: str = None) -> Meta:
+    def get_meta(self, statuses: set[str] = None, table_id: str = None) -> Meta:
         file = self._find_latest_file(self._path)
         if file:
             content = self._storage_provider.get_file_str_content(file)
@@ -108,8 +108,8 @@ class FileMetaProvider(BaseMetaProvider):
                         if key == table_id
                     }
 
-                if status and meta:
-                    meta = self._apply_status_filter(meta, status)
+                if statuses and meta:
+                    meta = self._apply_status_filter(meta, statuses)
 
                 return meta
         # new meta if there is no file found
