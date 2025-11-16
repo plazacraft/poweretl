@@ -188,8 +188,10 @@ class MetaModelUpdater:
             self._set_deletion_status(meta_item, Operation.DELETED.value, Status.SUCCESS.value)
         else:
             upgrader = DataclassUpgrader(type(meta_item))
+            preserve_linked = meta_item.linked
             upgrader.update_child(model_item, meta_item)
-
+            meta_item.linked = preserve_linked
+            
             for f in fields(meta_item):
                 if hasattr(model_item, f.name):
                     meta_attr = getattr(meta_item, f.name)

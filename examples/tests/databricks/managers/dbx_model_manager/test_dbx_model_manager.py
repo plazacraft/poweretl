@@ -108,9 +108,15 @@ def test_dbx_model_manager(
     was_exception = False
     try:
         
-        # All the magic here - Provision model, by default only PENDING are processed, but can be changed to process other statuses as well
+        # All the magic here - Provision model, 
+        # by default only PENDING are processed, 
+        # but can be changed to process other statuses as well
         model_manager.provision_model()
 
+        # If somehow meta is inconsistent (e.g. table was created 
+        # but code interrupted before meta was updated),
+        # below method can sync meta with its real state
+        #model_manager.sync_meta()
 
     except Exception as e:
         print(f"Test failed with error: {e}")
