@@ -1,13 +1,14 @@
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 
 @dataclass
 class CommandEntry:
     file: str
     version: str
+    step: int
     command: str
 
 
@@ -33,7 +34,7 @@ class FileCommandSplitter:
         """Parse version string
 
         Args:
-            v (str): Version to parse.
+            version (str): Version to parse.
 
         Returns:
             tuple[str]: Tuple with version parts.
@@ -67,6 +68,7 @@ class FileCommandSplitter:
                             CommandEntry(
                                 file=file_path,
                                 version=current_version,
+                                step=0,
                                 command=command_text,
                             )
                         )
@@ -87,6 +89,7 @@ class FileCommandSplitter:
                             CommandEntry(
                                 file=file_path,
                                 version=current_version,
+                                step=0,
                                 command=command_text,
                             )
                         )
@@ -107,20 +110,34 @@ class FileCommandSplitter:
                     CommandEntry(
                         file=file_path,
                         version=current_version,
+                        step=0,
                         command=command_text,
                     )
                 )
 
         return results
 
-    def get_commands(self, files: list[tuple[Path, str]]) -> List[CommandEntry]:
-        """Read multiple files and return combined list of (version, command).
+    def get_commands(
+        self,
+        files: list[tuple[Path, str]],
+        version: Optional[str] = None,
+        step: Optional[int] = None,
+    ) -> List[CommandEntry]:
+        """Read multiple files and return combined list of (version, command),
+        optionally filtered to only entries strictly greater than the provided
+        version/step marker.
 
         Results are returned in the order files are provided; callers can sort
         them as needed.
 
         Args:
             files (list[tuple[Path, str]]): List of files and their contents to process.
+            version (str | None, optional): Target version marker. Only entries with
+                version greater than this one will be returned, or entries with
+                the same version but step greater than ``step``. Defaults to "".
+            step (int | None, optional): Target step marker within the target version.
+                Only steps strictly greater than this value are returned for the
+                same version. Defaults to 0 when None.
 
         Returns:
             List[CommandEntry]: Ordered list of Files, Commands and their Versions.
@@ -131,4 +148,31 @@ class FileCommandSplitter:
 
         # Sort by semantic version ascending, then by file path ascending
         entries.sort(key=lambda e: (self.version_key(e.version), e.file or ""))
-        return entries
+
+        # Assign sequential step numbers within each version (starting from 1)
+        version_counters: dict[str, int] = {}
+        for e in entries:
+            v = e.version or ""
+            cnt = version_counters.get(v, 0) + 1
+            version_counters[v] = cnt
+            e.step = cnt
+
+        # Apply filters only if version or step is provided
+        if version is None and step is None:
+            return entries
+
+        # Filter by target (version, step): include strictly greater items
+        target_key = self.version_key(version or "")
+        target_step = step or 0
+
+        def is_greater(e: CommandEntry) -> bool:
+            ev = self.version_key(e.version or "")
+            if ev > target_key:
+                return True
+            if ev == target_key and e.step > target_step:
+                return True
+            return False
+
+        filtered = [e for e in entries if is_greater(e)]
+
+        return filtered
