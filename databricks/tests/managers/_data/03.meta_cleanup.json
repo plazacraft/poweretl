@@ -1,0 +1,10 @@
+{
+  "tables": {
+    "items": {
+      "table_01": {
+        "name": "workspace.poweretl_tests.unit_table_01",
+        "meta": {"object_id": "tbl-01", "operation": "deleted", "status": "pending"}
+      }
+    }
+  }
+}

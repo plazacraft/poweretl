@@ -1,0 +1,42 @@
+name: Run Project Standard Checks (Push)
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - utils
+          - defs
+          - common
+          - databricks
+          - examples
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run code quality checks for ${{ matrix.project }}
+        uses:  plazacraft/poweretl-pipelines/actions/code-checks@main
+        with:
+          project-path: ${{ matrix.project }}
+          python-version: '3.13'
+
+

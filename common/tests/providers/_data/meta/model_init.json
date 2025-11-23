@@ -1,0 +1,66 @@
+{
+    "tables": {
+        "items": {
+            "prd.test.table_1": {
+                "columns": {
+                    "items": {
+                        "col_1": {
+                            "name": "col 1",
+                            "properties": null,
+                            "type": "type"
+                        },
+                        "col_2": {
+                            "name": "col 2",
+                            "properties": null,
+                            "type": "type"
+                        },
+                        "col_3": {
+                            "name": "col 3",
+                            "properties": null,
+                            "type": "type"
+                        },
+                        "last_modification": {
+                            "name": "last modification",
+                            "properties": null,
+                            "type": "type"
+                        },
+                        "version": {
+                            "name": "version",
+                            "properties": null,
+                            "type": "type"
+                        }
+                    },
+                    "prune": false
+                },
+                "name": "table_1_new"
+            },
+            "prd.test.table_2": {
+                "columns": {
+                    "items": {
+                        "col_1": {
+                            "name": "col 1",
+                            "properties": null,
+                            "type": "type"
+                        }
+                    },
+                    "prune": false
+                },
+                "name": "table_2"
+            },
+            "prd.test.table_3": {
+                "columns": {
+                    "items": {
+                        "col_1": {
+                            "name": "col 1",
+                            "properties": null,
+                            "type": "type"
+                        }
+                    },
+                    "prune": false
+                },
+                "name": "table_3"
+            }
+        },
+        "prune": false
+    }
+}

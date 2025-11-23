@@ -1,0 +1,185 @@
+{
+  "tables": {
+    "items": {
+      "t_new": {
+        "name": "t_new",
+        "external_location": "/mnt/external/t_new",
+        "comment": "table new",
+        "columns": {"items": {}},
+        "tags": {"items": {}},
+        "properties": {"items": {}},
+        "settings": {"items": {}},
+        "meta": {"object_id": "tbl-1", "operation": "new", "status": "pending"}
+      },
+      "t_upd": {
+        "name": "t_upd",
+        "external_location": "/mnt/external/t_upd_new",
+        "comment": "table upd",
+        "columns": {
+          "items": {
+            "c_new": {
+              "name": "c_new",
+              "type": "INT",
+              "comment": "new column comment",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-1", "operation": "new", "status": "pending"}
+            },
+            "c_upd": {
+              "name": "c_upd",
+              "type": "STRING",
+              "comment": "updated comment",
+              "tags": {
+                "items": {
+                  "ctag_new": {
+                    "name": "ctag_new",
+                    "value": "v1",
+                    "meta": {"object_id": "ctg-1", "operation": "new", "status": "pending"}
+                  },
+                  "ctag_upd": {
+                    "name": "ctag_upd",
+                    "value": "v2",
+                    "meta": {"object_id": "ctg-2", "operation": "updated", "status": "pending"}
+                  },
+                  "ctag_del": {
+                    "name": "ctag_del",
+                    "value": "v3",
+                    "meta": {"object_id": "ctg-3", "operation": "deleted", "status": "pending"}
+                  }
+                }
+              },
+              "meta": {"object_id": "col-2", "operation": "updated", "status": "pending", "updated_fields": {"name": "c", "type": "STRING", "comment": "old"}}
+            },
+            "c_del": {
+              "name": "c_del",
+              "type": "INT",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-3", "operation": "deleted", "status": "pending"}
+            }
+          }
+        },
+        "tags": {
+          "items": {
+            "tag_new": {
+              "name": "tag_new",
+              "value": "tv1",
+              "meta": {"object_id": "tg-1", "operation": "new", "status": "pending"}
+            },
+            "tag_upd": {
+              "name": "tag_upd",
+              "value": "tv2",
+              "meta": {"object_id": "tg-2", "operation": "updated", "status": "pending"}
+            },
+            "tag_del": {
+              "name": "tag_del",
+              "value": "tv3",
+              "meta": {"object_id": "tg-3", "operation": "deleted", "status": "pending"}
+            }
+          }
+        },
+        "properties": {
+          "items": {
+            "prop_new": {
+              "name": "prop_new",
+              "value": "pv1",
+              "meta": {"object_id": "pr-1", "operation": "new", "status": "pending"}
+            },
+            "prop_upd": {
+              "name": "prop_upd",
+              "value": "pv2",
+              "meta": {"object_id": "pr-2", "operation": "updated", "status": "pending"}
+            },
+            "prop_del": {
+              "name": "prop_del",
+              "value": "pv3",
+              "meta": {"object_id": "pr-3", "operation": "deleted", "status": "pending"}
+            }
+          }
+        },
+        "settings": {
+          "items": {
+            "setting1": {
+              "name": "ENABLE CHANGE DATA FEED",
+              "value": "true",
+              "meta": {"object_id": "ps-1", "operation": "new", "status": "pending"}
+            },
+            "setting2": {
+              "name": "SET TBLPROPERTIES",
+              "value": "('delta.autoOptimize.optimizeWrite' = 'true')",
+              "meta": {"object_id": "ps-2", "operation": "new", "status": "pending"}
+            }
+          }
+        },
+        "meta": {"object_id": "tbl-2", "operation": "updated", "status": "pending", "updated_fields": {"name":"t", "comment": "old", "external_location": "old"}}
+      },
+      "t_cols_only": {
+        "name": "t_cols_only",
+        "columns": {
+          "items": {
+            "c2_new": {
+              "name": "c2_new",
+              "type": "BOOLEAN",
+              "comment": "another comment",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-21", "operation": "new", "status": "pending"}
+            },
+            "c2_upd": {
+              "name": "c2_upd",
+              "type": "DOUBLE",
+              "comment": "cols only comment",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-22", "operation": "updated", "status": "pending", "updated_fields": {"name": "c2", "type": "DOUBLE", "comment": "cols only comment"}}
+            },
+            "c2_del": {
+              "name": "c2_del",
+              "type": "STRING",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-23", "operation": "deleted", "status": "pending"}
+            }
+          }
+        },
+        "tags": {"items": {}},
+        "properties": {"items": {}},
+        "settings": {"items": {}},
+        "meta": {"object_id": "tbl-4", "operation": "updated", "status": "success"}
+      },
+      "t_del": {
+        "name": "t_del",
+        "columns": {"items": {}},
+        "tags": {"items": {}},
+        "properties": {"items": {}},
+        "settings": {"items": {}},
+        "meta": {"object_id": "tbl-3", "operation": "deleted", "status": "pending"}
+      },
+      "t_linked": {
+        "name": "t_linked",
+        "linked": true,
+        "external_location": "/mnt/linked/t_linked",
+        "comment": "linked table comment",
+        "columns": {
+          "items": {
+            "c_linked": {
+              "name": "c_linked",
+              "linked": true,
+              "type": "BIGINT",
+              "comment": "linked column comment",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-linked", "operation": "updated", "status": "pending", "updated_fields": {"name":"c", "type": "BIGINT", "comment": "linked column comment"}}    
+            }
+          }
+        },
+        "tags": {"items": {}},
+        "properties": {"items": {}},
+        "settings": {
+          "items": {
+            "setting3": {
+              "name": "ENABLE CHANGE DATA FEED",
+              "value": "false",
+              "meta": {"object_id": "ps-3", "operation": "new", "status": "pending"}
+            }
+          }
+        },
+        "meta": {"object_id": "tbl-linked", "operation": "updated", "status": "pending", "updated_fields": {"external_location": "old", "comment": "old"}}  
+      }
+    }
+  }
+}

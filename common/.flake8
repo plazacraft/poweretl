@@ -1,0 +1,8 @@
+[flake8]
+# Line length to match black and ruff
+max-line-length = 88
+
+# Ignore specific warnings
+#ignore = D100,D101,F403,F405
+
+
