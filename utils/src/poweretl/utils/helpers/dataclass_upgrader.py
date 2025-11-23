@@ -1,4 +1,6 @@
 # pylint: disable=R0912, R0911, E1121
+# Mostly AI
+
 import copy
 from dataclasses import fields, is_dataclass
 from typing import Any, Generic, Type, TypeVar

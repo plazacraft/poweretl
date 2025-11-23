@@ -1,4 +1,6 @@
 # pylint: disable=R0801
+# Mostly AI
+
 import pytest
 
 from poweretl.utils import TokensReplacer

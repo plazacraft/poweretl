@@ -33,7 +33,9 @@ def test_parse_sample_file():
     for r in results:
         steps_by_version.setdefault(r.version, []).append(r.step)
     for ver, steps in steps_by_version.items():
-        assert steps == list(range(1, len(steps) + 1)), f"Steps for version {ver} should start at 1 and increment"
+        assert steps == list(
+            range(1, len(steps) + 1)
+        ), f"Steps for version {ver} should start at 1 and increment"
 
 
 def test_read_files_multiple():
@@ -58,7 +60,9 @@ def test_read_files_multiple():
     for r in results:
         steps_by_version.setdefault(r.version, []).append(r.step)
     for ver, steps in steps_by_version.items():
-        assert steps == list(range(1, len(steps) + 1)), f"Steps for version {ver} should start at 1 and increment"
+        assert steps == list(
+            range(1, len(steps) + 1)
+        ), f"Steps for version {ver} should start at 1 and increment"
 
 
 def test_semver_sorting():
@@ -86,7 +90,9 @@ def test_semver_sorting():
     for r in results:
         steps_by_version.setdefault(r.version, []).append(r.step)
     for ver, steps in steps_by_version.items():
-        assert steps == list(range(1, len(steps) + 1)), f"Steps for version {ver} should start at 1 and increment"
+        assert steps == list(
+            range(1, len(steps) + 1)
+        ), f"Steps for version {ver} should start at 1 and increment"
 
 
 def test_filter_by_version_and_step():
@@ -113,22 +119,22 @@ def test_filter_by_version_and_step():
     def greater_than(e, v, s):
         if provider.version_key(e.version or "") > provider.version_key(v or ""):
             return True
-        if provider.version_key(e.version or "") == provider.version_key(v or "") and e.step > (s or 0):
+        if provider.version_key(e.version or "") == provider.version_key(
+            v or ""
+        ) and e.step > (s or 0):
             return True
         return False
 
     expected = [e for e in all_results if greater_than(e, pivot.version, pivot.step)]
 
-    assert [
-        (e.version, e.step, e.command.strip()) for e in filtered
-    ] == [
+    assert [(e.version, e.step, e.command.strip()) for e in filtered] == [
         (e.version, e.step, e.command.strip()) for e in expected
     ], "Filtered results should match entries strictly greater than (version, step)"
 
     # None markers should not filter anything
-    no_filter = provider.get_commands(reader.get_files_with_content(), version=None, step=None)
-    assert [
-        (e.version, e.step, e.command.strip()) for e in no_filter
-    ] == [
+    no_filter = provider.get_commands(
+        reader.get_files_with_content(), version=None, step=None
+    )
+    assert [(e.version, e.step, e.command.strip()) for e in no_filter] == [
         (e.version, e.step, e.command.strip()) for e in all_results
     ], "None filters should return all entries"
