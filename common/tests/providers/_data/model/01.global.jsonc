@@ -1,0 +1,22 @@
+{
+    "tables": {
+        "items": {
+            "<catalog>.<schema>.table_1": {
+                "name": "table_1",
+                "columns": {
+                    "items": {
+                        "col_1": {
+                            "name": "col 1",
+                            "type": "type"
+                        },
+                        "col_2": {
+                            "name": "col 2",
+                            "type": "type"
+                        }
+                        /*<dwh_columns>*/
+                    }
+                }
+            }
+        }
+    }
+}

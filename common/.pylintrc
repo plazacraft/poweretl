@@ -1,0 +1,12 @@
+[MESSAGES CONTROL]
+disable = 
+        C0114, # Missing module docstring (missing-module-docstring)
+        C0115, # Missing class docstring (missing-class-docstring)
+        C0116, # Too few public methods (1/2) (too-few-public-methods)
+        R0903, # Too few public methods (1/2) (too-few-public-methods)
+        W0123, # use of eval
+        W0102 # Dangerous default value {} as argument (dangerous-default-value)
+
+
+[FORMAT]
+max-line-length=88

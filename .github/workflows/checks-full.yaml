@@ -1,0 +1,74 @@
+name: Run Project All Checks (Push, Pull Request)
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - utils
+          - defs
+          - common
+          - databricks
+          - examples
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run code quality checks for ${{ matrix.project }}
+        uses: plazacraft/poweretl-pipelines/actions/code-checks@main
+        with:
+          project-path: ${{ matrix.project }}
+          python-version: '3.13'
+
+  run-tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - utils
+          - defs
+          - common
+          - databricks
+          - examples
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: Create JSON file from secrets
+        if: ${{ matrix.project == 'databricks' }}
+        run: |
+            echo '{
+            "host": "${{ vars.DATABRICKS_HOST }}",
+            "token": "${{ secrets.DATABRICKS_TOKEN }}",
+            "cluster_id": "${{ vars.DATABRICKS_CLUSTER_ID }}"
+            }' > databricks/src/poweretl/databricks/helpers/.databricks.config.json
+
+      - name: Run tests for ${{ matrix.project }}
+        uses: plazacraft/poweretl-pipelines/actions/run-tests@main
+        with:
+          project-path: ${{ matrix.project }}
+          python-version: '3.13'      
+
+

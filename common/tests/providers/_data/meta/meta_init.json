@@ -1,0 +1,116 @@
+{
+    "tables": {
+        "prune": false,
+        "items": {
+            "prd.test.table_1": {
+                "name": "table_1_new",
+                "columns": {
+                    "prune": false,
+                    "items": {
+                        "col_1": {
+                            "name": "col 1",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "f3f6f575-3f69-4fe4-8b45-b8f1657d644a",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        },
+                        "col_2": {
+                            "name": "col 2",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "1e3b8922-30cb-43e9-876a-dcb3371196da",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        },
+                        "col_3": {
+                            "name": "col 3",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "2a6fafe1-2526-4613-8b48-b67ddf821b94",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        },
+                        "last_modification": {
+                            "name": "last modification",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "1fc8ab9d-a07b-4c3a-b4ae-fc724d745ddf",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        },
+                        "version": {
+                            "name": "version",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "6c9e2988-8332-404c-bb61-8faf5b68dd2c",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        }
+                    }
+                },
+                "meta": {
+                    "object_id": "c66a180d-90bf-4517-beac-179b953ab163",
+                    "status": "pending",
+                    "operation": "new"
+                }
+            },
+            "prd.test.table_2": {
+                "name": "table_2",
+                "columns": {
+                    "prune": false,
+                    "items": {
+                        "col_1": {
+                            "name": "col 1",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "e74a8dca-dbcc-4c6a-bdf6-23ca08ea6c5c",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        }
+                    }
+                },
+                "meta": {
+                    "object_id": "f28265dd-1980-4fef-a760-1af76d66a67c",
+                    "status": "pending",
+                    "operation": "new"
+                }
+            },
+            "prd.test.table_3": {
+                "name": "table_3",
+                "columns": {
+                    "prune": false,
+                    "items": {
+                        "col_1": {
+                            "name": "col 1",
+                            "type": "type",
+                            "properties": null,
+                            "meta": {
+                                "object_id": "e74a8dca-dbcc-4c6a-bdf6-23ca08ea6c5c",
+                                "status": "pending",
+                                "operation": "new"
+                            }
+                        }
+                    }
+                },
+                "meta": {
+                    "object_id": "f28265dd-1980-4fef-a760-1af76d66a67d",
+                    "status": "pending",
+                    "operation": "new"
+                }
+            }
+        }
+    }
+}

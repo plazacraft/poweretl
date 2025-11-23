@@ -3,15 +3,22 @@ name = "poweretl-defs"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "plazacraft",email = "r.plazaman@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
 ]
 
 [tool.poetry]
 packages = [{include = "poweretl", from = "src"}]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.black]
+line-length = 88
 
 
 
@@ -23,6 +30,12 @@ build-backend = "poetry.core.masonry.api"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-
+pytest = "^7.4.0"
+pytest-cov = "^7.0.0"
+black = "^25.9.0"
+pylint = "^4.0.0"
+flake8 = "^7.3.0"
+isort = "^7.0.0"
 
 [tool.poetry.dependencies]
+# pydantic = "^2.12.3"

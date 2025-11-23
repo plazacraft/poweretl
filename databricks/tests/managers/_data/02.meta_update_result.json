@@ -1,0 +1,82 @@
+{
+  "tables": {
+    "items": {
+      "table_01": {
+        "name": "workspace.poweretl_tests.unit_table_01",
+        "comment": "table_01:\nTest table for unit tests.",
+        "columns": {"items": {
+            "col_01": {
+              "name": "col_01",
+              "type": "STRING",
+              "comment": "col_01:\nFirst column.",
+              "tags": {
+                "items": {
+                    "ctag_01": {
+                    "name": "ctag_01",
+                    "value": "ctag_value_01",
+                    "meta": {"object_id": "ctg-01", "operation": "new", "status": "success"}
+                    },
+                    "ctag_02": {
+                    "name": "ctag_02",
+                    "value": "ctag_value_02",
+                    "meta": {"object_id": "ctg-02", "operation": "new", "status": "success"}
+                    }
+                }},
+                "meta": {"object_id": "col-001", "operation": "new", "status": "success"}
+            },
+            "col_02": {
+              "name": "col_02_02",
+              "type": "BIGINT",
+              "comment": "col_02_02:\nSecond column.",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-002", "operation": "updated", "status": "success", "updated_fields": {"name" :"col_02", "type": "INT", "comment": "col_02:\nSecond column."}}
+            },
+            "col_03": {
+              "name": "col_03",
+              "type": "INT",
+              "comment": "col_03:\nThird column.",
+              "tags": {"items": {}},
+              "meta": {"object_id": "col-003", "operation": "new", "status": "success"}
+            }
+        }},
+        "tags": {"items": {
+            "tag_01": {
+              "name": "tag_01",
+              "value": "value_01",
+              "meta": {"object_id": "tg-01", "operation": "new", "status": "success"}
+            },
+            "tag_02": {
+              "name": "tag_02",
+              "value": "value_02_02",
+              "meta": {"object_id": "tg-02", "operation": "updated", "status": "success", "updated_fields": {"value" :"value_02"}}
+            },
+            "tag_03": {
+              "name": "tag_03",
+              "value": "value_03",
+              "meta": {"object_id": "tg-03", "operation": "new", "status": "success"}
+            }
+        }},
+        "properties": {"items": {
+            "column_mapping": {
+              "name": "delta.columnMapping.mode",
+              "value": "name",
+              "meta": {"object_id": "property-01", "operation": "new", "status": "success"}
+            },
+            "column_widening": {
+              "name": "delta.enableTypeWidening",
+              "value": "true",
+              "meta": {"object_id": "property-02", "operation": "new", "status": "success"}
+            }
+        }},
+        "settings": {"items": {
+            "cluster_by": {
+              "name": "CLUSTER BY",
+              "value": "(col_01, col_02)",
+              "meta": {"object_id": "cs-01", "operation": "new", "status": "success"}
+            }
+        }},           
+        "meta": {"object_id": "tbl-01", "operation": "new", "status": "success"}
+      }
+    }
+  }
+}

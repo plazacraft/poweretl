@@ -1,0 +1,38 @@
+{
+    "tables": {
+        "prd.test.table_1": {
+            "columns": {
+                "col_1": {
+                    "name": "col 1 new",
+                    "type": "type"
+                },
+                "col_2": {
+                    "name": "col 2",
+                    "type": "type"
+                },
+                "col_3": {
+                    "name": "col 2",
+                    "type": "type"
+                },
+                "last_modification": {
+                    "name": "last modification",
+                    "type": "type"
+                },
+                "version": {
+                    "name": "version",
+                    "type": "type"
+                }
+            },
+            "name": "table_1_new"
+        },
+        "prd.test.table_2": {
+            "columns": {
+                "col_1": {
+                    "name": "col 1",
+                    "type": "type"
+                }
+            },
+            "name": "table_2"
+        }
+    }
+}

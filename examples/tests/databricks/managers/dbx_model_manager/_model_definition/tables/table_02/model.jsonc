@@ -1,0 +1,33 @@
+{
+	
+	"tables":{
+        "items": {
+            "<catalog>.<schema>.table_02": 
+            { 
+                "name": "<catalog>.<schema>.table_02",
+                "columns":
+                {
+                    "items": {
+                        "name": { "name": "name", "type": "STRING" },
+                        "count": { "name": "count", "type": "INT" },
+                        /*<dlh_columns>*/
+                    }
+                    
+                },
+                "tags": 
+                {
+                    "items": {
+                        /*<env_tags>*/
+                    }
+                },
+                "properties": {
+                    "items": {
+                        /*<dlh_table_properties>*/
+                    }
+                }
+
+            }
+        }
+	}
+	
+}
