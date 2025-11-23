@@ -1,3 +1,5 @@
+# pylint: disable=W0102
+
 from abc import ABC, abstractmethod
 
 from poweretl.defs.meta import Status
