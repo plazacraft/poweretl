@@ -37,5 +37,3 @@ class IMetaProvider(ABC):
     @abstractmethod
     def get_meta(self, statuses: set[str] = None, table_id: str = None) -> Meta:
         """Returns Model together with its metadata."""
-
-

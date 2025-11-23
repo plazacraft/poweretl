@@ -55,7 +55,6 @@ class FileModelProvider(IModelProvider):
         if configs_content_final:
             self.config = self._file_merger.merge(configs_content_final)
 
-
     def get_model(self) -> Model:
 
         if self.config:

@@ -1,6 +1,7 @@
 # pylint: disable=R0801
 
 from pathlib import Path
+
 from poweretl.utils import IFileStorageWriter
 from pyspark.sql import SparkSession  # pylint: disable=C0411
 

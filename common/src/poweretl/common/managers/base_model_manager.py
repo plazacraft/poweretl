@@ -1,4 +1,4 @@
-# pylint: disable=R0912, W0718
+# pylint: disable=R0912, W0718, R0915, E1111
 
 import os
 from abc import abstractmethod
@@ -6,10 +6,12 @@ from datetime import datetime
 from pathlib import Path
 
 from poweretl.defs import IMetaProvider, IModelManager
-from poweretl.defs.meta import BaseItem, Operation, Status, Meta
-from poweretl.utils import FileEntry, FileMerger, MultiFileReader, TokensReplacer
+from poweretl.defs.meta import BaseItem, Operation, Status
 from poweretl.defs.model import Table
+from poweretl.utils import FileEntry, FileMerger, MultiFileReader, TokensReplacer
+
 from poweretl.common.helpers import MetaModelUpdater
+
 
 class BaseModelManager(IModelManager):
 
@@ -99,10 +101,10 @@ class BaseModelManager(IModelManager):
             item.meta.error_msg = str(e)
             self._meta_provider.push_meta_item_changes(item)
 
-    def provision_model(self, statuses: set[str] = {Status.PENDING.value}, table_id: str = None):
-        meta = self._meta_provider.get_meta(
-            table_id=table_id, statuses=statuses
-        )
+    def provision_model(
+        self, statuses: set[str] = {Status.PENDING.value}, table_id: str = None
+    ):
+        meta = self._meta_provider.get_meta(table_id=table_id, statuses=statuses)
         for table in meta.tables.items.values():
             if table.meta.operation == Operation.NEW.value:
                 external_clause = ""
@@ -146,13 +148,16 @@ class BaseModelManager(IModelManager):
                         value=tag.value,
                     )
                 elif tag.meta.operation == Operation.DELETED.value:
-                    if (table.meta.operation == Operation.DELETED.value):
+                    if table.meta.operation == Operation.DELETED.value:
                         tag.meta.status = table.meta.status
                         tag.meta.meta_last_update = datetime.now().isoformat()
-                        self._meta_provider.push_meta_item_changes(tag)                        
+                        self._meta_provider.push_meta_item_changes(tag)
                     else:
                         self._call_execute_command(
-                            "drop_table_tag", tag, table_name=table.name, tag_name=tag.name
+                            "drop_table_tag",
+                            tag,
+                            table_name=table.name,
+                            tag_name=tag.name,
                         )
 
             # Process table properties
@@ -176,10 +181,12 @@ class BaseModelManager(IModelManager):
                         value=current_property.value,
                     )
                 elif current_property.meta.operation == Operation.DELETED.value:
-                    if (table.meta.operation == Operation.DELETED.value):
+                    if table.meta.operation == Operation.DELETED.value:
                         current_property.meta.status = table.meta.status
-                        current_property.meta.meta_last_update = datetime.now().isoformat()
-                        self._meta_provider.push_meta_item_changes(current_property)                        
+                        current_property.meta.meta_last_update = (
+                            datetime.now().isoformat()
+                        )
+                        self._meta_provider.push_meta_item_changes(current_property)
 
                     else:
                         self._call_execute_command(
@@ -211,10 +218,10 @@ class BaseModelManager(IModelManager):
                         column_name=column.name,
                     )
                 elif column.meta.operation == Operation.DELETED.value:
-                    if (table.meta.operation == Operation.DELETED.value):
+                    if table.meta.operation == Operation.DELETED.value:
                         column.meta.status = table.meta.status
                         column.meta.meta_last_update = datetime.now().isoformat()
-                        self._meta_provider.push_meta_item_changes(column)                        
+                        self._meta_provider.push_meta_item_changes(column)
 
                     else:
                         self._call_execute_command(
@@ -245,10 +252,12 @@ class BaseModelManager(IModelManager):
                             value=column_tag.value,
                         )
                     elif column_tag.meta.operation == Operation.DELETED.value:
-                        if (column.meta.operation == Operation.DELETED.value):
+                        if column.meta.operation == Operation.DELETED.value:
                             column_tag.meta.status = table.meta.status
-                            column_tag.meta.meta_last_update = datetime.now().isoformat()
-                            self._meta_provider.push_meta_item_changes(column_tag)                        
+                            column_tag.meta.meta_last_update = (
+                                datetime.now().isoformat()
+                            )
+                            self._meta_provider.push_meta_item_changes(column_tag)
 
                         else:
                             self._call_execute_command(
@@ -269,20 +278,17 @@ class BaseModelManager(IModelManager):
                     value=current_setting.value,
                 )
 
-    def get_table_model_from_source(table_name) -> Table:
+    def get_table_model_from_source(self, table_name) -> Table:
         pass
 
-
-    def sync_meta(self, statuses: set[str] = {Status.PENDING.value}, table_id: str = None):
+    def sync_meta(
+        self, statuses: set[str] = {Status.PENDING.value}, table_id: str = None
+    ):
 
         meta = self._meta_provider.get_meta(statuses=statuses, table_id=table_id)
         for table_id_key, table in meta.tables.items.items():
             table_model = self.get_table_model_from_source(table.name)
             table_meta = self._meta_updater.get_synced_meta(table_model, table)
             meta.tables.items[table_id_key] = table_meta
-            
+
         self._meta_provider.push_meta_changes(meta)
-            
-
-
-        

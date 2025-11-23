@@ -1,17 +1,18 @@
 # pylint: disable=R0914, W0511, R0912, W0718
 
 import copy
+import uuid
 from dataclasses import fields, is_dataclass
 from datetime import datetime
 from typing import Any, Optional, TypeVar, Union, cast, get_type_hints
-import uuid
 
 from deepdiff import DeepDiff
-from poweretl.defs.meta import BaseCollection, BaseItem, Operation, Status, Table, Meta
-from poweretl.defs.model import Model, BaseCollection as ModelBaseCollection, BaseItem as ModelBaseItem
+from poweretl.defs.meta import BaseCollection, BaseItem, Meta, Operation, Status, Table
+from poweretl.defs.model import BaseCollection as ModelBaseCollection
+from poweretl.defs.model import BaseItem as ModelBaseItem
+from poweretl.defs.model import Model
 from poweretl.defs.model import Table as ModelTable
 from poweretl.utils import DataclassUpgrader
-
 
 BaseItemT = TypeVar("BaseItemT", bound=BaseItem)
 # BaseCollectionT = TypeVar("BaseCollectionT", bound=BaseCollection)
@@ -67,18 +68,19 @@ class MetaModelUpdater:
         upgrader = DataclassUpgrader(child_cls)
 
         if dest_obj:  # pylint: disable=R1702
-           
+
             updated_fields = {}
             updated = False
             if not upgrader.compare(source_obj, dest_obj):
                 updated_fields = _get_updated_fields(source_obj, dest_obj)
                 upgrader.update_child(source_obj, dest_obj)
-                
+
             # Define the action base on the previous status
 
-            
             if dest_obj.meta.operation == Operation.DELETED.value:
-                # if it was not removed then it will be updated, if it was successfully removed then it will be added as new
+                # if it was not removed then it will be updated,
+                # if it was successfully
+                # removed then it will be added as new
                 if dest_obj.meta.status != Status.SUCCESS.value or dest_obj.linked:
                     dest_obj.meta.operation = Operation.UPDATED.value
                     dest_obj.meta.updated_fields = updated_fields
@@ -86,14 +88,16 @@ class MetaModelUpdater:
                     dest_obj.meta.operation = Operation.NEW.value
                 updated = True
             elif dest_obj.meta.operation == Operation.NEW.value:
-                # if previous status was New but not success it should stays as new, it should change status only if was success
-                if (dest_obj.meta.status == Status.SUCCESS.value):
+                # if previous status was New but not success it should stays as new,
+                # it should change status only if was success
+                if dest_obj.meta.status == Status.SUCCESS.value:
                     dest_obj.meta.operation = Operation.UPDATED.value
                     updated = True
-           
+
             elif dest_obj.meta.operation == Operation.UPDATED.value and updated_fields:
-                # for update we change only if there are updated fields, for not success we need to merge not updated fields
-                if (dest_obj.meta.status == Status.SUCCESS.value):
+                # for update we change only if there are updated fields,
+                # for not success we need to merge not updated fields
+                if dest_obj.meta.status == Status.SUCCESS.value:
                     dest_obj.meta.updated_fields = updated_fields
                 else:
                     _merge_updated_fields(dest_obj.meta.updated_fields, updated_fields)
@@ -103,9 +107,7 @@ class MetaModelUpdater:
                 dest_obj.meta.status = Status.PENDING.value
                 dest_obj.meta.model_last_update = datetime.now().isoformat()
 
-
             return dest_obj
-
 
         new_child = upgrader.from_parent(source_obj)
         new_child.meta.object_id = str(uuid.uuid4())
@@ -130,7 +132,6 @@ class MetaModelUpdater:
                 collection_item: ModelBaseCollection = getattr(current_item, f.name)
                 for inner_item in collection_item.items.values():
                     self._set_deletion_status(inner_item, operation, status)
-
 
     def _update_collection(
         self, meta_collection: BaseCollection, model_collection: ModelBaseCollection
@@ -161,37 +162,45 @@ class MetaModelUpdater:
 
             meta_collection.items[item_id] = meta_item
 
-
-            
         # mark not existed items to remove
         if getattr(model_collection, "prune", False):
             for meta_current_item_id, meta_current_item in list(
                 meta_collection.items.items()
             ):
-                # if item is already deleted, then it's status shouldn't be changed for double deletion
-                if (meta_current_item_id not in model_collection.items.keys()) \
-                    and (not meta_current_item.linked) \
-                    and (meta_current_item.meta.operation != Operation.DELETED.value):
+                # if item is already deleted, then it's status
+                # shouldn't be changed for double deletion
+                if (
+                    (meta_current_item_id not in model_collection.items.keys())
+                    and (not meta_current_item.linked)
+                    and (meta_current_item.meta.operation != Operation.DELETED.value)
+                ):
 
-                    # if item was new but not provisioned correctly, then set it automatically to Deleted
-                    if (meta_current_item.meta.operation == Operation.NEW.value and meta_current_item.meta.status != Status.SUCCESS.value):
+                    # if item was new but not provisioned correctly,
+                    # then set it automatically to Deleted
+                    if (
+                        meta_current_item.meta.operation == Operation.NEW.value
+                        and meta_current_item.meta.status != Status.SUCCESS.value
+                    ):
                         new_status = Status.SUCCESS.value
                     else:
                         new_status = Status.PENDING.value
 
                     new_operation = Operation.DELETED.value
-                    self._set_deletion_status(meta_current_item, new_operation, new_status)
+                    self._set_deletion_status(
+                        meta_current_item, new_operation, new_status
+                    )
 
-    
-    def _update_synced_meta(self, meta_item: BaseItem, model_item:  ModelBaseItem):
-        if (not model_item):
-            self._set_deletion_status(meta_item, Operation.DELETED.value, Status.SUCCESS.value)
+    def _update_synced_meta(self, meta_item: BaseItem, model_item: ModelBaseItem):
+        if not model_item:
+            self._set_deletion_status(
+                meta_item, Operation.DELETED.value, Status.SUCCESS.value
+            )
         else:
             upgrader = DataclassUpgrader(type(meta_item))
             preserve_linked = meta_item.linked
             upgrader.update_child(model_item, meta_item)
             meta_item.linked = preserve_linked
-            
+
             for f in fields(meta_item):
                 if hasattr(model_item, f.name):
                     meta_attr = getattr(meta_item, f.name)
@@ -203,12 +212,14 @@ class MetaModelUpdater:
 
                             # match model item by name
                             model_matched_item = next(
-                                (model_item for model_item in model_collection.items.values() 
-                                 if model_item.name == item.name), 
-                                None
+                                (
+                                    model_item
+                                    for model_item in model_collection.items.values()
+                                    if model_item.name == item.name
+                                ),
+                                None,
                             )
                             self._update_synced_meta(item, model_matched_item)
-
 
             meta_item.meta.status = Status.SUCCESS.value
             meta_item.meta.operation = Operation.UPDATED.value

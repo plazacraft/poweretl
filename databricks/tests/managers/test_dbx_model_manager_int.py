@@ -14,48 +14,59 @@ from poweretl.databricks.managers import DbxModelManager
 
 def compare_table_with_source(table_model_from_source, expected_table):
     """Compare table model retrieved from source with expected table.
-    
+
     Args:
         table_model_from_source: Table model retrieved from Databricks
         expected_table: Expected table from metadata
     """
     table_name = expected_table.name
-    
+
     # Verify table was retrieved
-    assert table_model_from_source is not None, f"Table {table_name} should exist in Databricks"
-    
+    assert (
+        table_model_from_source is not None
+    ), f"Table {table_name} should exist in Databricks"
+
     # Compare basic table properties
     assert table_model_from_source.name == table_name, "Table name should match"
-    assert table_model_from_source.comment == expected_table.comment, "Table comment should match"
-    
+    assert (
+        table_model_from_source.comment == expected_table.comment
+    ), "Table comment should match"
+
     # Compare columns - only check columns that exist in expected_table
-    for col_id, col in expected_table.columns.items.items():
-        assert col.name in table_model_from_source.columns.items, \
-            f"Column {col.name} should exist in source"
+    for _, col in expected_table.columns.items.items():
+        assert (
+            col.name in table_model_from_source.columns.items
+        ), f"Column {col.name} should exist in source"
         source_col = table_model_from_source.columns.items[col.name]
-        assert source_col.type.upper() == col.type.upper(), \
-            f"Column {col.name} type should match"
-        assert source_col.comment == col.comment, \
-            f"Column {col.name} comment should match"
-        
+        assert (
+            source_col.type.upper() == col.type.upper()
+        ), f"Column {col.name} type should match"
+        assert (
+            source_col.comment == col.comment
+        ), f"Column {col.name} comment should match"
+
         # Compare column tags - only check tags that exist in expected column
-        for tag_id, tag in col.tags.items.items():
+        for _, tag in col.tags.items.items():
             if tag.name in source_col.tags.items:
-                assert source_col.tags.items[tag.name].value == tag.value, \
-                    f"Column tag {tag.name} value should match"
-    
+                assert (
+                    source_col.tags.items[tag.name].value == tag.value
+                ), f"Column tag {tag.name} value should match"
+
     # Compare table tags - only check tags that exist in expected_table
-    for tag_id, tag in expected_table.tags.items.items():
+    for _, tag in expected_table.tags.items.items():
         if tag.name in table_model_from_source.tags.items:
-            assert table_model_from_source.tags.items[tag.name].value == tag.value, \
-                f"Table tag {tag.name} value should match"
-    
+            assert (
+                table_model_from_source.tags.items[tag.name].value == tag.value
+            ), f"Table tag {tag.name} value should match"
+
     # Compare settings - only check settings that exist in expected_table
-    for setting_id, setting in expected_table.settings.items.items():
-        assert setting.name in table_model_from_source.settings.items, \
-            f"Setting {setting.name} should exist in source"
-        assert table_model_from_source.settings.items[setting.name].value == setting.value, \
-            f"Setting {setting.name} value should match"
+    for _, setting in expected_table.settings.items.items():
+        assert (
+            setting.name in table_model_from_source.settings.items
+        ), f"Setting {setting.name} should exist in source"
+        assert (
+            table_model_from_source.settings.items[setting.name].value == setting.value
+        ), f"Setting {setting.name} value should match"
 
 
 @pytest.fixture(scope="function")
@@ -186,10 +197,10 @@ def test_dbx_model_manager(test_data_setup, spark_session, cleanup_manager):
         first_table_id = list(init_results.tables.items.keys())[0]
         first_table = init_results.tables.items[first_table_id]
         table_name = first_table.name
-        
+
         # Get table model from Databricks source
         table_model_from_source = mgr_init.get_table_model_from_source(table_name)
-        
+
         # Compare with expected results
         compare_table_with_source(table_model_from_source, first_table)
 

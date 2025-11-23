@@ -3,11 +3,11 @@
 
 from pathlib import Path
 
+from poweretl.defs.model import Column, Columns, NameValue, NameValues, Table
 from poweretl.utils.providers.mem_file_storage_provider import MemFileStorageProvider
 
 from poweretl.common.managers.base_model_manager import BaseModelManager
 from poweretl.common.providers.file_meta_provider import FileMetaProvider
-from poweretl.defs.model import Table, Column, Columns, NameValue, NameValues
 
 
 class CapturingModelManager(BaseModelManager):
@@ -91,23 +91,23 @@ def test_sync_meta_updates_table_from_source():
         columns=Columns(
             items={
                 "c_upd": Column(
-                    name="c_upd",
-                    type="STRING",
-                    comment="synced comment from source"
+                    name="c_upd", type="STRING", comment="synced comment from source"
                 ),
                 "c_new_from_source": Column(
                     name="c_new_from_source",
                     type="BIGINT",
-                    comment="new column from source"
-                )
+                    comment="new column from source",
+                ),
             }
         ),
         tags=NameValues(
             items={
                 "tag_upd": NameValue(name="tag_upd", value="tv2_synced"),
-                "tag_new_from_source": NameValue(name="tag_new_from_source", value="tv_source")
+                "tag_new_from_source": NameValue(
+                    name="tag_new_from_source", value="tv_source"
+                ),
             }
-        )
+        ),
     )
 
     # Set the source table for the manager
@@ -116,7 +116,7 @@ def test_sync_meta_updates_table_from_source():
     # Get meta before sync
     meta_before = provider.get_meta(table_id="t_upd")
     table_before = meta_before.tables.items["t_upd"]
-    
+
     # Verify initial state
     assert table_before.external_location == "/mnt/external/t_upd_new"
     assert table_before.comment == "table upd"
@@ -171,7 +171,7 @@ def test_sync_meta_marks_deleted_when_source_returns_none():
     # Get meta before sync
     meta_before = provider.get_meta(table_id="t_upd")
     table_before = meta_before.tables.items["t_upd"]
-    
+
     # Verify initial state
     assert table_before.meta.status == "pending"
     assert table_before.meta.operation == "updated"
@@ -187,4 +187,3 @@ def test_sync_meta_marks_deleted_when_source_returns_none():
     assert table_after.meta.status == "success"
     assert table_after.meta.operation == "deleted"
     assert table_after.meta.error_msg is None
-

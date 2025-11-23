@@ -1,16 +1,17 @@
-from poweretl.common.providers.base_meta_provider import BaseMetaProvider
-from pyspark.sql import SparkSession  # pylint: disable=C0411
-from typing import List, Dict, Any
+# pylint: disable=R0914, W0718, R0912, R0915, R1724, W0612, C0415
 
 import json
+from typing import Any, Dict, List
 
+from poweretl.common.providers.base_meta_provider import BaseMetaProvider
 from poweretl.defs import Meta, Model
 from poweretl.defs.meta import BaseItem as MetaBaseItem
+from poweretl.defs.meta import Column as MetaColumn
 from poweretl.defs.meta import MetaInfo
+from poweretl.defs.meta import NameValue as MetaNameValue
 from poweretl.defs.meta import Table as MetaTable
 from poweretl.defs.meta import Tables as MetaTables
-from poweretl.defs.meta import Column as MetaColumn
-from poweretl.defs.meta import NameValue as MetaNameValue
+from pyspark.sql import SparkSession  # pylint: disable=C0411
 
 
 class DbxMetaProvider(BaseMetaProvider):
@@ -36,7 +37,9 @@ class DbxMetaProvider(BaseMetaProvider):
         current = self.get_meta()
         # Merge current + provided meta to get final state
         # Using the same helper as FileMetaProvider
-        from deepmerge import always_merger  # lazy import to avoid hard dependency at module import
+        from deepmerge import (
+            always_merger,  # lazy import to avoid hard dependency at module import
+        )
 
         merged = always_merger.merge(current, meta)
         self._save_meta(merged)
@@ -55,7 +58,9 @@ class DbxMetaProvider(BaseMetaProvider):
         meta = self._build_meta_from_rows(rows)
 
         if table_id and meta:
-            meta.tables.items = {k: v for k, v in meta.tables.items.items() if k == table_id}
+            meta.tables.items = {
+                k: v for k, v in meta.tables.items.items() if k == table_id
+            }
 
         if statuses and meta:
             meta = self._apply_status_filter(meta, statuses)
@@ -72,8 +77,8 @@ class DbxMetaProvider(BaseMetaProvider):
         tbl = self._meta_table_fullname()
         df = self._spark.sql(
             f"""
-            SELECT object_id, status, operation, error_msg, updated_fields, 
-                   model_last_update, meta_last_update, parent_object_id, 
+            SELECT object_id, status, operation, error_msg, updated_fields,
+                   model_last_update, meta_last_update, parent_object_id,
                    type, name, linked, data
             FROM {tbl}
             """
@@ -143,7 +148,12 @@ class DbxMetaProvider(BaseMetaProvider):
         # Pass 3: name-value like items (tags/properties/settings, column tags)
         for r in rows:
             rtype = r.get("type")
-            if rtype not in {"table_tag", "table_property", "table_setting", "column_tag"}:
+            if rtype not in {
+                "table_tag",
+                "table_property",
+                "table_setting",
+                "column_tag",
+            }:
                 continue
             data = self._safe_json_loads(r.get("data")) or {}
             value = data.get("value")
@@ -155,14 +165,22 @@ class DbxMetaProvider(BaseMetaProvider):
                 for t in tables.values():
                     if parent_id in t.columns.items:
                         t.columns.items[parent_id].tags.items[name] = MetaNameValue(
-                            name=name, linked=False, meta=MetaInfo(object_id=r.get("object_id")), value=value
+                            name=name,
+                            linked=False,
+                            meta=MetaInfo(object_id=r.get("object_id")),
+                            value=value,
                         )
                         break
             else:
                 # parent is table id
                 if parent_id in tables:
                     target_table = tables[parent_id]
-                    nv = MetaNameValue(name=name, linked=False, meta=MetaInfo(object_id=r.get("object_id")), value=value)
+                    nv = MetaNameValue(
+                        name=name,
+                        linked=False,
+                        meta=MetaInfo(object_id=r.get("object_id")),
+                        value=value,
+                    )
                     if rtype == "table_tag":
                         target_table.tags.items[name] = nv
                     elif rtype == "table_property":
@@ -286,10 +304,10 @@ class DbxMetaProvider(BaseMetaProvider):
         df.createOrReplaceTempView("_tmp_poweretl_meta_rows")
         self._spark.sql(
             f"""
-            INSERT INTO {tbl} 
-            SELECT 
-                object_id, status, operation, error_msg, updated_fields, 
-                model_last_update, meta_last_update, parent_object_id, 
+            INSERT INTO {tbl}
+            SELECT
+                object_id, status, operation, error_msg, updated_fields,
+                model_last_update, meta_last_update, parent_object_id,
                 type, name, linked, data
             FROM _tmp_poweretl_meta_rows
             """

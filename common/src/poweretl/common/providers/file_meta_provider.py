@@ -1,3 +1,5 @@
+# pylint: disable=R0801
+
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
