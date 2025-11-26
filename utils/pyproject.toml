@@ -7,7 +7,7 @@ authors = [
 ]
 readme = "README-PIP.md"
 keywords = ["python", "etl", "database", "data-lakehouse", "data-warehouse"]
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = []
 
 [tool.poetry]
