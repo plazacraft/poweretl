@@ -121,3 +121,22 @@ class DbxSchemaReader:
         }
         command = self._prepare_command("get_tables", params)
         return self._execute_command(command)
+    
+
+    def get_columns(self, 
+                   catalog_name, 
+                   schema_name,
+                   table_name,
+                   column_name = None,
+                   column_name_like = None):
+        
+
+        params = {
+            "catalog_name": self.sql_str(catalog_name),
+            "schema_name": self.sql_str(schema_name),
+            "table_name": self.sql_str(table_name),
+            "column_name": self.sql_str(column_name),
+            "column_name_like": self.sql_str(column_name_like),
+        }
+        command = self._prepare_command("get_columns", params)
+        return self._execute_command(command)    

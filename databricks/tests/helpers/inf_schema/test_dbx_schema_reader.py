@@ -21,5 +21,11 @@ def test_dbx_schema_reader_int():
         print(f"Table: {row['table_name']}, Schema: {row['table_schema']}, Type: {row['table_type']}, Tags: {row['tags']}")
 
 
+    print ("----------------------")
+    columns = reader.get_columns(catalog_name="system", schema_name="lakeflow", table_name="jobs").collect()
+    for row in columns:
+        print(f"Column: {row['column_name']}, Table: {row['table_name']}, Schema: {row['table_schema']}, Type: {row['data_type']}, Tags: {row['tags']}")
+
+
 if (__name__ == "__main__"):
     test_dbx_schema_reader_int()

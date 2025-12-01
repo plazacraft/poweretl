@@ -1,21 +1,60 @@
 get_catalogs: |
-  SELECT * 
-    FROM system.information_schema.catalogs
-   WHERE ({catalog_name} IS NULL OR catalog_name = {catalog_name})
-         AND ({catalog_name_like} IS NULL OR catalog_name LIKE {catalog_name_like});
+  SELECT c.*, tg.tags as tags
+    FROM system.information_schema.catalogs as c
+    LEFT JOIN (SELECT   catalog_name,
+                        CONCAT(
+                            '[', 
+                            CONCAT_WS(',', 
+                                COLLECT_LIST(
+                                    CONCAT('\{"tag_name":"', tag_name, '", "tag_value":"', tag_value, '"\}')
+                                )
+                            ), 
+                            ']'
+                        ) AS tags                                                        
+                FROM system.information_schema.schema_tags
+                WHERE ({catalog_name} IS NULL OR catalog_name = {catalog_name})
+                      AND ({catalog_name_like} IS NULL OR catalog_name LIKE {catalog_name_like})
+
+                GROUP BY catalog_name
+
+            ) as tg ON  tg.catalog_name     = c.catalog_name
+  
+   WHERE ({catalog_name} IS NULL OR c.catalog_name = {catalog_name})
+         AND ({catalog_name_like} IS NULL OR c.catalog_name LIKE {catalog_name_like});
 
 
 get_schemas: |
-  SELECT * 
-    FROM system.information_schema.schemata
-   WHERE ({catalog_name} IS NULL OR catalog_name = {catalog_name})
-         AND ({catalog_name_like} IS NULL OR catalog_name LIKE {catalog_name_like})
-         AND ({schema_name} IS NULL OR schema_name = {schema_name})
-         AND ({schema_name_like} IS NULL OR schema_name LIKE {schema_name_like});
+  SELECT s.*, tg.tags as tags
+    FROM system.information_schema.schemata as s
+    LEFT JOIN (SELECT   catalog_name,
+                        schema_name,
+                        CONCAT(
+                            '[', 
+                            CONCAT_WS(',', 
+                                COLLECT_LIST(
+                                    CONCAT('\{"tag_name":"', tag_name, '", "tag_value":"', tag_value, '"\}')
+                                )
+                            ), 
+                            ']'
+                        ) AS tags                                                        
+                FROM system.information_schema.schema_tags
+                WHERE ({catalog_name} IS NULL OR catalog_name = {catalog_name})
+                      AND ({catalog_name_like} IS NULL OR catalog_name LIKE {catalog_name_like})
+                      AND ({schema_name} IS NULL OR schema_name = {schema_name})
+                      AND ({schema_name_like} IS NULL OR schema_name LIKE {schema_name_like})
 
+                GROUP BY catalog_name, schema_name
+
+            ) as tg ON  tg.catalog_name     = s.catalog_name
+                        AND tg.schema_name  = s.schema_name
+
+   WHERE ({catalog_name} IS NULL OR s.catalog_name = {catalog_name})
+         AND ({catalog_name_like} IS NULL OR s.catalog_name LIKE {catalog_name_like})
+         AND ({schema_name} IS NULL OR s.schema_name = {schema_name})
+         AND ({schema_name_like} IS NULL OR s.schema_name LIKE {schema_name_like});
 
 get_tables: |
-  SELECT t.*, tg.tags 
+  SELECT t.*, tg.tags as tags
     FROM system.information_schema.tables as t
     LEFT JOIN (SELECT   catalog_name,
                         schema_name,
@@ -30,13 +69,12 @@ get_tables: |
                             ']'
                         ) AS tags                                                        
                 FROM system.information_schema.table_tags
-                -- WHERE ({catalog_name} IS NULL OR catalog_name = {catalog_name})
-                --        AND ({catalog_name_like} IS NULL OR catalog_name LIKE {catalog_name_like})
-                --        AND ({schema_name} IS NULL OR schema_name = {schema_name})
-                --        AND ({schema_name_like} IS NULL OR schema_name LIKE {schema_name_like})
-                --        AND ({table_name} IS NULL OR table_name = {table_name})
-                --        AND ({table_name_like} IS NULL OR table_name LIKE {table_name_like})
-                --        AND ({table_type} IS NULL OR table_type IN {table_type})
+                WHERE ({catalog_name} IS NULL OR catalog_name = {catalog_name})
+                      AND ({catalog_name_like} IS NULL OR catalog_name LIKE {catalog_name_like})
+                      AND ({schema_name} IS NULL OR schema_name = {schema_name})
+                      AND ({schema_name_like} IS NULL OR schema_name LIKE {schema_name_like})
+                      AND ({table_name} IS NULL OR table_name = {table_name})
+                      AND ({table_name_like} IS NULL OR table_name LIKE {table_name_like})
 
                 GROUP BY catalog_name, schema_name, table_name
 
@@ -52,3 +90,98 @@ get_tables: |
           AND ({table_name_like} IS NULL OR t.table_name LIKE {table_name_like})    
           AND ({table_type} IS NULL OR t.table_type IN {table_type})
 
+get_columns: |
+  SELECT c.*,
+          tg.tags as tags,
+          ccu.table_catalog as FK_CATALOG,
+          ccu.table_schema as FK_SCHEMA,
+          ccu.table_name as FK_TABLE,
+          ccu.column_name as FK_COLUMN,
+          CASE
+              WHEN tc.constraint_name IS NOT NULL THEN 1
+              ELSE 0
+          END as IS_PK
+      FROM 
+        system.information_schema.columns as c 
+
+    LEFT JOIN (SELECT   catalog_name,
+                        schema_name,
+                        table_name,
+                        column_name,
+                        CONCAT(
+                            '[', 
+                            CONCAT_WS(',', 
+                                COLLECT_LIST(
+                                    CONCAT('\{"tag_name":"', tag_name, '", "tag_value":"', tag_value, '"\}')
+                                )
+                            ), 
+                            ']'
+                        ) AS tags                                                        
+                FROM system.information_schema.column_tags
+                WHERE catalog_name = {catalog_name}
+                      AND schema_name = {schema_name}
+                      AND table_name = {table_name}
+                      AND ({column_name} IS NULL OR column_name = {column_name})
+                      AND ({column_name_like} IS NULL OR column_name LIKE {column_name_like})                                                                            
+
+                GROUP BY catalog_name, schema_name, table_name, column_name
+
+            ) as tg ON  tg.catalog_name     = c.table_catalog
+                        AND tg.schema_name  = c.table_schema
+                        AND tg.table_name   = c.table_name
+                        AND tg.column_name  = c.column_name
+
+        -- Lookout for FK
+        LEFT JOIN (SELECT   kcu.table_catalog   as kcu_table_catalog, 
+                            kcu.table_schema    as kcu_table_schema, 
+                            kcu.table_name      as kcu_table_name, 
+                            kcu.column_name     as kcu_column_name, 
+                            ccu.*
+                        FROM system.information_schema.key_column_usage as kcu 
+                        INNER JOIN system.information_schema.referential_constraints as rc ON           
+                                                                            rc.constraint_catalog       = kcu.constraint_catalog
+                                                                            AND rc.constraint_schema    = kcu.constraint_schema
+                                                                            AND rc.constraint_name      = kcu.constraint_name
+
+                        INNER JOIN system.information_schema.constraint_column_usage as ccu ON   
+                                                                            ccu.constraint_catalog      = rc.unique_constraint_catalog
+                                                                            AND ccu.constraint_schema   = rc.unique_constraint_schema
+                                                                            AND ccu.constraint_name     = rc.unique_constraint_name
+                        WHERE kcu.table_catalog = {catalog_name}
+                              AND kcu.table_schema = {schema_name}
+                              AND kcu.table_name = {table_name}
+                              AND ({column_name} IS NULL OR kcu.column_name = {column_name})
+                              AND ({column_name_like} IS NULL OR kcu.column_name LIKE {column_name_like})                                                                            
+                    
+                    ) as ccu ON ccu.kcu_table_catalog       = c.table_catalog
+                                AND ccu.kcu_table_schema    = c.table_schema
+                                AND ccu.kcu_table_name      = c.table_name
+                                AND ccu.kcu_column_name     = c.column_name                                    
+
+        -- Lookout for PK
+        LEFT JOIN (SELECT   kcu.table_catalog   as kcu_table_catalog, 
+                            kcu.table_schema    as kcu_table_schema, 
+                            kcu.table_name      as kcu_table_name, 
+                            kcu.column_name     as kcu_column_name, 
+                            tc.*
+                        FROM system.information_schema.key_column_usage as kcu 
+                        INNER JOIN system.information_schema.table_constraints as tc ON         
+                                                                            tc.constraint_catalog       = kcu.constraint_catalog
+                                                                            AND tc.constraint_schema    = kcu.constraint_schema
+                                                                            AND tc.constraint_name      = kcu.constraint_name
+                                                                            AND tc.constraint_type      = "PRIMARY KEY"
+                        WHERE kcu.table_catalog = {catalog_name}
+                              AND kcu.table_schema = {schema_name}
+                              AND kcu.table_name = {table_name}
+                              AND ({column_name} IS NULL OR kcu.column_name = {column_name})
+                              AND ({column_name_like} IS NULL OR kcu.column_name LIKE {column_name_like})                                                                            
+
+                    ) as tc ON  tc.kcu_table_catalog       = c.table_catalog
+                                AND tc.kcu_table_schema    = c.table_schema
+                                AND tc.kcu_table_name      = c.table_name
+                                AND tc.kcu_column_name     = c.column_name        
+    WHERE c.table_catalog = {catalog_name}
+          AND c.table_schema = {schema_name}
+          AND c.table_name = {table_name}
+          AND ({column_name} IS NULL OR c.column_name = {column_name})
+          AND ({column_name_like} IS NULL OR c.column_name LIKE {column_name_like});
