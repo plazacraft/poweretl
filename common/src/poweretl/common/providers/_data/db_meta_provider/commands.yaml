@@ -1,26 +1,22 @@
 get_version: |
-  WITH table_exists AS (
-    SELECT EXISTS (
+  BEGIN
+    DECLARE sqlStr STRING DEFAULT 'SELECT version, step FROM {table_version}';
+    DECLARE tableExists BOOLEAN DEFAULT false;
+    SET tableExists = (EXISTS (
       SELECT 1
       FROM system.information_schema.tables
       WHERE 
         table_catalog     = split('{table_version}', '\\.')[0]
         AND table_schema  = split('{table_version}', '\\.')[1]
         AND table_name    = split('{table_version}', '\\.')[2]
-    ) AS exists_flag
-  )
+    ));
 
-  SELECT
-    CASE
-      WHEN exists_flag THEN (SELECT version FROM {table_version})
-      ELSE ''
-    END AS version,
-    
-    CASE
-      WHEN exists_flag THEN (SELECT step FROM {table_version})
-      ELSE 0
-    END AS step
-  FROM table_exists;
+    IF (tableExists=true) THEN
+      EXECUTE IMMEDIATE sqlStr;
+    ELSE
+      SELECT '' AS version, 0 AS step;
+    END IF;
+  END;
 
 
 update_version: |

@@ -1,0 +1,54 @@
+get_catalogs: |
+  SELECT * 
+    FROM system.information_schema.catalogs
+   WHERE ({catalog_name} IS NULL OR catalog_name = {catalog_name})
+         AND ({catalog_name_like} IS NULL OR catalog_name LIKE {catalog_name_like});
+
+
+get_schemas: |
+  SELECT * 
+    FROM system.information_schema.schemata
+   WHERE ({catalog_name} IS NULL OR catalog_name = {catalog_name})
+         AND ({catalog_name_like} IS NULL OR catalog_name LIKE {catalog_name_like})
+         AND ({schema_name} IS NULL OR schema_name = {schema_name})
+         AND ({schema_name_like} IS NULL OR schema_name LIKE {schema_name_like});
+
+
+get_tables: |
+  SELECT t.*, tg.tags 
+    FROM system.information_schema.tables as t
+    LEFT JOIN (SELECT   catalog_name,
+                        schema_name,
+                        table_name,
+                        CONCAT(
+                            '[', 
+                            CONCAT_WS(',', 
+                                COLLECT_LIST(
+                                    CONCAT('\{"tag_name":"', tag_name, '", "tag_value":"', tag_value, '"\}')
+                                )
+                            ), 
+                            ']'
+                        ) AS tags                                                        
+                FROM system.information_schema.table_tags
+                -- WHERE ({catalog_name} IS NULL OR catalog_name = {catalog_name})
+                --        AND ({catalog_name_like} IS NULL OR catalog_name LIKE {catalog_name_like})
+                --        AND ({schema_name} IS NULL OR schema_name = {schema_name})
+                --        AND ({schema_name_like} IS NULL OR schema_name LIKE {schema_name_like})
+                --        AND ({table_name} IS NULL OR table_name = {table_name})
+                --        AND ({table_name_like} IS NULL OR table_name LIKE {table_name_like})
+                --        AND ({table_type} IS NULL OR table_type IN {table_type})
+
+                GROUP BY catalog_name, schema_name, table_name
+
+            ) as tg ON  tg.catalog_name     = t.table_catalog
+                        AND tg.schema_name  = t.table_schema
+                        AND tg.table_name   = t.table_name
+
+    WHERE ({catalog_name} IS NULL OR t.table_catalog = {catalog_name})
+          AND ({catalog_name_like} IS NULL OR t.table_catalog LIKE {catalog_name_like})
+          AND ({schema_name} IS NULL OR t.table_schema = {schema_name})
+          AND ({schema_name_like} IS NULL OR t.table_schema LIKE {schema_name_like})
+          AND ({table_name} IS NULL OR t.table_name = {table_name})
+          AND ({table_name_like} IS NULL OR t.table_name LIKE {table_name_like})    
+          AND ({table_type} IS NULL OR t.table_type IN {table_type})
+

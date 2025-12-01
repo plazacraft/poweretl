@@ -21,13 +21,13 @@ class TokensReplacer:
     ):
         # Match unescaped tokens across multiple lines
         self._pattern = re.compile(
-            rf"(?<!{re_escape})({re_start})(?P<token>.*?)({re_end})",
+            rf"(?<!{re_escape})({re_start})(?P<token>.*?)(?<!{re_escape})({re_end})",
             flags=re.DOTALL,
         )
 
         # Match escaped tokens to clean them up later
         self._escaped_pattern = re.compile(
-            rf"{re_escape}({re_start}.*?{re_end})", flags=re.DOTALL
+            rf"({re_escape}{re_start})|({re_escape}{re_end})", flags=re.DOTALL
         )
 
     def replace(self, text: str, tokens: Dict[str, str]) -> str:
@@ -40,7 +40,8 @@ class TokensReplacer:
         # Replace unescaped tokens
         result = self._pattern.sub(replacer, text)
 
-        # Remove escape character from escaped tokens: \{token} → {token}
-        result = self._escaped_pattern.sub(lambda m: m.group(1), result)
+        # Remove escape characters from escaped delimiters
+        # Match group(1) is \{ and group(2) is \}, we want just { or }
+        result = self._escaped_pattern.sub(lambda m: m.group(0)[1:], result)
 
         return result

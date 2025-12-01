@@ -27,7 +27,7 @@ def test_multiline_replacement():
     replacer = TokensReplacer()
     text = """Hello {user},
 Your balance is {amount}.
-Escaped: \\{user}"""
+Escaped: \\{user\\}"""
     replacements = {"user": "Roman", "amount": "100 PLN"}
 
     result = replacer.replace(text, replacements)
