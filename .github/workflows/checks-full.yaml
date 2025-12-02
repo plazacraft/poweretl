@@ -57,7 +57,7 @@ jobs:
 
 
       - name: Create JSON file from secrets
-        if: ${{ matrix.project == 'databricks' }}
+        if: ${{ matrix.project == 'databricks' || matrix.project == 'examples' }}
         run: |
             echo '{
             "host": "${{ vars.DATABRICKS_HOST }}",
