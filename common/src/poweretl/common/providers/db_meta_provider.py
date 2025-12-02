@@ -102,7 +102,7 @@ class DbMetaProvider(BaseMetaProvider):
     def _get_version(self) -> tuple[str, int]:
         command = self._prepare_command("get_version", {})
         result = self._execute_command(command)
-        if  (len(result) > 0):
+        if len(result) > 0:
             row = result[0]
             return row["version"], row["step"]
         return "", 0
